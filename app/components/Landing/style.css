@@ -1,0 +1,25 @@
+.container {
+  position: absolute;
+  text-align: center;
+}
+
+.container h2 {
+  font-size: 5rem;
+}
+  
+.container a {
+  font-size: 1.4rem;
+}
+ 
+.left {
+  float: left;
+  width: 60vw;
+  height: 85vh;
+  border: solid;
+}
+.right {
+  float: left;
+  width: 30vw;
+  height: 85vh;
+  border: solid;
+}
