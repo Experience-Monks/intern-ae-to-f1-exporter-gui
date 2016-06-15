@@ -8,35 +8,17 @@ import * as SelectStateActions from '../../actions/selectState';
 
 class StateSelector extends Component {
   static propTypes = {
-    setAnimationState: React.PropTypes.func,
-    selectPreviewState: React.PropTypes.func,
-    animationState: React.PropTypes.string.isRequired
+    setAnimationState: React.PropTypes.func
   };
-
-  static defaultProps = {
-    animationState: 'idle state'
-  }
-
-  state = {
-    filter: 'idle state'
-  }
 
   filterTypes = [ 'idle state', 'hover state', 'over state'];
 
   componentWillReceiveProps( receivedProps) {
-    if(receivedProps.animationState === 'over state') {
-      this.transformPreview('over');
-    }
-    else if(receivedProps.animationState === 'hover state') {
-      this.transformPreview('hover'); 
-    }
-    else {
-      this.transformPreview('idle');
-    }
+
   }
 
   render() {
-    const { setAnimationState, animationState } = this.props;
+    const { setAnimationState, selectPreviewState } = this.props;
     return (
       <div className={style.inputWrapper}>
         {
@@ -47,7 +29,7 @@ class StateSelector extends Component {
                   id={type}
                   className={style.checkbox}
                   type="checkbox" value={type}
-                  checked={animationState === type}
+                  checked={this.props.previewState === type}
                   onChange={() => setAnimationState(type) }
                 /> 
                 <label className={style.checkboxLabel} htmlFor={type}>{type}</label>
@@ -62,7 +44,7 @@ class StateSelector extends Component {
 
 function mapStateToProps(state) {
   return {
-    animationState: state.animationState
+    setAnimationState: state.previewState
   };
 }
 

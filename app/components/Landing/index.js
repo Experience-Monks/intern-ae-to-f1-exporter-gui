@@ -1,18 +1,36 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as LandingActions from '../../actions/landing';
+
 import styles from './style.css';
 
 import ExportButton from '../ExportButton';
 import StateSelector from '../StateSelector';
 import Preview from '../Preview'
 
-export default class Landing extends Component {
+class Landing extends Component {
+
+  static propTypes = {
+    previewState: React.PropTypes.string
+  };
+
+  static defaultProps = {
+    previewState: 'idle state'
+  }
+
   render() {
     return (
       <div className={styles.container}>
         <div className={styles.left}>
-          <Preview />
-          <StateSelector />
+          <Preview  
+            previewState={this.props.previewState} 
+          />
+          <StateSelector 
+            previewState={this.props.previewState} 
+          />
         </div>
         <div className={styles.right}>
           <ExportButton />
@@ -21,3 +39,17 @@ export default class Landing extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    previewState: state.previewState,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(LandingActions, dispatch);
+}
+
+const LandingContainer = connect(mapStateToProps, mapDispatchToProps)(Landing);
+
+export default LandingContainer;

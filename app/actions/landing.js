@@ -3,8 +3,8 @@ export const IDLE = 'IDLE';
 export const HOVER = 'HOVER';
 export const OVER = 'OVER';
 
-export function prev(animationState) {
-	switch(animationState) {
+export function prev(previewState) {
+	switch(previewState) {
 		case 'idle':
 			return {
 				type: IDLE
@@ -24,8 +24,8 @@ export function prev(animationState) {
 	}
 }
 
-export function selectPreviewState(animationState) {
+export function selectPreviewState(previewState) {
 	return (dispatch, getState) => {
-		dispatch(prev(animationState));
+		dispatch(prev(previewState));
 	};
 }

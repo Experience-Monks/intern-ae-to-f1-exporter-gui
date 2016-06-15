@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import status from './exporter';
-import animationState from './animationState';
-import preview from './preview';
+import previewState from './previewState';
+import landing from './landing';
 
 const rootReducer = combineReducers({
   status,
-  animationState,
-  preview,
+  previewState,
+  landing,
   routing
 });
 

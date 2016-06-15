@@ -1,6 +1,6 @@
 import { ANIMATION_STATE_IDLE, ANIMATION_STATE_HOVER, ANIMATION_STATE_OVER } from '../actions/selectState';
 
-function animationState(state = 'idle state', action) {
+function previewState(state = 'idle state', action) {
 	switch (action.type) {
 		case ANIMATION_STATE_IDLE:
 			state = 'idle state'
@@ -16,4 +16,4 @@ function animationState(state = 'idle state', action) {
 	}
 }
 
-export default animationState;
+export default previewState;

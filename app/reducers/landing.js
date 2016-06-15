@@ -1,6 +1,6 @@
-import { IDLE, HOVER, OVER, NOOP } from '../actions/preview';
+import { IDLE, HOVER, OVER, NOOP } from '../actions/landing';
 
-function currentAnimation(state = 'none', action) {
+function previewState(state = 'idle', action) {
 	switch(action.type) {
 		case IDLE:
 			state = 'idle';

@@ -15,7 +15,8 @@ export function sync(type) {
 
 export function setAnimationState(type) {
   return (dispatch, getState) => {
-  	const {animationState} = getState();
+  	const {previewState} = getState();
     dispatch(sync(type));
   };
 }
+
