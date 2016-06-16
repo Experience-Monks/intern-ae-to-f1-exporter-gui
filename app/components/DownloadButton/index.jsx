@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
-import * as DownloadActions from '../../actions/landing';
 
 import styles from './style.css';
 
+const fs = require('fs');
+
 class DownloadButton extends Component {
 
-
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
+        
     }
 
     handleClick = () => {
-        if(this.props.status && this.props.status === 'Synchronized') {
+        if(this.props.download) {
             console.log('download');
         }
     }
@@ -38,11 +36,7 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(DownloadActions, dispatch);
-}
-
-const DownloadContainer = connect(mapStateToProps, mapDispatchToProps)(DownloadButton);
+const DownloadContainer = connect(mapStateToProps)(DownloadButton);
 
 
 export default DownloadContainer;

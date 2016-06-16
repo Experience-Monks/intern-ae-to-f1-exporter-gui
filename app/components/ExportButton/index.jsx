@@ -6,6 +6,7 @@ import mkdirp from 'mkdirp';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ExportActions from '../../actions/export';
+import * as DownloadActions from '../../actions/download';
 
 const aeToJSON = require('ae-to-json');
 const ae = require('after-effects');
@@ -16,6 +17,7 @@ const aeToF1Dom = require('exporters-f1-dom');
 class ExportButton extends React.Component {
     static propTypes = {
         setAESync: React.PropTypes.func,
+        setDownloadState: React.PropTypes.func,
         status: React.PropTypes.string
     };
 
@@ -72,6 +74,7 @@ class ExportButton extends React.Component {
             })
             .then(() => {
                 this.props.setAESync('Synchronized');
+                this.props.setDownloadState(true);
                 this.setState({ statusMessage: 'Synchronized' });
                 global.fs.unlinkSync('./ae-export.json');
             })
@@ -119,12 +122,14 @@ render() {
 function mapStateToProps(state) {
   return {
     status: state.status,
-    setAESync: state.status
+    setAESync: state.status,
+    setDownloadState: state.download,
+    download: state.download
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ExportActions, dispatch);
+  return bindActionCreators(Object.assign({}, ExportActions, DownloadActions), dispatch);
 }
 
 const Exporter = connect(mapStateToProps, mapDispatchToProps)(ExportButton);
