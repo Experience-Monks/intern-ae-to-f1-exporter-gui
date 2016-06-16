@@ -12,7 +12,7 @@ export function sync(state) {
 			return {
 				type: NOOP
 			};
-		case 'Synched':
+		case 'Synchronized':
 			return {
 				type: UNSYNC
 	     	};
