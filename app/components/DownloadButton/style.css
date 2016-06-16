@@ -1,0 +1,8 @@
+.container {
+	letter-spacing: 2px;
+	width: 35%;
+	border: solid;
+	display: flex;
+	cursor: pointer;
+	text-transform: uppercase;
+}
