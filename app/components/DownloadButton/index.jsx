@@ -4,22 +4,19 @@ import styles from './style.css';
 
 class DownloadButton extends Component {
 
-    constructor(props) {
-        super(props);
-    }
 
     componentWillReceiveProps(nextProps) {
-        console.log('nextprops');
         console.log(nextProps);
     }
 
     handleClick = () => {
-        if(this.props.downloadEnabled && this.props.downloadEnabled === true) {
+        if(this.props.status && this.props.status === 'Synchronized') {
             console.log('download');
         }
     }
 
     render() {
+        console.log(this.props);
         return (
             <div className={styles.container}>
                 <div onClick={this.handleClick.bind(this)}>

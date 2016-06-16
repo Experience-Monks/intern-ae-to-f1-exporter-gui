@@ -6,7 +6,7 @@ export const SET_PREVIEW_STATE = 'SET_PREVIEW_STATE';
 export function sync(state) {
     return {
         type: SET_PREVIEW_STATE,
-        state
+        state: state
     };
   //  switch (type) {
   //  case 'over state':

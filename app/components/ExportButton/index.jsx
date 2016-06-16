@@ -38,6 +38,7 @@ class ExportButton extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synchronize') {
+        console.log(store);
         let outputType = nextProps.type === 'f1-dom' ? 'f1Dom' : 'react';
         this.setState({ statusMessage: 'Synchronizing'});
         ae.execute(aeToJSON)
@@ -70,7 +71,7 @@ class ExportButton extends React.Component {
                 }
             })
             .then(() => {
-                this.props.setAESync('Synched');
+                this.props.setAESync('Synchronized');
                 this.setState({ statusMessage: 'Synchronized' });
                 global.fs.unlinkSync('./ae-export.json');
             })

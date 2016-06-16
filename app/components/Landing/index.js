@@ -9,17 +9,23 @@ import styles from './style.css';
 import ExportButton from '../ExportButton/index.jsx';
 import StateSelector from '../StateSelector/index.jsx';
 import Preview from '../Preview/index.jsx';
+import DownloadButton from '../DownloadButton/index.jsx';
 
 class Landing extends Component {
 
   static propTypes = {
     previewState: React.PropTypes.string,
-    type: React.PropTypes.string
+    setDownloadState: React.PropTypes.func,
+    type: React.PropTypes.string,
+    download: React.PropTypes.bool,
+    status: React.PropTypes.string
   };
 
   static defaultProps = {
     previewState: 'idle state',
-    type: 'f1Dom'
+    type: 'f1Dom',
+    download: false,
+    status: 'Unsync'
   }
 
   render() {
@@ -36,6 +42,12 @@ class Landing extends Component {
             <div className={styles.right}>
               <ExportButton
                 type={this.props.type}
+                download={this.props.download}
+                status={this.props.status}
+              />
+              <DownloadButton
+                download={this.props.download}
+                status={this.props.status}
               />
             </div>
         </div>
@@ -44,9 +56,10 @@ class Landing extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    previewState: state.previewState,
-  };
+    return {
+        previewState: state.previewState,
+        setDownloadState: state.download
+    };
 }
 
 function mapDispatchToProps(dispatch) {
