@@ -1,8 +1,6 @@
 /* eslint max-len: 0 */
 import webpack from 'webpack';
 import baseConfig from './webpack.config.base';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import path from 'path';
 
 const config = {
   ...baseConfig,

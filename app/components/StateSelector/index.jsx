@@ -1,5 +1,4 @@
-import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import style from './style.css';
@@ -8,17 +7,14 @@ import * as SelectStateActions from '../../actions/selectState';
 
 class StateSelector extends Component {
   static propTypes = {
-    setAnimationState: React.PropTypes.func
+    setAnimationState: React.PropTypes.func,
+    previewState: React.PropTypes.string
   };
 
-  filterTypes = [ 'idle state', 'hover state', 'over state'];
-
-  componentWillReceiveProps( receivedProps) {
-
-  }
+  filterTypes = ['idle state', 'hover state', 'over state'];
 
   render() {
-    const { setAnimationState, selectPreviewState } = this.props;
+    const { setAnimationState } = this.props;
     return (
       <div className={style.inputWrapper}>
         {

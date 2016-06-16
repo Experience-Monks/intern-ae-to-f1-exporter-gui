@@ -25,7 +25,7 @@ export function prev(previewState) {
 }
 
 export function selectPreviewState(previewState) {
-	return (dispatch, getState) => {
+	return (dispatch) => {
 		dispatch(prev(previewState));
 	};
 }

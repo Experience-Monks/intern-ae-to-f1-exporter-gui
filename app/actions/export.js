@@ -15,7 +15,8 @@ export function sync(state) {
 		case 'Synched':
 			return {
 				type: UNSYNC
-			};
+	     	};
+		default:
 	}
 }
 
