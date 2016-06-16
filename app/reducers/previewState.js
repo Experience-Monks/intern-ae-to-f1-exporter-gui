@@ -1,15 +1,9 @@
-import { ANIMATION_STATE_IDLE, ANIMATION_STATE_HOVER, ANIMATION_STATE_OVER } from '../actions/selectState';
+import { SET_PREVIEW_STATE } from '../actions/selectState';
 
 function previewState(state = 'idle state', action) {
 	switch (action.type) {
-		case ANIMATION_STATE_IDLE:
-			state = 'idle state'
-			return state;
-		case ANIMATION_STATE_HOVER:
-			state = 'hover state';
-			return state;
-		case ANIMATION_STATE_OVER:
-			state = 'over state';
+		case SET_PREVIEW_STATE:
+			state = action.state;
 			return state;
 		default:
 			return state;

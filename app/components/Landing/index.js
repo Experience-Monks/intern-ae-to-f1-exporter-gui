@@ -19,7 +19,6 @@ class Landing extends Component {
 
   static defaultProps = {
     previewState: 'idle state',
-    status: 'Unsync',
     type: 'f1Dom'
   }
 
