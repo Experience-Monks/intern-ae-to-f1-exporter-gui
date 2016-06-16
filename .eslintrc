@@ -23,7 +23,10 @@
     "jsx-quotes": 0,
     "arrow-body-style": 0,
     "react/jsx-indent-props": 0,
-    "global-require": 0
+    "global-require": 0,
+    "no-else-return": 0,
+    "no-params-reassign": 0,
+    "padded-blocks": 0
   },
   "plugins": [
     "import",
