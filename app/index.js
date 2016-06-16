@@ -11,7 +11,7 @@ global.fs = require('fs');
 global.NodeZip = require('node-zip');
 global.zip = new NodeZip();
 global.electron = require('electron');
-global.dialogue = electron.remote.dialog;
+global.dialog = electron.remote.dialog;
 
 const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);

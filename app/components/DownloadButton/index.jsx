@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import mkdirp from 'mkdirp';
+import ncp from 'ncp';
 
 import styles from './style.css';
-
-const fs = require('fs');
 
 class DownloadButton extends Component {
 
@@ -13,12 +13,15 @@ class DownloadButton extends Component {
 
     handleClick = () => {
         if(this.props.download) {
-            console.log('download');
+            let path = global.dialog.showSaveDialog();
+            mkdirp(path);
+            ncp('./output-react', path, (err) => {
+                if(err) console.error(err);
+            });
         }
     }
 
     render() {
-        console.log(this.props);
         return (
             <div className={styles.container}>
                 <div onClick={this.handleClick.bind(this)}>
