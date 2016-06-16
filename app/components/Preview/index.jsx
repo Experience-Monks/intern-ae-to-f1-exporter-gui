@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as SelectStateActions from '../../actions/selectState';
+
 import styles from './style.css';
 
 class Preview extends Component {
@@ -27,4 +32,17 @@ class Preview extends Component {
   }
 }
 
-export default Preview;
+function mapStateToProps(state) {
+  return {
+    setAnimationState: state.previewState,
+    previewState: state.previewState
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(SelectStateActions, dispatch);
+}
+
+const PreviewContainer = connect(mapStateToProps, mapDispatchToProps)(Preview);
+
+export default PreviewContainer;

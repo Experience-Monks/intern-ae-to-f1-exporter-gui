@@ -55,17 +55,4 @@ class Landing extends Component {
   }
 }
 
-function mapStateToProps(state) {
-    return {
-        previewState: state.previewState,
-        setDownloadState: state.download
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(LandingActions, dispatch);
-}
-
-const LandingContainer = connect(mapStateToProps, mapDispatchToProps)(Landing);
-
-export default LandingContainer;
+export default Landing;

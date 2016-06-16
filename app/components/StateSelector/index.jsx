@@ -40,7 +40,8 @@ class StateSelector extends Component {
 
 function mapStateToProps(state) {
   return {
-    setAnimationState: state.previewState
+    setAnimationState: state.previewState,
+    previewState: state.previewState
   };
 }
 
