@@ -6,21 +6,22 @@ import ExportButton from '../ExportButton/index.jsx';
 import StateSelector from '../StateSelector/index.jsx';
 import Preview from '../Preview/index.jsx';
 import DownloadButton from '../DownloadButton/index.jsx';
+import Toggle from '../Toggle/index.jsx';
 
 class Landing extends Component {
 
   static propTypes = {
     previewState: React.PropTypes.string,
     setDownloadState: React.PropTypes.func,
-    type: React.PropTypes.string,
+    previewType: React.PropTypes.string,
     download: React.PropTypes.bool,
     status: React.PropTypes.string,
-    filter: React.PropTypes.array
+    filter: React.PropTypes.array,
   };
 
   static defaultProps = {
-    previewState: 'idle state',
-    type: 'f1Dom',
+    previewState: 'idle',
+    previewType: 'f1Dom',
     download: false,
     status: 'Unsync',
     filter: []
@@ -32,6 +33,8 @@ class Landing extends Component {
             <div className={styles.left}>
               <Preview
                 previewState={this.props.previewState}
+                download={this.props.download}
+                type={this.props.previewType}
               />
               <StateSelector
                 previewState={this.props.previewState}
@@ -40,9 +43,12 @@ class Landing extends Component {
             </div>
             <div className={styles.right}>
               <ExportButton
-                type={this.props.type}
+                type={this.props.previewType}
                 download={this.props.download}
                 status={this.props.status}
+              />
+              <Toggle 
+                type={this.props.previewType}
               />
               <DownloadButton
                 download={this.props.download}

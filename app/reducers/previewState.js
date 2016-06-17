@@ -1,6 +1,6 @@
 import { SET_PREVIEW_STATE } from '../actions/selectState';
 
-function previewState(state = 'idle state', action) {
+function previewState(state = 'idle', action) {
 	switch (action.type) {
 		case SET_PREVIEW_STATE:
 			state = action.state;

@@ -57,20 +57,16 @@ class ExportButton extends React.Component {
         ae.execute(aeToJSON)
             .then((result) => {
                 fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
-                if(outputType === 'react') {
-                    mkdirp(__dirname + '/output-react');
-                    aeToReactF1({
-                        pathJSON: __dirname + '/ae-export.json',
-                        pathOut: __dirname + '/output-react/'
-                    });
-                }
-                else {
-                    mkdirp('./output-f1');
-                    aeToF1Dom({
-                        pathJSON: __dirname + '/ae-export.json',
-                        pathOut: __dirname + '/output-f1/'
-                    });
-                }
+                mkdirp(__dirname + '/output-react');
+                mkdirp('./output-f1');
+                aeToReactF1({
+                    pathJSON: __dirname + '/ae-export.json',
+                    pathOut: __dirname + '/output-react/'
+                });
+                aeToF1Dom({
+                    pathJSON: __dirname + '/ae-export.json',
+                    pathOut: __dirname + '/output-f1/'
+                });
             })
             .then(() => {
                 this.props.setAESync('Synchronized');
