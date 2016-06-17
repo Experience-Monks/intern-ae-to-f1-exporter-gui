@@ -22,16 +22,7 @@ const DEFAULT_OPTS = {
   dir: './',
   name: appName,
   asar: shouldUseAsar,
-  ignore: [
-    '^/test($|/)',
-    '^/tools($|/)',
-    '^/release($|/)',
-    '^/main.development.js'
-  ].concat(devDeps.map(name => `/node_modules/${name}($|/)`))
-  .concat(
-    deps.filter(name => !electronCfg.externals.includes(name))
-      .map(name => `/node_modules/${name}($|/)`)
-  )
+  ignore: []
 };
 
 const icon = argv.icon || argv.i || 'app/app';

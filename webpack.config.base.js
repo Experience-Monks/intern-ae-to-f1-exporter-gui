@@ -1,10 +1,11 @@
 import path from 'path';
+import webpack from 'webpack';
 
 export default {
   module: {
     loaders: [{
       test: /\.jsx?$/,
-      loaders: ['babel-loader'],
+      loader: 'babel-loader',
       exclude: /node_modules/
     }, {
       test: /\.json$/,
@@ -22,7 +23,9 @@ export default {
     packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
   },
   plugins: [
-
+     new webpack.DefinePlugin({
+       __dirname: '__dirname',
+     }),
   ],
   externals: {
     'after-effects': 'after-effects',

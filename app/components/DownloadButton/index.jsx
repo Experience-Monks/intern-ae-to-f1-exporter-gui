@@ -4,23 +4,24 @@ import mkdirp from 'mkdirp';
 import ncp from 'ncp';
 
 import styles from './style.css';
+import electron from 'electron';
 
 class DownloadButton extends Component {
 
-    handleClick = () => {
-        if(this.props.download) {
-            let path = global.dialog.showSaveDialog();
-            mkdirp(path);
-            ncp('./output-react', path, (err) => {
-                if(err) console.error(err);
-            });
-        }
-    }
+   // handleClick = () => {
+   //     if(this.props.download) {
+   //         let path = electron.remote.dialog.showSaveDialog();
+   //         mkdirp(path);
+   //         ncp('./output-react', path, (err) => {
+   //             if(err) console.error(err);
+   //         });
+   //     }
+   // }
 
     render() {
         return (
             <div className={styles.container}>
-                <div onClick={this.handleClick.bind(this)}>
+                <div>
                     {'download'}
                 </div>
             </div>

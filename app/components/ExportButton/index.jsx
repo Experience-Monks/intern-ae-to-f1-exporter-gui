@@ -8,12 +8,18 @@ import { connect } from 'react-redux';
 import * as ExportActions from '../../actions/export';
 import * as DownloadActions from '../../actions/download';
 
-const aeToJSON = require('ae-to-json');
-const ae = require('after-effects');
-const getTargets = require('../../utils/ae-to-f1-exporter-utils/getTargets');
-const aeToReactF1 = require('exporters-react-f1');
-const aeToF1Dom = require('exporters-f1-dom');
-const fs = require('fs');
+import aeToJSON from 'ae-to-json';
+import ae from 'after-effects';
+
+ae.options.includes = [
+    './node_modules/after-effects/lib/includes/console.js',
+    './node_modules/after-effects/lib/includes/es5-shim.js',
+    './node_modules/after-effects/lib/includes/get.js'
+];
+
+import aeToReactF1 from 'exporters-react-f1';
+import aeToF1Dom from'exporters-f1-dom';
+import fs from 'fs';
 
 class ExportButton extends React.Component {
     static propTypes = {
@@ -45,24 +51,20 @@ class ExportButton extends React.Component {
         this.setState({ statusMessage: 'Synchronizing'});
         ae.execute(aeToJSON)
             .then((result) => {
-                const targetToCopy = getTargets(result);
-                let srcTargets = [];
-                Object.keys(targetToCopy).forEach((key) => {
-                    srcTargets.push(targetToCopy[key].src);
-                });
-                fs.writeFileSync('./ae-export.json', JSON.stringify(result));
+                console.log('dir ' + __dirname);
+                fs.writeFileSync( __dirname + '/ae-export.json', JSON.stringify(result));
                 if(outputType === 'react') {
-                    mkdirp('./output-react');
+                    mkdirp(__dirname + '/output-react');
                     aeToReactF1({
-                        pathJSON: './ae-export.json',
-                        pathOut: './output-react/'
+                        pathJSON: __dirname + '/ae-export.json',
+                        pathOut: __dirname + '/output-react/'
                     });
                 }
                 else {
                     mkdirp('./output-f1');
                     aeToF1Dom({
-                        pathJSON: './ae-export.json',
-                        pathOut: './output-f1/'
+                        pathJSON: __dirname + '/ae-export.json',
+                        pathOut: __dirname + '/output-f1/'
                     });
                 }
             })
@@ -70,7 +72,7 @@ class ExportButton extends React.Component {
                 this.props.setAESync('Synchronized');
                 this.props.setDownloadState(true);
                 this.setState({ statusMessage: 'Synchronized' });
-                fs.unlinkSync('./ae-export.json');
+                fs.unlinkSync(__dirname + '/ae-export.json');
             })
             .catch((e) => {
                 this.setState({ statusMessage: 'Synch Failed' });
