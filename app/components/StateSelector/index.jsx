@@ -6,41 +6,42 @@ import style from './style.css';
 import * as SelectStateActions from '../../actions/selectState';
 
 class StateSelector extends Component {
-  static propTypes = {
-    setAnimationState: React.PropTypes.func,
-    previewState: React.PropTypes.string
-  };
+    static propTypes = {
+      setAnimationState: React.PropTypes.func,
+      filter: React.PropTypes.array,
+      previewState: React.PropTypes.string
+    };
 
-  filterTypes = ['idle state', 'hover state', 'over state'];
-
-  render() {
-    const { setAnimationState } = this.props;
-    return (
-      <div className={style.inputWrapper}>
-        {
-          this.filterTypes.map(type => {
-            return (
-              <div key={type} className={style.checkContainer} >
-                <input
-                  id={type}
-                  className={style.checkbox}
-                  type="checkbox" value={type}
-                  checked={this.props.previewState === type}
-                  onChange={() => setAnimationState(type) }
-                /> 
-                <label className={style.checkboxLabel} htmlFor={type}>{type}</label>
-              </div>
-            )
-          })
-        }
-      </div>
-    );
-  }
+    render() {
+        const { setAnimationState, filter } = this.props;
+        let filterProp = filter ? filter : [];
+        return (
+          <div className={style.inputWrapper}>
+            {
+              filterProp.map(type => {
+                return (
+                  <div key={type} className={style.checkContainer} >
+                    <input
+                      id={type}
+                      className={style.checkbox}
+                      type="checkbox" value={type}
+                      checked={this.props.previewState === type}
+                      onChange={() => setAnimationState(type)}
+                    /> 
+                    <label className={style.checkboxLabel} htmlFor={type}>{type}</label>
+                  </div>
+                );
+              })
+            }
+          </div>
+        );
+    }
 }
 
 function mapStateToProps(state) {
   return {
     setAnimationState: state.previewState,
+    filter: state.filter,
     previewState: state.previewState
   };
 }

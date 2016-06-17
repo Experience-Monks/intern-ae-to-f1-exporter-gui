@@ -7,9 +7,11 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ExportActions from '../../actions/export';
 import * as DownloadActions from '../../actions/download';
+import * as FilterActions from '../../actions/filter';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
+import arrUnique from 'array-unique';
 
 ae.options.includes = [
     './node_modules/after-effects/lib/includes/console.js',
@@ -25,7 +27,8 @@ class ExportButton extends React.Component {
     static propTypes = {
         setAESync: React.PropTypes.func,
         setDownloadState: React.PropTypes.func,
-        status: React.PropTypes.string
+        status: React.PropTypes.string,
+        setFilters: React.PropTypes.func
     };
 
     static defaultProps = {
@@ -47,11 +50,11 @@ class ExportButton extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synchronize') {
-        let outputType = nextProps.type === 'f1-dom' ? 'f1Dom' : 'react';
+        let outputType = nextProps.type === 'f1-dom' ? 'f1Dom' : 'f1';
         this.setState({ statusMessage: 'Synchronizing'});
         ae.execute(aeToJSON)
             .then((result) => {
-                fs.writeFileSync( __dirname + '/ae-export.json', JSON.stringify(result));
+                fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
                 if(outputType === 'react') {
                     mkdirp(__dirname + '/output-react');
                     aeToReactF1({
@@ -72,12 +75,43 @@ class ExportButton extends React.Component {
                 this.props.setDownloadState(true);
                 this.setState({ statusMessage: 'Synchronized' });
                 fs.unlinkSync(__dirname + '/ae-export.json');
+
+                if(outputType === 'react') this.readTransitionsF1();
+                else this.readTransitionsReact();
             })
             .catch((e) => {
                 this.setState({ statusMessage: 'Synch Failed' });
                 console.error(e);
             });
         }
+    }
+
+    readTransitionsReact = () => {
+        fs.readFile(__dirname + '/output-react/animation.json', 'utf-8', (err, data) => {
+            if (err) console.error(err);
+            let datas = JSON.parse(data);
+            let states = [];
+            datas.forEach((item) => {
+                states.push(item.from);
+                states.push(item.to);
+            }); 
+            states = arrUnique(states);
+            this.props.setFilters(states);
+        });
+    }
+
+    readTransitionsF1 = () => {
+        fs.readFile(__dirname + '/output-f1/animation.json', 'utf-8', (err, data) => {
+            if (err) console.error(err);
+            let datas = JSON.parse(data);
+            let states = [];
+            datas.forEach((item) => {
+                states.push(item.from);
+                states.push(item.to);
+            }); 
+            states = arrUnique(states);
+            this.props.setFilters(states);
+        });
     }
 	
 	componentWillAppear(cb) {
@@ -101,7 +135,7 @@ class ExportButton extends React.Component {
     }
 
 render() {
-    const { setAESync, status} = this.props;
+    const { setAESync, status } = this.props;
     return (
         <div className={style.exporter}>
             <div className={style.column}>
@@ -119,12 +153,14 @@ function mapStateToProps(state) {
     status: state.status,
     setAESync: state.status,
     setDownloadState: state.download,
-    download: state.download
+    download: state.download,
+    filter: state.filter,
+    setFilters: state.filter
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, ExportActions, DownloadActions), dispatch);
+  return bindActionCreators(Object.assign({}, ExportActions, DownloadActions, FilterActions), dispatch);
 }
 
 const Exporter = connect(mapStateToProps, mapDispatchToProps)(ExportButton);

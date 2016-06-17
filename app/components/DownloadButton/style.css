@@ -1,6 +1,6 @@
 .container {
-	letter-spacing: 2px;
-	width: 35%;
+	letter-spacing: 1px;
+	width: 40%;
 	border: solid;
 	display: flex;
 	cursor: pointer;

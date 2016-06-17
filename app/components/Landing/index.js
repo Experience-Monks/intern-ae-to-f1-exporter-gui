@@ -14,14 +14,16 @@ class Landing extends Component {
     setDownloadState: React.PropTypes.func,
     type: React.PropTypes.string,
     download: React.PropTypes.bool,
-    status: React.PropTypes.string
+    status: React.PropTypes.string,
+    filter: React.PropTypes.array
   };
 
   static defaultProps = {
     previewState: 'idle state',
     type: 'f1Dom',
     download: false,
-    status: 'Unsync'
+    status: 'Unsync',
+    filter: []
   }
 
   render() {
@@ -33,6 +35,7 @@ class Landing extends Component {
               />
               <StateSelector
                 previewState={this.props.previewState}
+                filters={this.props.filter}
               />
             </div>
             <div className={styles.right}>
