@@ -12,6 +12,11 @@ class DownloadButton extends Component {
       download: React.PropTypes.bool
     };
 
+    constructor(props) {
+        super(props);   
+        this.handleClick = this.handleClick.bind(this);
+    }
+
     handleClick = (download) => {
         if(download) {
             let path = electron.remote.dialog.showSaveDialog();
@@ -25,8 +30,8 @@ class DownloadButton extends Component {
     render() {
         const { download } = this.props;
         return (
-            <div className={styles.container}>
-                <div onClick={this.handleClick(download)}>
+            <div className={styles.container} onClick={() => this.handleClick(download)}>
+                <div>
                     {'download'}
                 </div>
             </div>
