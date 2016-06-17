@@ -107,7 +107,7 @@
     "ae-to-f1": "git+ssh://github.com/jam3/ae-to-f1.git",
     "ae-to-f1-exporter": "git+ssh://github.com/jam3/ae-to-f1-exporter.git",
     "ae-to-json": "^1.1.2",
-    "after-effects": "^0.3.3",
+    "after-effects": "git+https://github.com/nascherman/after-effects.git#0.3.3",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
     "css-modules-require-hook": "^4.0.0",
     "domready": "^1.0.8",
