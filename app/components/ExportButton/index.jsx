@@ -28,7 +28,8 @@ class ExportButton extends React.Component {
         setAESync: React.PropTypes.func,
         setDownloadState: React.PropTypes.func,
         status: React.PropTypes.string,
-        setFilters: React.PropTypes.func
+        setFilters: React.PropTypes.func,
+        previewType: React.PropTypes.string
     };
 
     static defaultProps = {
@@ -50,8 +51,9 @@ class ExportButton extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synchronize') {
-        let outputType = nextProps.type === 'f1-dom' ? 'f1Dom' : 'f1';
+        let outputType = nextProps.previewType === 'f1Dom' ? 'react' : 'f1Dom';
         this.setState({ statusMessage: 'Synchronizing'});
+        this.props.setAESync('Synching');
         ae.execute(aeToJSON)
             .then((result) => {
                 fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
@@ -81,6 +83,7 @@ class ExportButton extends React.Component {
             })
             .catch((e) => {
                 this.setState({ statusMessage: 'Synch Failed' });
+                this.props.setAESync('Unsync');
                 console.error(e);
             });
         }
@@ -155,7 +158,8 @@ function mapStateToProps(state) {
     setDownloadState: state.download,
     download: state.download,
     filter: state.filter,
-    setFilters: state.filter
+    setFilters: state.filter,
+    previewType: state.previewType
   };
 }
 

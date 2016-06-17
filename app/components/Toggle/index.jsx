@@ -1,29 +1,49 @@
 import React from 'react';
-import Switch from 'react-toggle-switch';
 import style from './style.css';
- 
-export default class Toggle extends React.Component {
-    state = {
-      toggled: false,
-      on: false,
-      enabled: false
-    };
+import classNames from 'classnames';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-    handleClick = () => {
-      
+import * as ToggleActions from '../../actions/toggle';
+ 
+class Toggle extends React.Component {
+    static propTypes = {
+        previewType: React.PropTypes.string,
+        status: React.PropTypes.string,
+        setType: React.PropTypes.func
+    }
+
+    handleClick = (previewType) => {
+        if(this.props.status === 'Synching') return;
+        this.props.setType(previewType === 'f1Dom' ? 'react' : 'f1Dom'  );
     }
 
     render() {
+        const { previewType } = this.props;
+        const toggleClass = previewType === 'react' ? 
+            classNames(style.switchToggle) : classNames(style.switchToggle, style.switchOn);
         return (
-            <div >
-                <Switch  
-                    onClick={this.handleClick.bind(this)}
-                    enabled
-                    on
-                />
+            <div className={style.switch} onClick={() => this.handleClick(previewType)} >
+                <div className={toggleClass} />
+                {'toggle'}
             </div>
         );
     }
 }
 
-Toggle.defaultProps = {};
+function mapStateToProps(state) {
+    return {
+        status: state.status,
+        setType: state.previewType,
+        previewType: state.previewType
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(ToggleActions, dispatch);
+}
+
+const ToggleContainer = connect(mapStateToProps, mapDispatchToProps)(Toggle);
+
+export default ToggleContainer;
+

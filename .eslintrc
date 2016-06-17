@@ -27,7 +27,8 @@
     "no-else-return": 0,
     "no-params-reassign": 0,
     "padded-blocks": 0,
-    "prefer-template": 0
+    "prefer-template": 0,
+    "max-len": 0
   },
   "plugins": [
     "import",
