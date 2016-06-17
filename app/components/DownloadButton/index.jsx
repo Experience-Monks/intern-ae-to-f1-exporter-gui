@@ -7,10 +7,6 @@ import styles from './style.css';
 
 class DownloadButton extends Component {
 
-    componentWillReceiveProps(nextProps) {
-        
-    }
-
     handleClick = () => {
         if(this.props.download) {
             let path = global.dialog.showSaveDialog();

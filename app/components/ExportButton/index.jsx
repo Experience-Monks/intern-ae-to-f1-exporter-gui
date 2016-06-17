@@ -13,6 +13,7 @@ const ae = require('after-effects');
 const getTargets = require('../../utils/ae-to-f1-exporter-utils/getTargets');
 const aeToReactF1 = require('exporters-react-f1');
 const aeToF1Dom = require('exporters-f1-dom');
+const fs = require('fs');
 
 class ExportButton extends React.Component {
     static propTypes = {
@@ -40,7 +41,6 @@ class ExportButton extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synchronize') {
-        let _this = this;
         let outputType = nextProps.type === 'f1-dom' ? 'f1Dom' : 'react';
         this.setState({ statusMessage: 'Synchronizing'});
         ae.execute(aeToJSON)
@@ -50,16 +50,13 @@ class ExportButton extends React.Component {
                 Object.keys(targetToCopy).forEach((key) => {
                     srcTargets.push(targetToCopy[key].src);
                 });
-                global.fs.writeFileSync('./ae-export.json', JSON.stringify(result));
+                fs.writeFileSync('./ae-export.json', JSON.stringify(result));
                 if(outputType === 'react') {
                     mkdirp('./output-react');
                     aeToReactF1({
                         pathJSON: './ae-export.json',
                         pathOut: './output-react/'
                     });
-                    // srcTargets.forEach((target) => {
-                    //   fs.copy(target, './output-react/assets/');
-                    // });
                 }
                 else {
                     mkdirp('./output-f1');
@@ -67,16 +64,13 @@ class ExportButton extends React.Component {
                         pathJSON: './ae-export.json',
                         pathOut: './output-f1/'
                     });
-                //  srcTargets.forEach((target) => {
-                //    fs.copy(target, './output-f1/assets/');
-                //  });
                 }
             })
             .then(() => {
                 this.props.setAESync('Synchronized');
                 this.props.setDownloadState(true);
                 this.setState({ statusMessage: 'Synchronized' });
-                global.fs.unlinkSync('./ae-export.json');
+                fs.unlinkSync('./ae-export.json');
             })
             .catch((e) => {
                 this.setState({ statusMessage: 'Synch Failed' });

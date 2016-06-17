@@ -25,17 +25,13 @@ export default {
 
   ],
   externals: {
-    'fs': 'fs-extra',
     'after-effects': 'after-effects',
-    'electron': 'electron',
     'node-zip': 'node-zip',
     'ae-to-json': 'ae-to-json/after-effects',
     'ae-to-f1-exporter': 'ae-to-f1-exporter',
     'exporters-react-f1': 'ae-to-f1-exporter/exporters/react-f1',
-    'exporters-f1-dom': 'ae-to-f1-exporter/exporters/f1-dom',
-    'ncp': 'ncp'
+    'exporters-f1-dom': 'ae-to-f1-exporter/exporters/f1-dom'
     // put your node 3rd party libraries which can't be built with webpack here
     // (mysql, mongodb, and so on..)
-  },
-  target: 'electron-main'
+  }
 };

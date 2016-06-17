@@ -7,12 +7,6 @@ import routes from './routes';
 import configureStore from './store/configureStore';
 import './app.global.css';
 
-global.fs = require('fs');
-global.NodeZip = require('node-zip');
-global.zip = new NodeZip();
-global.electron = require('electron');
-global.dialog = electron.remote.dialog;
-
 const store = configureStore();
 const history = syncHistoryWithStore(hashHistory, store);
 
