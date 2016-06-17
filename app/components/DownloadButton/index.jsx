@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import mkdirp from 'mkdirp';
-import ncp from 'ncp';
 
 import styles from './style.css';
 import electron from 'electron';
+import shelljs from 'shelljs';
+shelljs.config.fatal = false;
 
 class DownloadButton extends Component {
+    static propTypes = {
+      download: React.PropTypes.bool
+    };
 
-   // handleClick = () => {
-   //     if(this.props.download) {
-   //         let path = electron.remote.dialog.showSaveDialog();
-   //         mkdirp(path);
-   //         ncp('./output-react', path, (err) => {
-   //             if(err) console.error(err);
-   //         });
-   //     }
-   // }
+    handleClick = (download) => {
+        if(download) {
+            let path = electron.remote.dialog.showSaveDialog();
+            if(!path) return;
+
+            mkdirp(path);
+            shelljs.cp('-R', __dirname + '/output-react', path);
+        }
+    }
 
     render() {
+        const { download } = this.props;
         return (
             <div className={styles.container}>
-                <div>
+                <div onClick={this.handleClick(download)}>
                     {'download'}
                 </div>
             </div>
@@ -37,6 +42,5 @@ function mapStateToProps(state) {
 }
 
 const DownloadContainer = connect(mapStateToProps)(DownloadButton);
-
 
 export default DownloadContainer;

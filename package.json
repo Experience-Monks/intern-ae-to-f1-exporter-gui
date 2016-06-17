@@ -117,7 +117,6 @@
     "gsap-promise": "^2.0.0",
     "keyframes": "^2.3.0",
     "mkdirp": "^0.5.1",
-    "ncp": "^2.0.0",
     "node-zip": "^1.1.1",
     "postcss": "^5.0.21",
     "react": "^15.1.0",
@@ -129,6 +128,7 @@
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
     "remote": "^0.2.6",
+    "shelljs": "^0.7.0",
     "source-map-support": "^0.4.0",
     "webpack-node-externals": "^1.2.0"
   },

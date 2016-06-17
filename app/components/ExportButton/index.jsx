@@ -51,7 +51,6 @@ class ExportButton extends React.Component {
         this.setState({ statusMessage: 'Synchronizing'});
         ae.execute(aeToJSON)
             .then((result) => {
-                console.log('dir ' + __dirname);
                 fs.writeFileSync( __dirname + '/ae-export.json', JSON.stringify(result));
                 if(outputType === 'react') {
                     mkdirp(__dirname + '/output-react');
