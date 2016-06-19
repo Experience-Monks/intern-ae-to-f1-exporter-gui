@@ -11,23 +11,33 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 5%;
-  min-width: 120px;
-  min-height: 120px;
-  width: 9vw;
-  height: 9vw;
-  border: 2px solid #E5E5E5;
+  min-width: 140px;
+  min-height: 140px;
+  width: 8vw;
+  height: 8vw;
+  border: 2px solid #EFEFEF;
   border-radius: 50%;
-  font-size: 0.992vw;
+  font-size: 0.842vw;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  line-height: 150%;
 }
 
-@media screen and (max-width: 1000px) {
-  .noPreview { font-size: 12px; }
+@media screen and (max-width: 1400px) {
+  .noPreview {
+    font-size: 10px;
+  }
+}
+
+.noPreview label {
+  margin-left: 3%;
+  margin-bottom: 5%;
 }
 
 .noPreview svg {
   width: 28.125%;
-  margin-bottom: 5%;
+  margin-bottom: 3%;
 }
 
 .previewContainer {
@@ -36,4 +46,5 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  transform: scale(0.5);
 }

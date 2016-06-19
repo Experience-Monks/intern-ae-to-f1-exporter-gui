@@ -1,3 +1,71 @@
+@keyframes front-wave {
+  0% {
+    x: -400px;
+  }
+  100% {
+    x: 0px;
+  }
+}
+
+@keyframes back-wave {
+  0% {
+    x: 0px;
+  }
+  100% {
+    x: -400px;
+  }
+}
+
+@keyframes move-up {
+  0% {
+    height: 55px;
+    y: 75px;
+  }
+  100% {
+    height: 88px;
+    y: 42px;
+  }
+}
+
+@keyframes front-wave-color {
+  0% {
+    fill: rgba(90, 90, 90, 0.5);
+  }
+  50% {
+    fill: rgba(120, 120, 120, 0.7);
+  }
+  100% {
+    fill: rgba(98, 217, 188, 0.8);
+  }
+}
+
+@keyframes back-wave-color {
+  0% {
+    fill: rgba(224, 224, 224, 0.5);
+  }
+  25% {
+    fill: rgba(224, 224, 224, 0.5);
+  }
+  100% {
+    fill: rgba(98, 217, 188, 0.3);
+  }
+}
+
+@keyframes font-color {
+  0% {
+    color: #8B8989;
+  }
+  25% {
+    color: white;
+  }
+  75% {
+    color: white;
+  }
+  100% {
+    color: #8B8989;
+  }
+}
+
 .exporter {
   display: block;
   justify-content: space-around;
@@ -5,32 +73,78 @@
   width: 100%;
 }
 
-.buttonSynchronizing .exportButton {
-  color: #3572C5;
+.buttonSynchronizing .message, .buttonSynchronizing .frontWave, .buttonSynchronizing .backWave {
+  visibility: visible !important;
+  animation: font-color 10s infinite linear alternate;
+}
+
+.buttonSynchronizing .frontWave .waterFill {
+  animation: front-wave 0.9s infinite linear, move-up 5s infinite ease-out alternate;
+}
+
+.buttonSynchronizing .frontWave svg {
+  animation: front-wave-color 5s infinite linear alternate;
+}
+
+.buttonSynchronizing .backWave svg {
+  animation: back-wave-color 5s infinite linear alternate;
+}
+
+.buttonSynchronizing .backWave .waterFill {
+  animation: back-wave 1.2s infinite linear, move-up 5s infinite ease-out alternate;
 }
 
 .buttonSynchronized .exportButton {
-  color: #7ED6BC;
+  color: #7ED6BC !important;
 }
 
-
 .exportButton {
-  opacity: 0;
+  position: relative;
   background: #302D2D;
   border: none;
   text-transform: uppercase;
   width: 100%;
   height: 5vw;
-  color: #8B8989;
   min-height: 60px;
   letter-spacing: 5px;
   font-weight: 700;
+  color: #8B8989;
   outline: none;
   position: relative;
   cursor: pointer;
+  overflow: hidden;
+  transition: color 1.5s ease;
+  font-size: 14px;
+  font-weight: normal;
+}
 
-  &:hover {
-    background-color: #222;
-    color: #E9E9E9;
-  }
+.message {
+  position: absolute;
+  z-index: 100;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.waveAnimation {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.frontWave, .backWave {
+  visibility: hidden;
+}
+
+.frontWave svg, .backWave svg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.waterFill {
+  position: relative;
+  height: 50px;
+  y: 80px;
 } 

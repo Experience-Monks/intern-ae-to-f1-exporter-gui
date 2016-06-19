@@ -13,6 +13,9 @@ export default {
     }, {
       test: /\.svg$/,
       loader: 'svg-inline'
+    }, {
+      test: /\.(png|woff|woff2|eot|ttf)$/,
+      loader: 'url-loader?limit=100000'
     }]
   },
   output: {

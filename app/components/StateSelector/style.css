@@ -18,7 +18,7 @@
   height: 0%;
   width: 0%;
   position: relative;
-  text-transform: uppercase;   
+  text-transform: uppercase;
 }
 
 .checkbox, .checkboxLabel {
@@ -26,6 +26,7 @@
   vertical-align: middle;
   margin: 5px;
   cursor: pointer;
+  text-transform: capitalize;
 }
 
 .checkboxLabel {

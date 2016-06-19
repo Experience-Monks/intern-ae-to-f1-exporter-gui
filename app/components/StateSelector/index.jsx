@@ -13,15 +13,35 @@ class StateSelector extends Component {
     previewState: React.PropTypes.string
   };
 
+  static defaultProps = {
+    filter: []
+  };
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);  
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);  
+  }
+
+  handleKeyDown = (e) => {
+    const { filter } = this.props;
+    const stateIndex = e.keyCode - 49;
+
+    if(filter[stateIndex] && e.keyCode >= 49 && e.keyCode <= 57) {
+      this.props.setAnimationState(filter[stateIndex]);
+    };
+  }
+
   render() {
     const { setAnimationState, filter } = this.props;
     const className = classnames(style.stateSelector, this.props.className)
-    let filterProp = filter ? filter : [];
 
     return (
       <div className={className}>
         {
-          filterProp.map(type => {
+          filter.map(type => {
             return (
               <div key={type} className={style.checkContainer} >
                 <input

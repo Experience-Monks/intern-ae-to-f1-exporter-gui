@@ -5,6 +5,7 @@ import styles from './style.css';
 import ExportButton from '../ExportButton/index.jsx';
 import StateSelector from '../StateSelector/index.jsx';
 import Preview from '../Preview/index.jsx';
+import ErrorDisplay from '../ErrorDisplay/index.jsx';
 import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
 
@@ -31,6 +32,7 @@ class Landing extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.left}>
+          <ErrorDisplay />
           <Preview
             className={styles.preview}
             previewState={this.props.previewState}
@@ -49,7 +51,16 @@ class Landing extends Component {
             download={this.props.download}
             status={this.props.status}
           />
-          <div className={styles.compositionWrapper}></div>
+          <div className={styles.compositionWrapper}>
+            <div className={styles.allComps}>All Comps&nbsp;&nbsp;<b>0</b></div>
+            {
+              Array.apply(null, {length: 6}).map(() => '—').map((item, i) => {
+                return (
+                  <div key={i} className={styles.listItem}>{item}</div>
+                );
+              })
+            }
+          </div>
           <div className={styles.controlWrapper}>
             <div className={styles.toggleWrapper}>
               <label>Select F1 Flavour</label>
