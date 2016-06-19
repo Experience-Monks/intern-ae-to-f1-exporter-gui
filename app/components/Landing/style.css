@@ -1,25 +1,97 @@
 .container {
-  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
   text-align: center;
 }
 
 .container h2 {
   font-size: 5rem;
 }
-  
+
 .container a {
   font-size: 1.4rem;
 }
- 
-.left {
-  float: left;
-  width: 60vw;
-  height: 85vh;
-  border: solid;
+
+.left, .right {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
+
+.left {
+  z-index: 2;
+  flex: 0.74;
+  box-shadow: -31px 0px 121px 6px rgba(100,100,100,1);
+}
+
 .right {
-  float: left;
-  width: 30vw;
-  height: 85vh;
-  border: solid;
+  z-index: 1;
+  flex: 0.26;
+  min-width: 300px;
+}
+
+.stateSelector {
+  flex: 0.1;
+}
+
+.preview {
+  flex: 0.9;
+}
+
+.compositionWrapper {
+  flex: 0.7;
+}
+
+.controlWrapper {
+  flex: 0.3;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.toggleWrapper {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+}
+
+.toggleWrapper label {
+  text-transform: uppercase;
+  font-size: 10px;
+  margin-left: 10%;
+}
+
+.toggleWrapper label, .toggleSwitch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0.5;
+}
+
+.fakeTextArea {
+  width: 80%;
+  height: 30%;
+  margin-top: auto;
+  margin-bottom: 20px;
+  border: 1px solid #DCDCDC;
+  padding: 5px;
+}
+
+.fakeSubmitButton {
+  margin-top: auto;
+  background: #E8E8E8;
+  border: none;
+  color: #FDFDFD;
+  text-transform: uppercase;
+  width: 100%;
+  height: 6vw;
+  min-height: 70px;
+  letter-spacing: 5px;
+  font-weight: 700;
+  outline: none;
+  position: relative;
+  cursor: pointer;
 }

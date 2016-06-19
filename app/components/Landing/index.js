@@ -25,37 +25,48 @@ class Landing extends Component {
     download: false,
     status: 'Unsync',
     filter: []
-  }
+  };
 
   render() {
     return (
-        <div className={styles.container}>
-            <div className={styles.left}>
-              <Preview
-                previewState={this.props.previewState}
-                download={this.props.download}
-                type={this.props.previewType}
-              />
-              <StateSelector
-                previewState={this.props.previewState}
-                filters={this.props.filter}
-              />
-            </div>
-            <div className={styles.right}>
-              <ExportButton
-                type={this.props.previewType}
-                download={this.props.download}
-                status={this.props.status}
-              />
-              <Toggle 
-                type={this.props.previewType}
-              />
-              <DownloadButton
-                download={this.props.download}
-                status={this.props.status}
-              />
-            </div>
+      <div className={styles.container}>
+        <div className={styles.left}>
+          <Preview
+            className={styles.preview}
+            previewState={this.props.previewState}
+            download={this.props.download}
+            type={this.props.previewType}
+          />
+          <StateSelector
+            className={styles.stateSelector}
+            previewState={this.props.previewState}
+            filters={this.props.filter}
+          />
         </div>
+        <div className={styles.right}>
+          <ExportButton
+            type={this.props.previewType}
+            download={this.props.download}
+            status={this.props.status}
+          />
+          <div className={styles.compositionWrapper}></div>
+          <div className={styles.controlWrapper}>
+            <div className={styles.toggleWrapper}>
+              <label>Select F1 Flavour</label>
+              <Toggle 
+                className={styles.toggleSwitch}
+                type={this.props.previewType}
+              />
+            </div>
+            <DownloadButton
+              download={this.props.download}
+              status={this.props.status}
+            />
+            <textarea className={styles.fakeTextArea} placeholder="Description" />
+          </div>
+          <button className={styles.fakeSubmitButton}>Submit</button>
+        </div>
+      </div>
     );
   }
 }

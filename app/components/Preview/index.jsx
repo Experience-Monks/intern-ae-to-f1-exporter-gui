@@ -6,58 +6,75 @@ import ReactF1Preview from '../ReactF1Preview/index.jsx';
 
 import * as SelectStateActions from '../../actions/selectState';
 import styles from './style.css';
+import noPreviewSvg from './no-preview.svg';
+import classnames from 'classnames';
 
 class Preview extends Component {
-    static propType = {
-        previewType: React.PropTypes.string,
-        previewState: React.PropTypes.string,
-        download: React.PropTypes.bool
+  static propType = {
+    previewType: React.PropTypes.string,
+    previewState: React.PropTypes.string,
+    download: React.PropTypes.bool
+  };
+
+  state = {
+    backgroundPlaceHolder: {
+      backgroundColor: 'rgba(0,0,0,0.5)'
+    }
+  };
+
+  getContent = () => {
+    const { previewType, previewState, download } = this.props;
+
+    if(!download) {
+      // return (
+      //   <div className={styles.previewContainer} style={this.state.backgroundPlaceHolder}></div>
+      // );
+
+      return <NoPreview />   
     }
 
-    state = {
-        backgroundPlaceHolder: {
-            backgroundColor: 'rgba(0,0,0,0.5)'
-        }
+    if(previewType === 'react') {
+      return (
+        <div className={styles.previewContainer} >
+          <ReactF1Preview previewState={previewState} />
+        </div>
+      );
     }
 
-    render() {
-        const { previewType, previewState, download } = this.props;
-        if(!download) {
-            return (
-                <div className={styles.container}>
-                    <div className={styles.previewContainer} style={this.state.backgroundPlaceHolder}>
-                    </div>
-                </div>
-            );    
+    return (
+      <div className={styles.previewContainer} ></div>
+    );
+  };
+
+  render() {
+    const className = classnames(styles.container, this.props.className);
+
+    return (
+      <div className={className}>
+        {
+          this.getContent()
         }
-        else if(previewType === 'react') {
-            return (
-                <div className={styles.container}>
-                    <div className={styles.previewContainer} >
-                        <ReactF1Preview previewState={previewState} />
-                    </div>
-                </div>
-            );
-        }
-        else {
-            return (
-                <div className={styles.container}>
-                    <div className={styles.previewContainer} >
-                    </div>
-                </div>
-            );
-        }
-        
-    }
+      </div>
+    )
+  }
+}
+
+function NoPreview() {
+  return (
+    <div className={styles.noPreview}>
+      <div dangerouslySetInnerHTML={{ __html: noPreviewSvg }}></div>
+      <label>No<br/>Preview</label>
+    </div>
+  );
 }
 
 function mapStateToProps(state) {
-    return {
-        setAnimationState: state.previewState,
-        previewState: state.previewState,
-        download: state.download,
-        previewType: state.previewType
-    };
+  return {
+    setAnimationState: state.previewState,
+    previewState: state.previewState,
+    download: state.download,
+    previewType: state.previewType
+  };
 }
 
 function mapDispatchToProps(dispatch) {

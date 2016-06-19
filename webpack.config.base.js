@@ -10,8 +10,10 @@ export default {
     }, {
       test: /\.json$/,
       loader: 'json-loader'
-    }
-    ]
+    }, {
+      test: /\.svg$/,
+      loader: 'svg-inline'
+    }]
   },
   output: {
     path: path.join(__dirname, 'dist'),

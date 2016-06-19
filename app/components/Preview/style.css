@@ -1,15 +1,39 @@
 .container {
-	border: solid;
-	margin-top: 5%;
-	margin-left: 5%;
-	width: 90%;
-	height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 
+.noPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5%;
+  min-width: 120px;
+  min-height: 120px;
+  width: 9vw;
+  height: 9vw;
+  border: 2px solid #E5E5E5;
+  border-radius: 50%;
+  font-size: 0.992vw;
+}
+
+@media screen and (max-width: 1000px) {
+  .noPreview { font-size: 12px; }
+}
+
+.noPreview svg {
+  width: 28.125%;
+  margin-bottom: 5%;
 }
 
 .previewContainer {
-	margin-top: 20%;
-	margin-left: 20%;
-	width: 30vw;
-	height: 30vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }

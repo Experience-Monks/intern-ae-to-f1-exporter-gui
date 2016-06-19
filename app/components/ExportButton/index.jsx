@@ -12,6 +12,7 @@ import * as FilterActions from '../../actions/filter';
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
 import arrUnique from 'array-unique';
+import classnames from 'classnames';
 
 ae.options.includes = [
     './node_modules/after-effects/lib/includes/console.js',
@@ -44,7 +45,7 @@ class ExportButton extends React.Component {
         this.animateIn();
         ae.execute(() => Boolean(app.project.file))
             .then((isSynced) => {
-                if(isSynced) this.setState({ init: true, statusMessage: 'ready to synchronize' });
+                if(isSynced) this.setState({ init: true, statusMessage: 'synchronize' });
                 else this.setState({ init: true, statusMessage: 'failed to synchronize' });
             });
     }
@@ -112,31 +113,42 @@ class ExportButton extends React.Component {
             this.props.setFilters(states);
         });
     }
-	
-	componentWillAppear(cb) {
+  
+  componentWillAppear(cb) {
         this.animateIn().then(cb);
-	}
-	
-	componentWillEnter(cb) {
+  }
+  
+  componentWillEnter(cb) {
         this.animateIn().then(cb);
-	}
-	
-	componentWillLeave(cb) {
+  }
+  
+  componentWillLeave(cb) {
         this.animateOut().then(cb);
-	}
-	
-	animateIn = () => {
-        return animate.to(this.refs.exporter, 0.3, { opacity: 1, ease: Quad.easeOut });
-	}
-	
-	animateOut = () => {
-        return animate.to(this.refs.exporter, 0.3, { opacity: 0, ease: Quad.easeOut });
-    }
+  }
+  
+  animateIn = () => {
+    return animate.to(this.refs.exporter, 0.3, { opacity: 1, ease: Quad.easeOut });
+  }
+  
+  animateOut = () => {
+    return animate.to(this.refs.exporter, 0.3, { opacity: 0, ease: Quad.easeOut });
+  }
 
-render() {
+  render() {
     const { setAESync, status } = this.props;
+    // const className = classnames(style.exporter, {
+    //   [style.buttonSynchronizing]: status === 'Syncing',
+    //   [style.buttonSynchronized]: status === 'Synchronized'
+    // });
+
+    // The above should be the correct code, but since store isnt working yet
+    const className = classnames(style.exporter, {
+      [style.buttonSynchronizing]: this.state.statusMessage === 'Synchronizing',
+      [style.buttonSynchronized]: this.state.statusMessage === 'Synchronized'
+    });
+
     return (
-        <div className={style.exporter}>
+        <div className={className}>
             <div className={style.column}>
             <button className={style.exportButton} ref="exporter" onClick={() => setAESync(status)}>
               {this.state.statusMessage}
