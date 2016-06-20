@@ -27,10 +27,10 @@ class DownloadButton extends Component {
       mkdirp(path);
 
       if(this.props.previewType === 'react') {
-        shelljs.cp('-R', __dirname + '/', path);
+        shelljs.cp('-R', __dirname + '/output-react/*', path);
       }
       else {
-        shelljs.cp('-R', __dirname + '/', path);
+        shelljs.cp('-R', __dirname + '/output-f1/*', path);
       }
     }
   }

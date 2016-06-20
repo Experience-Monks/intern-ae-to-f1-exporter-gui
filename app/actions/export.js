@@ -10,7 +10,7 @@ export function sync(state) {
 			};
 		case 'Synching':
 			return {
-				type: NOOP
+				type: EXPORT
 			};
 		case 'Synchronized':
 			return {

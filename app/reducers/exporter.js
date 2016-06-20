@@ -1,12 +1,12 @@
-import { EXPORT, UNSYNC, NOOP } from '../actions/export';
+import { EXPORT, UNSYNC } from '../actions/export';
 
 function status(state = 'Unsynched', action) {
 	switch (action.type) {
 		case EXPORT:
-      if(state === 'Synchronize') {
-        state = 'Synching';
-        return state;
-      }
+			if(state === 'Synchronize') {
+				state = 'Synching';
+				return state;
+			}
 			else if(state !== 'Synched') {
 				state = 'Synchronize';
 				return state;
@@ -14,10 +14,8 @@ function status(state = 'Unsynched', action) {
 			else {
 				return state;
 			}
-    case NOOP: 
-      return state
     case UNSYNC:
-      state = 'Unsynched'
+      state = 'Unsynched';
       return state;
 		default:
 			return state;

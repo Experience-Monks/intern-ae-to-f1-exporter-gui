@@ -80,8 +80,6 @@ class ExportButton extends React.Component {
   }
 
   syncAfterEffects = () => {
-    const outputType = this.props.previewType === 'f1Dom' ? 'react' : 'f1Dom';
-
     return ae.execute(aeToJSON)
       .then((result) => {
         fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
@@ -125,34 +123,6 @@ class ExportButton extends React.Component {
       });
   };
 
-  readTransitionsReact = () => {
-    fs.readFile(__dirname + '/output-react/animation.json', 'utf-8', (err, data) => {
-      if (err) console.error(err);
-      let datas = JSON.parse(data);
-      let states = [];
-      datas.forEach((item) => {
-          states.push(item.from);
-          states.push(item.to);
-      });
-      states = arrUnique(states);
-      this.props.setFilters(states);
-    });
-  }
-
-  readTransitionsF1 = () => {
-    fs.readFile(__dirname + '/output-f1/animation.json', 'utf-8', (err, data) => {
-      if (err) console.error(err);
-      let datas = JSON.parse(data);
-      let states = [];
-      datas.forEach((item) => {
-          states.push(item.from);
-          states.push(item.to);
-      });
-      states = arrUnique(states);
-      this.props.setFilters(states);
-    });
-  }
-
   componentWillAppear(cb) {
     this.animateIn().then(cb);
   }
@@ -175,15 +145,9 @@ class ExportButton extends React.Component {
 
   render() {
     const { setAESync, status } = this.props;
-    // const className = classnames(style.exporter, {
-    //   [style.buttonSynchronizing]: status === 'Syncing',
-    //   [style.buttonSynchronized]: status === 'Synchronized'
-    // });
-
-    // The above should be the correct code, but since store isnt working yet
     const className = classnames(style.exporter, {
-      [style.buttonSynchronizing]: this.state.statusMessage === 'Synchronizing',
-      [style.buttonSynchronized]: this.state.statusMessage === 'Synchronized'
+      [style.buttonSynchronizing]: status === 'Synching',
+      [style.buttonSynchronized]: status === 'Synchronized'
     });
 
     return (
