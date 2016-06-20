@@ -12,6 +12,7 @@ import * as ErrorsAction from '../../actions/errors';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
+
 import arrUnique from 'array-unique';
 import classnames from 'classnames';
 import frontWaveSvg from './front-wave.svg';
@@ -35,6 +36,7 @@ class ExportButton extends React.Component {
     setFilters: React.PropTypes.func,
     previewType: React.PropTypes.string
   };
+
 
   static defaultProps = {
     status: 'Unsync'
@@ -68,6 +70,7 @@ class ExportButton extends React.Component {
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synchronize') {
       this.setState({ statusMessage: 'Synchronizing'});
+      this.props.setDownloadState(false);
       this.props.setAESync('Synching');
 
       // This timeout is used to ensure the loading animation is in place before
@@ -94,13 +97,19 @@ class ExportButton extends React.Component {
         });
       })
       .then(() => {
+        fs.unlinkSync(__dirname + '/ae-export.json');
+        const data = fs.readFileSync(__dirname + '/output-react/animation.json', 'utf-8');
+        let datas = JSON.parse(data);
+        let states = [];
+        datas.forEach((item) => {
+            states.push(item.from);
+            states.push(item.to);
+        });
+        states = this.arrNoDupe(states);
+        this.props.setFilters(states);
         this.props.setAESync('Synchronized');
         this.props.setDownloadState(true);
         this.setState({ statusMessage: 'Synchronized' });
-        fs.unlinkSync(__dirname + '/ae-export.json');
-
-        if(outputType === 'react') this.readTransitionsF1();
-        else this.readTransitionsReact();
       })
       .catch((e) => {
         console.error(e);
@@ -124,7 +133,7 @@ class ExportButton extends React.Component {
       datas.forEach((item) => {
           states.push(item.from);
           states.push(item.to);
-      }); 
+      });
       states = arrUnique(states);
       this.props.setFilters(states);
     });
@@ -138,22 +147,30 @@ class ExportButton extends React.Component {
       datas.forEach((item) => {
           states.push(item.from);
           states.push(item.to);
-      }); 
+      });
       states = arrUnique(states);
       this.props.setFilters(states);
     });
   }
-  
+
   componentWillAppear(cb) {
     this.animateIn().then(cb);
   }
-  
+
   componentWillEnter(cb) {
     this.animateIn().then(cb);
   }
-  
+
   componentWillLeave(cb) {
     this.animateOut().then(cb);
+  }
+
+  arrNoDupe = (a) => {
+    let temp = {};
+    for(let i = 0; i < a.length; i++) {
+        temp[a[i]] = true;
+    }
+    return Object.keys(temp);
   }
 
   render() {
@@ -184,15 +201,15 @@ class ExportButton extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    status: state.status,
-    setAESync: state.status,
-    setDownloadState: state.download,
-    download: state.download,
-    filter: state.filter,
-    setFilters: state.filter,
-    previewType: state.previewType
-  };
+    return {
+        status: state.status,
+        setAESync: state.status,
+        setDownloadState: state.download,
+        download: state.download,
+        filter: state.filter,
+        setFilters: state.filter,
+        previewType: state.previewType
+    };
 }
 
 function mapDispatchToProps(dispatch) {

@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import mkdirp from 'mkdirp';
@@ -9,21 +10,28 @@ shelljs.config.fatal = false;
 
 class DownloadButton extends Component {
   static propTypes = {
-    download: React.PropTypes.bool
+    download: React.PropTypes.bool,
+    previewType: React.PropTypes.string
   };
 
   constructor(props) {
-      super(props);   
-      this.handleClick = this.handleClick.bind(this);
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleClick = (download) => {
     if(download) {
       let path = electron.remote.dialog.showSaveDialog();
-      if(!path) return;
 
+      if(!path) return;
       mkdirp(path);
-      shelljs.cp('-R', __dirname + '/output-react', path);
+
+      if(this.props.previewType === 'react') {
+        shelljs.cp('-R', __dirname + '/', path);
+      }
+      else {
+        shelljs.cp('-R', __dirname + '/', path);
+      }
     }
   }
 
@@ -40,10 +48,11 @@ class DownloadButton extends Component {
 }
 
 function mapStateToProps(state) {
-  return {
-    download: state.download,
-    status: state.status
-  };
+    return {
+        download: state.download,
+        status: state.status,
+        previewType: state.previewType
+    };
 }
 
 const DownloadContainer = connect(mapStateToProps)(DownloadButton);

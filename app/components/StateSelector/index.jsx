@@ -18,11 +18,11 @@ class StateSelector extends Component {
   };
 
   componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);  
+    window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);  
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   handleKeyDown = (e) => {
@@ -41,16 +41,17 @@ class StateSelector extends Component {
     return (
       <div className={className}>
         {
-          filter.map(type => {
+          filter.map((type, index) => {
             return (
               <div key={type} className={style.checkContainer} >
                 <input
                   id={type}
+                  key={index}
                   className={style.checkbox}
                   type="checkbox" value={type}
                   checked={this.props.previewState === type}
                   onChange={() => setAnimationState(type)}
-                /> 
+                />
                 <label className={style.checkboxLabel} htmlFor={type}>{type}</label>
               </div>
             );

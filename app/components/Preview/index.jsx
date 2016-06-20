@@ -16,43 +16,18 @@ class Preview extends Component {
     download: React.PropTypes.bool
   };
 
-  state = {
-    backgroundPlaceHolder: {
-      backgroundColor: 'rgba(0,0,0,0.5)'
-    }
-  };
-
-  getContent = () => {
-    const { previewType, previewState, download } = this.props;
-
-    if(!download) {
-      // return (
-      //   <div className={styles.previewContainer} style={this.state.backgroundPlaceHolder}></div>
-      // );
-
-      return <NoPreview />   
-    }
-
-    if(previewType === 'react') {
-      return (
-        <div className={styles.previewContainer} >
-          <ReactF1Preview previewState={previewState} />
-        </div>
-      );
-    }
-
-    return (
-      <div className={styles.previewContainer} ></div>
-    );
-  };
-
   render() {
+    const { previewType, previewState, download } = this.props;
     const className = classnames(styles.container, this.props.className);
 
     return (
       <div className={className}>
         {
-          this.getContent()
+          !download
+          ? <NoPreview />
+          : <div className={styles.previewContainer} >
+              <ReactF1Preview previewState={previewState} />
+            </div>
         }
       </div>
     )
