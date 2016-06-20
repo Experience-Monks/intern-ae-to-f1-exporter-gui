@@ -9,7 +9,8 @@ shelljs.config.fatal = false;
 
 class DownloadButton extends Component {
     static propTypes = {
-      download: React.PropTypes.bool
+      download: React.PropTypes.bool,
+      previewType: React.PropTypes.string
     };
 
     constructor(props) {
@@ -21,9 +22,13 @@ class DownloadButton extends Component {
         if(download) {
             let path = electron.remote.dialog.showSaveDialog();
             if(!path) return;
-
             mkdirp(path);
-            shelljs.cp('-R', __dirname + '/output-react', path);
+            if(this.props.previewType === 'react') {
+                shelljs.cp('-R', __dirname + '/', path);
+            }
+            else {
+                shelljs.cp('-R', __dirname + '/', path);
+            }
         }
     }
 
@@ -42,7 +47,8 @@ class DownloadButton extends Component {
 function mapStateToProps(state) {
     return {
         download: state.download,
-        status: state.status
+        status: state.status,
+        previewType: state.previewType
     };
 }
 

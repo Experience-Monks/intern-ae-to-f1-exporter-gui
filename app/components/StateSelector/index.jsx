@@ -18,11 +18,12 @@ class StateSelector extends Component {
         return (
           <div className={style.inputWrapper}>
             {
-              filterProp.map(type => {
+              filterProp.map((type, index) => {
                 return (
                   <div key={type} className={style.checkContainer} >
                     <input
                       id={type}
+                      key={index}
                       className={style.checkbox}
                       type="checkbox" value={type}
                       checked={this.props.previewState === type}

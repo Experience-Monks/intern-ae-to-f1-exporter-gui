@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 const React = require('react');
 const ReactF1 = require('react-f1');
@@ -39,8 +38,6 @@ class ReactF1Preview extends React.Component {
 	}
 	
 	render() {
-		// const assetName = this.state.assetName;
-		// const assetPath = '../../output-react/' + {assetName};
 		const { previewState } = this.props;
 		const props = {
 			states: aeToF1Dom.getStates(this.state.aeOpts),
@@ -65,21 +62,21 @@ class ReactF1Preview extends React.Component {
 		return(
 			
 				<ReactF1 {...props} style={styleContainer}>
-				{
-					assetNames.map(name => {
-						return (
-							<img 
-								className='image'
-								data-f1={name.key} 
-								src={__dirname + '/output-react/assets/' + name.data.src} 
-								width={name.data.width || 500} 
-								height={name.data.height || 500} 
-								style={{position: 'absolute', left: 0, top: 0}} 
-								alt={'preview-react'}
-							/>
-						);
-					})
-				}
+					{
+						assetNames.map((name, index) => {
+							return (
+								<img 
+									data-f1={name.key} 
+									key={index}
+									src={__dirname + '/output-react/assets/' + name.data.src} 
+									width={name.data.width || 500} 
+									height={name.data.height || 500} 
+									style={{position: 'absolute', left: 0, top: 0}} 
+									alt={'preview-react'}
+								/>
+							);
+						})
+					}
 				</ReactF1>
 			
 		);

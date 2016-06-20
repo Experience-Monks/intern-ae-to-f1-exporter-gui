@@ -9,7 +9,6 @@ import styles from './style.css';
 
 class Preview extends Component {
     static propType = {
-        previewType: React.PropTypes.string,
         previewState: React.PropTypes.string,
         download: React.PropTypes.bool
     }
@@ -21,7 +20,7 @@ class Preview extends Component {
     }
 
     render() {
-        const { previewType, previewState, download } = this.props;
+        const { previewState, download } = this.props;
         if(!download) {
             return (
                 <div className={styles.container}>
@@ -30,19 +29,11 @@ class Preview extends Component {
                 </div>
             );    
         }
-        else if(previewType === 'react') {
-            return (
-                <div className={styles.container}>
-                    <div className={styles.previewContainer} >
-                        <ReactF1Preview previewState={previewState} />
-                    </div>
-                </div>
-            );
-        }
         else {
             return (
                 <div className={styles.container}>
                     <div className={styles.previewContainer} >
+                        <ReactF1Preview previewState={previewState} />
                     </div>
                 </div>
             );
@@ -55,8 +46,7 @@ function mapStateToProps(state) {
     return {
         setAnimationState: state.previewState,
         previewState: state.previewState,
-        download: state.download,
-        previewType: state.previewType
+        download: state.download
     };
 }
 

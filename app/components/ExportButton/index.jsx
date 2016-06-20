@@ -11,16 +11,9 @@ import * as FilterActions from '../../actions/filter';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
-import arrUnique from 'array-unique';
-
-ae.options.includes = [
-    './node_modules/after-effects/lib/includes/console.js',
-    './node_modules/after-effects/lib/includes/es5-shim.js',
-    './node_modules/after-effects/lib/includes/get.js'
-];
 
 import aeToReactF1 from 'exporters-react-f1';
-import aeToF1Dom from'exporters-f1-dom';
+import aeToF1Dom from 'exporters-f1-dom';
 import fs from 'fs';
 
 class ExportButton extends React.Component {
@@ -34,7 +27,7 @@ class ExportButton extends React.Component {
 
     static defaultProps = {
         status: 'Unsync'
-    }
+    };
 
     state = {
         statusMessage: 'Synchronize'
@@ -51,8 +44,8 @@ class ExportButton extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synchronize') {
-        let outputType = nextProps.previewType === 'f1Dom' ? 'react' : 'f1Dom';
         this.setState({ statusMessage: 'Synchronizing'});
+        this.props.setDownloadState(false);
         this.props.setAESync('Synching');
         ae.execute(aeToJSON)
             .then((result) => {
@@ -69,13 +62,20 @@ class ExportButton extends React.Component {
                 });
             })
             .then(() => {
+                fs.unlinkSync(__dirname + '/ae-export.json');
+                const data = fs.readFileSync(__dirname + '/output-react/animation.json', 'utf-8');
+                let datas = JSON.parse(data);
+                let states = [];
+                datas.forEach((item) => {
+                    states.push(item.from);
+                    states.push(item.to);
+                }); 
+                states = this.arrNoDupe(states);
+                this.props.setFilters(states);
                 this.props.setAESync('Synchronized');
                 this.props.setDownloadState(true);
                 this.setState({ statusMessage: 'Synchronized' });
-                fs.unlinkSync(__dirname + '/ae-export.json');
-
-                if(outputType === 'react') this.readTransitionsF1();
-                else this.readTransitionsReact();
+             
             })
             .catch((e) => {
                 this.setState({ statusMessage: 'Synch Failed' });
@@ -85,34 +85,6 @@ class ExportButton extends React.Component {
         }
     }
 
-    readTransitionsReact = () => {
-        fs.readFile(__dirname + '/output-react/animation.json', 'utf-8', (err, data) => {
-            if (err) console.error(err);
-            let datas = JSON.parse(data);
-            let states = [];
-            datas.forEach((item) => {
-                states.push(item.from);
-                states.push(item.to);
-            }); 
-            states = arrUnique(states);
-            this.props.setFilters(states);
-        });
-    }
-
-    readTransitionsF1 = () => {
-        fs.readFile(__dirname + '/output-f1/animation.json', 'utf-8', (err, data) => {
-            if (err) console.error(err);
-            let datas = JSON.parse(data);
-            let states = [];
-            datas.forEach((item) => {
-                states.push(item.from);
-                states.push(item.to);
-            }); 
-            states = arrUnique(states);
-            this.props.setFilters(states);
-        });
-    }
-	
 	componentWillAppear(cb) {
         this.animateIn().then(cb);
 	}
@@ -133,30 +105,38 @@ class ExportButton extends React.Component {
         return animate.to(this.refs.exporter, 0.3, { opacity: 0, ease: Quad.easeOut });
     }
 
-render() {
-    const { setAESync, status } = this.props;
-    return (
-        <div className={style.exporter}>
-            <div className={style.column}>
-            <button className={style.exportButton} ref="exporter" onClick={() => setAESync(status)}>
-              {this.state.statusMessage}
-            </button>
+    arrNoDupe = (a) => {
+        let temp = {};
+        for(let i = 0; i < a.length; i++) {
+            temp[a[i]] = true;
+        }
+        return Object.keys(temp);
+    }
+
+    render() {
+        const { setAESync, status } = this.props;
+        return (
+            <div className={style.exporter}>
+                <div className={style.column}>
+                <button className={style.exportButton} ref="exporter" onClick={() => setAESync(status)}>
+                  {this.state.statusMessage}
+                </button>
+                </div>
             </div>
-        </div>
-    );
-  }
+        );
+    }
 }
 
 function mapStateToProps(state) {
-  return {
-    status: state.status,
-    setAESync: state.status,
-    setDownloadState: state.download,
-    download: state.download,
-    filter: state.filter,
-    setFilters: state.filter,
-    previewType: state.previewType
-  };
+    return {
+        status: state.status,
+        setAESync: state.status,
+        setDownloadState: state.download,
+        download: state.download,
+        filter: state.filter,
+        setFilters: state.filter,
+        previewType: state.previewType
+    };
 }
 
 function mapDispatchToProps(dispatch) {
