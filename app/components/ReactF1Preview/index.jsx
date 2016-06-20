@@ -24,25 +24,37 @@ class ReactF1Preview extends React.Component {
 	componentWillMount = () => {
 		const dataAsset = JSON.parse(fs.readFileSync(__dirname + '/output-react/targets.json', {encoding: 'utf-8'}));
 		const dataAnimation = JSON.parse(fs.readFileSync(__dirname + '/output-react/animation.json', {encoding: 'utf-8'}));
-		const assetNames = [];
-		Object.keys(dataAsset).forEach((key) => {
-			assetNames.push({
-				key,
-				data: dataAsset[key]
-			});
-		});
-		this.setState({
-			aeOpts: {
-				animation: dataAnimation,
-				targets: dataAsset
-			},
-			assetNames
-		});
+    const assetNames = [];
+    if(Object.keys(dataAsset).length === 0 || Object.keys(dataAnimation).length === 0) {
+      this.setState({ aeOpts: {} });
+      this.props.displayError({
+        description: 'An error occured retrieving f1 animation data.',
+        suggestion: 'Make sure your composition is compatible with the ae-to-f1 exporter.'
+      });
+    }
+		else {
+      Object.keys(dataAsset).forEach((key) => {
+        assetNames.push({
+          key,
+          data: dataAsset[key]
+        });
+      });
+
+      this.setState({
+        aeOpts: {
+          animation: dataAnimation,
+          targets: dataAsset
+        },
+        assetNames
+      });
+    }
 
 	}
 	
 	render() {
 		const { previewState, displayError } = this.props;
+    if(Object.keys(this.state.aeOpts).length === 0) return;
+
 		const props = {
 			states: aeToF1Dom.getStates(this.state.aeOpts),
 			transitions: aeToF1Dom.getTransitions(this.state.aeOpts),

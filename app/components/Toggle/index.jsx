@@ -23,11 +23,16 @@ class Toggle extends React.Component {
     const toggleClass = previewType === 'react' ? 
       classNames(style.switchToggle) : classNames(style.switchToggle, style.switchOn);
 
+    const toggleTextClass = previewType === 'react' ?
+      classNames(style.toggleText, style.toggleTextRight) : classNames(style.toggleText, style.toggleTextLeft);
+
     return (
         <div className={this.props.className}>
+          F1 REACT
           <div className={style.switch} onClick={() => this.handleClick(previewType)} >
             <div className={toggleClass} />
           </div>
+          F1 DOM
         </div>
     );
   }

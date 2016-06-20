@@ -64,7 +64,7 @@ class ExportButton extends React.Component {
     if(nextProps.status === 'Synching') {
       let _this = this;
       this.props.setDownloadState(false);
-
+      
       // This timeout is used to ensure the loading animation is in place before
       // executing after effects which may stall application for a few seconds.
       setTimeout(() => {
@@ -77,7 +77,7 @@ class ExportButton extends React.Component {
             suggestion: 'Please contact a developer to resolve this.',
             error: e.message
           });
-          this.props.setAESync('Synchronized');
+          _this.props.setAESync('Synchronized');
         }
       }, 1000);
     }
@@ -108,9 +108,10 @@ class ExportButton extends React.Component {
             states.push(item.to);
         });
         states = this.arrNoDupe(states);
+        this.props.setAESync('Synchronized');
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
-        this.props.setAESync('Synchronized');
+        
         this.props.setDownloadState(true);
       })
       .catch((e) => {

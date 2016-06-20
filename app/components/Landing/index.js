@@ -38,6 +38,7 @@ class Landing extends Component {
             previewState={this.props.previewState}
             download={this.props.download}
             type={this.props.previewType}
+            filters={this.props.filter}
           />
           <StateSelector
             className={styles.stateSelector}

@@ -1,7 +1,7 @@
 .switch {
     border: 1px solid #ccc;
-    width: 70px;
-    height: 26px;
+    width: 50px;
+    height: 20px;
     border-radius: 13px;
     cursor: pointer;
     display: flex;
@@ -12,16 +12,17 @@
     width: 25px;
     height: 24px;
     left: 0;
+    margin-top: -3px;
     border-radius: 12px;
     position: relative;
     transition: left .2s ease-in-out;
 }
 .switchOn {
-    background: green;
-    left:44px;
+    background: black;
+    left: 24px;
 }
 .switchOn .switchToggle {
-    left: 23px;
+    left: 22px;
 }
 .switchDisabled {
     cursor: not-allowed;
