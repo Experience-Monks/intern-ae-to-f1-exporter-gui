@@ -15,7 +15,7 @@ class Toggle extends React.Component {
 
   handleClick = (previewType) => {
     if(this.props.status === 'Synching') return;
-    this.props.setType(previewType === 'f1Dom' ? 'react' : 'f1Dom'  );
+    this.props.setType(previewType === 'f1Dom' ? 'react' : 'f1Dom');
   }
 
   render() {

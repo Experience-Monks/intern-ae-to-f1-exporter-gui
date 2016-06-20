@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
 	filter, 
 	previewType,
 	routing,
-  errors
+	errors
 });
 
 export default rootReducer;

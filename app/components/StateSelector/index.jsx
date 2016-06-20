@@ -31,12 +31,12 @@ class StateSelector extends Component {
 
     if(filter[stateIndex] && e.keyCode >= 49 && e.keyCode <= 57) {
       this.props.setAnimationState(filter[stateIndex]);
-    };
+    }
   }
 
   render() {
     const { setAnimationState, filter } = this.props;
-    const className = classnames(style.stateSelector, this.props.className)
+    const className = classnames(style.stateSelector, this.props.className);
 
     return (
       <div className={className}>

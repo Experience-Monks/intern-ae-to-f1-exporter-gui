@@ -4,7 +4,7 @@ export const UNSYNC = 'UNSYNC';
 
 export function sync(state) {
 	switch(state) {
-		case 'Unsynched':
+		case 'Synchronize':
 			return {
 				type: EXPORT
 			};
@@ -15,15 +15,13 @@ export function sync(state) {
 		case 'Synchronized':
 			return {
 				type: UNSYNC
-	     	};
+			};
 		default:
 	}
 }
 
 export function setAESync(status) {
-	// dispatch({ type: 'SYNCING' })
-
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(sync(status));
   };
 }

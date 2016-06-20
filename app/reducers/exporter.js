@@ -1,6 +1,6 @@
 import { EXPORT, UNSYNC } from '../actions/export';
 
-function status(state = 'Unsynched', action) {
+function status(state = 'Synchronize', action) {
 	switch (action.type) {
 		case EXPORT:
 			if(state === 'Synchronize') {
@@ -14,12 +14,11 @@ function status(state = 'Unsynched', action) {
 			else {
 				return state;
 			}
-    case UNSYNC:
-      state = 'Unsynched';
-      return state;
-		default:
-			return state;
-			
+			case UNSYNC:
+				state = 'Synchronize';
+				return state;
+			default:
+				return state;
 	}
 }
 

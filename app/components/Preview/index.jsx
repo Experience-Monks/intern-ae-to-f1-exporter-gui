@@ -17,7 +17,7 @@ class Preview extends Component {
   };
 
   render() {
-    const { previewType, previewState, download } = this.props;
+    const { previewState, download } = this.props;
     const className = classnames(styles.container, this.props.className);
 
     return (
@@ -30,7 +30,7 @@ class Preview extends Component {
             </div>
         }
       </div>
-    )
+    );
   }
 }
 
@@ -38,7 +38,7 @@ function NoPreview() {
   return (
     <div className={styles.noPreview}>
       <div dangerouslySetInnerHTML={{ __html: noPreviewSvg }}></div>
-      <label>No<br/>Preview</label>
+      <label>No<br />Preview</label>
     </div>
   );
 }

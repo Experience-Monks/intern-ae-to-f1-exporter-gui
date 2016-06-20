@@ -8,7 +8,7 @@ const fs = require('fs');
 class ReactF1Preview extends React.Component {
 	static propType = {
         previewState: React.PropTypes.string,
-    }
+  }
 
 	state = {
 		style: {},

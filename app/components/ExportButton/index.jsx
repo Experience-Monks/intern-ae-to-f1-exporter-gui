@@ -1,5 +1,4 @@
 import React from 'react';
-import animate from 'gsap-promise';
 import style from './style.css';
 import mkdirp from 'mkdirp';
 
@@ -13,7 +12,6 @@ import * as ErrorsAction from '../../actions/errors';
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
 
-import arrUnique from 'array-unique';
 import classnames from 'classnames';
 import frontWaveSvg from './front-wave.svg';
 import backWaveSvg from './back-wave.svg';
@@ -37,14 +35,9 @@ class ExportButton extends React.Component {
     previewType: React.PropTypes.string
   };
 
-
   static defaultProps = {
-    status: 'Unsync'
+    status: 'Synchronize'
   }
-
-  state = {
-    statusMessage: 'Synchronize'
-  };
 
   componentDidMount() {
     const frontSvg = this.refs.waveAnimFront.firstChild;
@@ -52,26 +45,22 @@ class ExportButton extends React.Component {
     [frontSvg, backSvg].forEach(svg => {
       svg.classList.add(style.loading);
       svg.querySelector('.waterFill').classList.add(style.waterFill);
-    })
+    });
 
     ae.execute(() => Boolean(app.project.file))
       .then((isSynced) => {
-        if(isSynced) this.setState({ init: true, statusMessage: 'synchronize' });
-        else {
+        if(!isSynced) {
           this.props.displayError({
             description: 'Error syncing with After Effects.',
             suggestion: 'Please try again.'
           });
-          this.setState({ init: true, statusMessage: 'failed to synchronize' });
         }
       });
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.status === 'Synchronize') {
-      this.setState({ statusMessage: 'Synchronizing'});
+    if(nextProps.status === 'Synching') {
       this.props.setDownloadState(false);
-      this.props.setAESync('Synching');
 
       // This timeout is used to ensure the loading animation is in place before
       // executing after effects which may stall application for a few seconds.
@@ -107,7 +96,6 @@ class ExportButton extends React.Component {
         this.props.setFilters(states);
         this.props.setAESync('Synchronized');
         this.props.setDownloadState(true);
-        this.setState({ statusMessage: 'Synchronized' });
       })
       .catch((e) => {
         console.error(e);
@@ -118,7 +106,6 @@ class ExportButton extends React.Component {
           error: e
         });
 
-        this.setState({ statusMessage: 'Synch Failed' });
         this.props.setAESync('Unsync');
       });
   };
@@ -153,8 +140,8 @@ class ExportButton extends React.Component {
     return (
       <div className={className}>
         <div className={style.column}>
-        <button className={style.exportButton} ref="exporter" onClick={() => setAESync(status)}>
-          <div className={style.message}>{this.state.statusMessage}</div>
+        <button className={style.exportButton} ref="exporter" onClick={() => setAESync('Synchronize')}>
+          <div className={style.message}>{status}</div>
           <div ref="waveAnimBack" className={style.backWave} dangerouslySetInnerHTML={{ __html: backWaveSvg }}></div>
           <div ref="waveAnimFront" className={style.frontWave} dangerouslySetInnerHTML={{ __html: frontWaveSvg }}></div>
         </button>
