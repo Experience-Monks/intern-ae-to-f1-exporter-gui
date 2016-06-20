@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import { displayError, clearError } from '../../actions/errors';
 import styles from './style.css';
-import classnames from 'classnames';
 import animate from 'gsap-promise';
 import diff from 'deep-diff';
 

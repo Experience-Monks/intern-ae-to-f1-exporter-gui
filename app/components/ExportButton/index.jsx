@@ -8,6 +8,7 @@ import * as ExportActions from '../../actions/export';
 import * as DownloadActions from '../../actions/download';
 import * as FilterActions from '../../actions/filter';
 import * as ErrorsAction from '../../actions/errors';
+import * as SelectStateActions from '../../actions/selectState';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
@@ -32,6 +33,7 @@ class ExportButton extends React.Component {
     setDownloadState: React.PropTypes.func,
     status: React.PropTypes.string,
     setFilters: React.PropTypes.func,
+    setAnimationState: React.PropTypes.func,
     previewType: React.PropTypes.string
   };
 
@@ -52,7 +54,7 @@ class ExportButton extends React.Component {
         if(!isSynced) {
           this.props.displayError({
             description: 'Error syncing with After Effects.',
-            suggestion: 'Please try again.'
+            suggestion: 'Make sure your After Effects project is open and please try again.'
           });
         }
       });
@@ -60,11 +62,24 @@ class ExportButton extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.status === 'Synching') {
+      let _this = this;
       this.props.setDownloadState(false);
 
       // This timeout is used to ensure the loading animation is in place before
       // executing after effects which may stall application for a few seconds.
-      setTimeout(this.syncAfterEffects, 1000);
+      setTimeout(() => {
+        try {
+          _this.syncAfterEffects();  
+        }
+        catch (e) {
+          _this.props.displayError({
+            description: 'An unknown error has occured.',
+            suggestion: 'Please contact a developer to resolve this.',
+            error: e.message
+          });
+          this.props.setAESync('Synchronized');
+        }
+      }, 1000);
     }
   }
 
@@ -93,20 +108,13 @@ class ExportButton extends React.Component {
             states.push(item.to);
         });
         states = this.arrNoDupe(states);
+        this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
         this.props.setAESync('Synchronized');
         this.props.setDownloadState(true);
       })
       .catch((e) => {
-        console.error(e);
-
-        this.props.displayError({
-          description: 'An unknown error has occured.',
-          suggestion: 'Please contact a developer to resolve this.',
-          error: e
-        });
-
-        this.props.setAESync('Unsync');
+        throw(e);
       });
   };
 
@@ -159,12 +167,13 @@ function mapStateToProps(state) {
         download: state.download,
         filter: state.filter,
         setFilters: state.filter,
-        previewType: state.previewType
+        previewState: state.previewState,
+        setAnimationState: state.previewState
     };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, ExportActions, DownloadActions, FilterActions, ErrorsAction ), dispatch);
+  return bindActionCreators(Object.assign({}, ExportActions, DownloadActions, FilterActions, ErrorsAction, SelectStateActions), dispatch);
 }
 
 const Exporter = connect(mapStateToProps, mapDispatchToProps)(ExportButton);

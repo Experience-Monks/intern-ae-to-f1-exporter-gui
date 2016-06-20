@@ -1,4 +1,7 @@
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import * as ErrorsAction from '../../actions/errors';
 
 const React = require('react');
 const ReactF1 = require('react-f1');
@@ -8,6 +11,7 @@ const fs = require('fs');
 class ReactF1Preview extends React.Component {
 	static propType = {
         previewState: React.PropTypes.string,
+        displayError: React.PropTypes.func
   }
 
 	state = {
@@ -38,7 +42,7 @@ class ReactF1Preview extends React.Component {
 	}
 	
 	render() {
-		const { previewState } = this.props;
+		const { previewState, displayError } = this.props;
 		const props = {
 			states: aeToF1Dom.getStates(this.state.aeOpts),
 			transitions: aeToF1Dom.getTransitions(this.state.aeOpts),
@@ -58,28 +62,35 @@ class ReactF1Preview extends React.Component {
 			transformOrigin: '50% 50%'
 		};
 		const assetNames = this.state.assetNames;
+		try {
+      return(
+        <ReactF1 {...props} style={styleContainer}>
+          {
+            assetNames.map((name, index) => {
+              return (
+                <img 
+                  data-f1={name.key} 
+                  key={index}
+                  src={__dirname + '/output-react/assets/' + name.data.src} 
+                  width={name.data.width || 500} 
+                  height={name.data.height || 500} 
+                  style={{position: 'absolute', left: 0, top: 0}} 
+                  alt={'preview-react'}
+                />
+              );
+            })
+          }
+        </ReactF1>
+      );	
+		}
+    catch (e) {
+       displayError({
+        description: 'An error occured rendering the preview.',
+        suggestion: 'Please try again.',
+        error: e.message
+      });
+    }
 		
-		return(
-			
-				<ReactF1 {...props} style={styleContainer}>
-					{
-						assetNames.map((name, index) => {
-							return (
-								<img 
-									data-f1={name.key} 
-									key={index}
-									src={__dirname + '/output-react/assets/' + name.data.src} 
-									width={name.data.width || 500} 
-									height={name.data.height || 500} 
-									style={{position: 'absolute', left: 0, top: 0}} 
-									alt={'preview-react'}
-								/>
-							);
-						})
-					}
-				</ReactF1>
-			
-		);
 	}
 }
 
@@ -89,7 +100,11 @@ function mapStateToProps(state) {
     };
 }
 
-const ReactF1PreviewContainer = connect(mapStateToProps)(ReactF1Preview);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(ErrorsAction, dispatch);
+}
+
+const ReactF1PreviewContainer = connect(mapStateToProps, mapDispatchToProps)(ReactF1Preview);
 
 export default ReactF1PreviewContainer;
 

@@ -17,7 +17,7 @@ class Landing extends Component {
     previewType: React.PropTypes.string,
     download: React.PropTypes.bool,
     status: React.PropTypes.string,
-    filter: React.PropTypes.array,
+    filter: React.PropTypes.array
   };
 
   static defaultProps = {
