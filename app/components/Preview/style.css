@@ -1,15 +1,50 @@
 .container {
-	border: solid;
-	margin-top: 5%;
-	margin-left: 5%;
-	width: 90%;
-	height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
 
+.noPreview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  min-height: 140px;
+  width: 8vw;
+  height: 8vw;
+  border: 2px solid #EFEFEF;
+  border-radius: 50%;
+  font-size: 0.842vw;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  line-height: 150%;
+}
+
+@media screen and (max-width: 1400px) {
+  .noPreview {
+    font-size: 10px;
+  }
+}
+
+.noPreview label {
+  margin-left: 3%;
+  margin-bottom: 5%;
+}
+
+.noPreview svg {
+  width: 28.125%;
+  margin-bottom: 3%;
 }
 
 .previewContainer {
-	margin-top: 20%;
-	margin-left: 20%;
-	width: 30vw;
-	height: 30vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transform: scale(0.5);
 }

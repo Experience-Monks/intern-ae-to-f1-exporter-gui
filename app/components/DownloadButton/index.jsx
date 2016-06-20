@@ -1,3 +1,4 @@
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import mkdirp from 'mkdirp';
@@ -8,40 +9,42 @@ import shelljs from 'shelljs';
 shelljs.config.fatal = false;
 
 class DownloadButton extends Component {
-    static propTypes = {
-      download: React.PropTypes.bool,
-      previewType: React.PropTypes.string
-    };
+  static propTypes = {
+    download: React.PropTypes.bool,
+    previewType: React.PropTypes.string
+  };
 
-    constructor(props) {
-        super(props);   
-        this.handleClick = this.handleClick.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
-    handleClick = (download) => {
-        if(download) {
-            let path = electron.remote.dialog.showSaveDialog();
-            if(!path) return;
-            mkdirp(path);
-            if(this.props.previewType === 'react') {
-                shelljs.cp('-R', __dirname + '/', path);
-            }
-            else {
-                shelljs.cp('-R', __dirname + '/', path);
-            }
-        }
-    }
+  handleClick = (download) => {
+    if(download) {
+      let path = electron.remote.dialog.showSaveDialog();
 
-    render() {
-        const { download } = this.props;
-        return (
-            <div className={styles.container} onClick={() => this.handleClick(download)}>
-                <div>
-                    {'download'}
-                </div>
-            </div>
-        );
+      if(!path) return;
+      mkdirp(path);
+
+      if(this.props.previewType === 'react') {
+        shelljs.cp('-R', __dirname + '/', path);
+      }
+      else {
+        shelljs.cp('-R', __dirname + '/', path);
+      }
     }
+  }
+
+  render() {
+    const { download } = this.props;
+    return (
+      <div className={styles.container} onClick={() => this.handleClick(download)}>
+        <div>
+          {'download'}
+        </div>
+      </div>
+    );
+  }
 }
 
 function mapStateToProps(state) {

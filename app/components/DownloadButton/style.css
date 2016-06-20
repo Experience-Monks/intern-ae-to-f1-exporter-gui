@@ -1,7 +1,6 @@
 .container {
 	letter-spacing: 1px;
 	width: 40%;
-	border: solid;
 	display: flex;
 	cursor: pointer;
 	text-transform: uppercase;
