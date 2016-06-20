@@ -57,7 +57,7 @@ class ExportButton extends React.Component {
         if(isSynced) this.setState({ init: true, statusMessage: 'synchronize' });
         else {
           this.props.displayError({
-            title: 'Error syncing with After Effects.',
+            description: 'Error syncing with After Effects.',
             suggestion: 'Please try again.'
           });
           this.setState({ init: true, statusMessage: 'failed to synchronize' });
@@ -106,7 +106,7 @@ class ExportButton extends React.Component {
         console.error(e);
 
         this.props.displayError({
-          title: 'An unknown error has occured.',
+          description: 'An unknown error has occured.',
           suggestion: 'Please contact a developer to resolve this.',
           error: e
         });

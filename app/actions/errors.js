@@ -16,7 +16,7 @@ export function displayError(message) {
     type: DISPLAY_ERROR,
     message: {
       time: moment().format('LTS'),
-      title: message.title,
+      description: message.description,
       suggestion: message.suggestion,
       error: message.error
     }

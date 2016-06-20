@@ -49,12 +49,12 @@ class ErrorDisplay extends Component {
   };
 
   render() {
-    const { time, title, suggestion } = this.props.message || {};
+    const { time, description, suggestion } = this.props.message || {};
 
     return (
       <div ref="container" className={styles.errorDisplay}>
         <div className={styles.errorTime}>{`[ ${time} ]`}</div>
-        <div className={styles.errorTitle}>{title}</div>
+        <div className={styles.errorTitle}>{description}</div>
         <div className={styles.errorSuggestion}>{suggestion}</div>
         <div className={styles.closeButton} onClick={this.handleClick}>Close</div>
       </div>
