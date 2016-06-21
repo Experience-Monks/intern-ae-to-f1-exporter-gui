@@ -22,7 +22,12 @@ const DEFAULT_OPTS = {
   dir: './',
   name: appName,
   asar: shouldUseAsar,
-  ignore: []
+  ignore: [ 
+    '^/test($|/)',
+    '^/tools($|/)',
+    '^/release($|/)',
+    '^/main.development.js'
+  ]
 };
 
 const icon = argv.icon || argv.i || 'app/app';

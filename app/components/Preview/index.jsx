@@ -15,17 +15,18 @@ class Preview extends Component {
     previewType: React.PropTypes.string,
     previewState: React.PropTypes.string,
     download: React.PropTypes.bool,
-    displayError: React.PropTypes.func
+    displayError: React.PropTypes.func,
+    filter: React.PropTypes.array
   };
 
   render() {
-    const { previewState, download, displayError } = this.props;
+    const { previewState, download, displayError, filter } = this.props;
     const className = classnames(styles.container, this.props.className);
     try {
       return (
         <div className={className}>
           {
-            !download
+            !download || filter.indexOf(previewState) === -1 
             ? <NoPreview />
             : <div className={styles.previewContainer} >
                 <ReactF1Preview previewState={previewState} />
@@ -36,7 +37,7 @@ class Preview extends Component {
     }
     catch (e) {
       displayError({
-        description: 'An error occurred rendering the preview.',
+        description: 'Preview rendering error: ' + e.message,
         suggestion: 'Make sure your project\'s composition is compatible with F1.',
         error: e.message
       });
@@ -59,7 +60,8 @@ function mapStateToProps(state) {
     setAnimationState: state.previewState,
     previewState: state.previewState,
     download: state.download,
-    previewType: state.previewType
+    previewType: state.previewType,
+    filter: state.filter
   };
 }
 

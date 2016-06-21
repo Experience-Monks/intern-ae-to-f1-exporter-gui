@@ -1,6 +1,8 @@
 import React from 'react';
 import style from './style.css';
 import mkdirp from 'mkdirp';
+import fs from 'fs';
+import rimraf from 'rimraf';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -18,8 +20,7 @@ import frontWaveSvg from './front-wave.svg';
 import backWaveSvg from './back-wave.svg';
 
 import aeToReactF1 from 'exporters-react-f1';
-import aeToF1Dom from'exporters-f1-dom';
-import fs from 'fs';
+import aeToF1Dom from 'exporters-f1-dom';
 
 ae.options.includes = [
     './node_modules/after-effects/lib/includes/console.js',
@@ -54,7 +55,7 @@ class ExportButton extends React.Component {
         if(!isSynced) {
           this.props.displayError({
             description: 'Error syncing with After Effects.',
-            suggestion: 'Make sure your After Effects project is open and please try again.'
+            suggestion: 'Make sure your After Effects project is open.'
           });
         }
       });
@@ -68,17 +69,7 @@ class ExportButton extends React.Component {
       // This timeout is used to ensure the loading animation is in place before
       // executing after effects which may stall application for a few seconds.
       setTimeout(() => {
-        try {
-          _this.syncAfterEffects();  
-        }
-        catch (e) {
-          _this.props.displayError({
-            description: 'An unknown error has occured.',
-            suggestion: 'Please contact a developer to resolve this.',
-            error: e.message
-          });
-          _this.props.setAESync('Synchronized');
-        }
+        _this.syncAfterEffects(); 
       }, 1000);
     }
   }
@@ -87,15 +78,16 @@ class ExportButton extends React.Component {
     return ae.execute(aeToJSON)
       .then((result) => {
         fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
+        rimraf.sync(__dirname + '/output*');
         mkdirp(__dirname + '/output-react');
-        mkdirp('./output-f1');
+        mkdirp(__dirname + '/output-f1');
         aeToReactF1({
-            pathJSON: __dirname + '/ae-export.json',
-            pathOut: __dirname + '/output-react/'
+          pathJSON: __dirname + '/ae-export.json',
+          pathOut: __dirname + '/output-react/'
         });
         aeToF1Dom({
-            pathJSON: __dirname + '/ae-export.json',
-            pathOut: __dirname + '/output-f1/'
+          pathJSON: __dirname + '/ae-export.json',
+          pathOut: __dirname + '/output-f1/'
         });
       })
       .then(() => {
@@ -111,11 +103,14 @@ class ExportButton extends React.Component {
         this.props.setAESync('Synchronized');
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
-        
         this.props.setDownloadState(true);
       })
       .catch((e) => {
-        throw(e);
+        this.props.displayError({
+          description: e.message,
+          suggestion: 'Make sure your after effects process is started.'
+        });
+        this.props.setAESync('Synchronized');
       });
   };
 

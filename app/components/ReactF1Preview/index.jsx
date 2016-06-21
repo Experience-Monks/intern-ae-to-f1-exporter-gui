@@ -97,7 +97,7 @@ class ReactF1Preview extends React.Component {
 		}
     catch (e) {
        displayError({
-        description: 'An error occured rendering the preview.',
+        description: 'Preview rendering error: ' + e.message,
         suggestion: 'Please try again.',
         error: e.message
       });
