@@ -6,6 +6,7 @@ import download from './download';
 import filter from './filter';
 import previewType from './toggle';
 import errors from './errors';
+import compState from './compState';
 
 const rootReducer = combineReducers({
 	status,
@@ -13,8 +14,9 @@ const rootReducer = combineReducers({
 	download,
 	filter, 
 	previewType,
-	routing,
-	errors
+	errors,
+	compState,
+	routing
 });
 
 export default rootReducer;

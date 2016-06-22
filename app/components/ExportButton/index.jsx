@@ -3,6 +3,7 @@ import style from './style.css';
 import mkdirp from 'mkdirp';
 import fs from 'fs';
 import rimraf from 'rimraf';
+import path from 'path';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -11,16 +12,17 @@ import * as DownloadActions from '../../actions/download';
 import * as FilterActions from '../../actions/filter';
 import * as ErrorsAction from '../../actions/errors';
 import * as SelectStateActions from '../../actions/selectState';
+import * as CompActions from '../../actions/multiComp';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
+import aeToReactF1 from 'exporters-react-f1';
+import aeToF1Dom from 'exporters-f1-dom';
 
 import classnames from 'classnames';
 import frontWaveSvg from './front-wave.svg';
 import backWaveSvg from './back-wave.svg';
 
-import aeToReactF1 from 'exporters-react-f1';
-import aeToF1Dom from 'exporters-f1-dom';
 
 ae.options.includes = [
     './node_modules/after-effects/lib/includes/console.js',
@@ -79,8 +81,8 @@ class ExportButton extends React.Component {
       .then((result) => {
         fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
         rimraf.sync(__dirname + '/output*');
-        mkdirp(__dirname + '/output-react');
-        mkdirp(__dirname + '/output-f1');
+        mkdirp.sync(__dirname + '/output-react');
+        mkdirp.sync(__dirname + '/output-f1');
         aeToReactF1({
           pathJSON: __dirname + '/ae-export.json',
           pathOut: __dirname + '/output-react/'
@@ -92,17 +94,36 @@ class ExportButton extends React.Component {
       })
       .then(() => {
         fs.unlinkSync(__dirname + '/ae-export.json');
-        const data = fs.readFileSync(__dirname + '/output-react/animation.json', 'utf-8');
-        let datas = JSON.parse(data);
-        let states = [];
-        datas.forEach((item) => {
-            states.push(item.from);
-            states.push(item.to);
+
+        const srcPath = __dirname + '/output-react/';
+        const subDirectories = fs.readdirSync(srcPath).filter((file) => {
+          return fs.statSync(path.join(srcPath, file)).isDirectory();
         });
+        let states = [];
+        let compPath = '';
+        if(subDirectories.length > 1 ) {
+          subDirectories.forEach((dir) => {
+            const data = fs.readFileSync(srcPath + dir + '/animation.json', 'utf-8');
+            let datas = JSON.parse(data);
+            datas.forEach((item) => {
+                states.push(item.from);
+                states.push(item.to);
+            });  
+          });
+        }
+        else {
+          const data = fs.readFileSync(srcPath + 'animation.json', 'utf-8');
+          let datas = JSON.parse(data);
+          datas.forEach((item) => {
+              states.push(item.from);
+              states.push(item.to);
+          });
+        }
         states = this.arrNoDupe(states);
         this.props.setAESync('Synchronized');
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
+        if(subDirectories.length > 1) this.props.setMultiCompState(true);
         this.props.setDownloadState(true);
       })
       .catch((e) => {
@@ -164,12 +185,21 @@ function mapStateToProps(state) {
         filter: state.filter,
         setFilters: state.filter,
         previewState: state.previewState,
-        setAnimationState: state.previewState
+        setAnimationState: state.previewState,
+        compState: state.compState,
+        setMultiCompState: state.compState
     };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, ExportActions, DownloadActions, FilterActions, ErrorsAction, SelectStateActions), dispatch);
+  return bindActionCreators(Object.assign({}, 
+    ExportActions, 
+    DownloadActions, 
+    FilterActions, 
+    ErrorsAction, 
+    SelectStateActions,
+    CompActions
+    ), dispatch);
 }
 
 const Exporter = connect(mapStateToProps, mapDispatchToProps)(ExportButton);

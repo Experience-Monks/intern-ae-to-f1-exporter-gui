@@ -8,6 +8,11 @@ import Preview from '../Preview/index.jsx';
 import ErrorDisplay from '../ErrorDisplay/index.jsx';
 import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
+//import EmailForm from '../EmailForm/index.jsx';
+
+//import nodeMailer from 'node-mailer';
+//import emailSettings from '../../utils/clinet_id.json';
+//const emailSettings = require('../../utils/clinet_id.json');
 
 class Landing extends Component {
 
@@ -17,7 +22,9 @@ class Landing extends Component {
     previewType: React.PropTypes.string,
     download: React.PropTypes.bool,
     status: React.PropTypes.string,
-    filter: React.PropTypes.array
+    filter: React.PropTypes.array,
+    emailTo: React.PropTypes.string,
+    compState: React.PropTypes.bool
   };
 
   static defaultProps = {
@@ -25,7 +32,12 @@ class Landing extends Component {
     previewType: 'f1Dom',
     download: false,
     status: 'Unsync',
-    filter: []
+    filter: [],
+    compState: false
+  };
+
+  handleSubmit = () => {
+    console.log('todo');
   };
 
   render() {
@@ -37,8 +49,8 @@ class Landing extends Component {
             className={styles.preview}
             previewState={this.props.previewState}
             download={this.props.download}
-            type={this.props.previewType}
             filters={this.props.filter}
+            compState={this.props.compState}
           />
           <StateSelector
             className={styles.stateSelector}
@@ -51,6 +63,7 @@ class Landing extends Component {
             type={this.props.previewType}
             download={this.props.download}
             status={this.props.status}
+            compState={this.props.compState}
           />
           <div className={styles.compositionWrapper}>
             <div className={styles.allComps}>All Comps&nbsp;&nbsp;<b>0</b></div>
@@ -63,20 +76,22 @@ class Landing extends Component {
             }
           </div>
           <div className={styles.controlWrapper}>
-            <div className={styles.toggleWrapper}>
+            <div className={styles.inlineWrapper}>
               <label>Select F1 Flavour</label>
               <Toggle 
                 className={styles.toggleSwitch}
                 type={this.props.previewType}
               />
             </div>
-            <DownloadButton
-              download={this.props.download}
-              status={this.props.status}
-            />
-            <textarea className={styles.fakeTextArea} placeholder="Description" />
+            <div className={styles.inlineWrapper}>
+              <DownloadButton
+                download={this.props.download}
+                status={this.props.status}
+              />
+            </div>
+            <textarea className={styles.fakeTextArea} ref="description" placeholder="Description" />
           </div>
-          <button className={styles.fakeSubmitButton}>Submit</button>
+          <button className={styles.fakeSubmitButton} onClick={this.handleSubmit.bind(this)}>Submit</button>
         </div>
       </div>
     );

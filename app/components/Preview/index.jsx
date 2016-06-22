@@ -12,7 +12,6 @@ import classnames from 'classnames';
 
 class Preview extends Component {
   static propType = {
-    previewType: React.PropTypes.string,
     previewState: React.PropTypes.string,
     download: React.PropTypes.bool,
     displayError: React.PropTypes.func,
@@ -60,7 +59,6 @@ function mapStateToProps(state) {
     setAnimationState: state.previewState,
     previewState: state.previewState,
     download: state.download,
-    previewType: state.previewType,
     filter: state.filter
   };
 }

@@ -86,14 +86,14 @@
   border-top: 1px solid #E3E3E3;
 }
 
-.toggleWrapper {
+.inlineWrapper {
   display: flex;
   align-items: center;
   width: 100%;
   margin: 10px 0;
 }
 
-.toggleWrapper label {
+.inlineWrapper label {
   text-transform: uppercase;
   font-size: 10px;
   font-weight: bold;
@@ -101,7 +101,7 @@
   margin-left: 10%;
 }
 
-.toggleWrapper label, .toggleSwitch {
+.inlineWrapper label, .toggleSwitch {
   display: flex;
   align-items: center;
   justify-content: center;
