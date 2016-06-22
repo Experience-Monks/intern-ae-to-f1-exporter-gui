@@ -1,0 +1,68 @@
+.compositionWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 0.7;
+  overflow: scroll;
+  cursor: pointer;
+}
+
+.allComps, .listItem {
+  display: flex;
+  flex-basis: 40%;
+  align-items: center;
+  padding-left: 30px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  min-height: 60px;
+}
+
+.allComps {
+  border-bottom: 1px solid #E3E3E3;
+}
+
+.listItem {
+  font-size: 16px;
+  color: rgba(200,200,200,0.8);
+  background-color: #F9F9F9;
+}
+
+.listItem:not(:last-child) {
+  border-bottom: 1px solid #E3E3E3;
+}
+
+.circleContainer {
+  cursor: pointer;
+  margin-left: 50%;
+  width: 20px;
+  color: #333;
+  justify-content: center;
+  align-items: right;
+  border-left: 1px solid #ECECEC;
+}
+
+ input, .radio {
+  opacity: 0;
+  height: 0%;
+  width: 0%;
+  position: relative;
+}
+
+.checkbox  {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+  content: '';
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  text-align: center;
+}
+
+.checkbox:checked  {
+  background: #222;
+  box-shadow: inset 0px 0px 0px 4px #fff;
+}

@@ -11,7 +11,9 @@ shelljs.config.fatal = false;
 class DownloadButton extends Component {
   static propTypes = {
     download: React.PropTypes.bool,
-    previewType: React.PropTypes.string
+    previewType: React.PropTypes.string,
+    compExports: React.PropTypes.array,
+    compDownload: React.PropTypes.array
   };
 
   constructor(props) {
@@ -51,7 +53,8 @@ function mapStateToProps(state) {
     return {
         download: state.download,
         status: state.status,
-        previewType: state.previewType
+        previewType: state.previewType,
+        compDownload: state.compDownload
     };
 }
 

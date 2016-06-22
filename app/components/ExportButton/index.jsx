@@ -12,7 +12,8 @@ import * as DownloadActions from '../../actions/download';
 import * as FilterActions from '../../actions/filter';
 import * as ErrorsAction from '../../actions/errors';
 import * as SelectStateActions from '../../actions/selectState';
-import * as CompActions from '../../actions/multiComp';
+import * as MultiCompActions from '../../actions/multiComp';
+import * as CompNameActions from '../../actions/compositions';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
@@ -37,6 +38,7 @@ class ExportButton extends React.Component {
     status: React.PropTypes.string,
     setFilters: React.PropTypes.func,
     setAnimationState: React.PropTypes.func,
+    setCompositionName: React.PropTypes.func,
     previewType: React.PropTypes.string
   };
 
@@ -100,16 +102,13 @@ class ExportButton extends React.Component {
           return fs.statSync(path.join(srcPath, file)).isDirectory();
         });
         let states = [];
-        let compPath = '';
         if(subDirectories.length > 1 ) {
-          subDirectories.forEach((dir) => {
-            const data = fs.readFileSync(srcPath + dir + '/animation.json', 'utf-8');
-            let datas = JSON.parse(data);
-            datas.forEach((item) => {
-                states.push(item.from);
-                states.push(item.to);
-            });  
-          });
+          const data = fs.readFileSync(srcPath + subDirectories[0] + '/animation.json', 'utf-8');
+          let datas = JSON.parse(data);
+          datas.forEach((item) => {
+              states.push(item.from);
+              states.push(item.to);
+          });  
         }
         else {
           const data = fs.readFileSync(srcPath + 'animation.json', 'utf-8');
@@ -123,7 +122,10 @@ class ExportButton extends React.Component {
         this.props.setAESync('Synchronized');
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
-        if(subDirectories.length > 1) this.props.setMultiCompState(true);
+        if(subDirectories.length > 1) {
+          this.props.setMultiCompState(true);
+          this.props.setCompositionName(subDirectories[0]);
+        }
         this.props.setDownloadState(true);
       })
       .catch((e) => {
@@ -187,6 +189,7 @@ function mapStateToProps(state) {
         previewState: state.previewState,
         setAnimationState: state.previewState,
         compState: state.compState,
+        setCompositionName: state.compName,
         setMultiCompState: state.compState
     };
 }
@@ -198,7 +201,8 @@ function mapDispatchToProps(dispatch) {
     FilterActions, 
     ErrorsAction, 
     SelectStateActions,
-    CompActions
+    MultiCompActions,
+    CompNameActions
     ), dispatch);
 }
 
