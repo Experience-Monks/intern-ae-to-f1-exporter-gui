@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 
 import * as CompositionActions from '../../actions/compositions';
 import * as FilterActions from '../../actions/filter';
+import * as SelectStateActions from '../../actions/selectState';
+
+import arrNoDupe from '../../utils/arrNoDupe';
 
 class CompositionSelector extends Component {
 
@@ -15,10 +18,13 @@ class CompositionSelector extends Component {
 		compName: React.PropTypes.string,
 		download: React.PropTypes.bool,
     setCompositionName: React.PropTypes.func,
+    setAnimationState: React.PropTypes.func,
     setCompositionDownloads: React.PropTypes.func,
     compDownload: React.PropTypes.array,
+    compState: React.PropTypes.bool,
     filter: React.PropTypes.array,
-    setFilters: React.PropTypes.func
+    setFilters: React.PropTypes.func,
+    previewState: React.PropTypes.string
 	};
 
 	state = {
@@ -39,10 +45,29 @@ class CompositionSelector extends Component {
         this.setState({comps: [name.src.split('.')[0]]});
       }	
 		}
+    if(nextProps.compName !== this.props.compName) {
+      let states = [];
+      let srcPath = __dirname + '/output-react/';
+      if(this.props.compState) srcPath += nextProps.compName + '/';
+      const data = fs.readFileSync(srcPath + 'animation.json', 'utf-8');
+      let datas = JSON.parse(data);
+      datas.forEach((item) => {
+          states.push(item.from);
+          states.push(item.to);
+      });
+      states = arrNoDupe(states);
+      this.props.setAnimationState(states[0]);
+      this.props.setFilters(states);
+    }
 	}
 
+  handleCompClick = (item) => {
+    this.props.setFilters([]);
+    this.props.setCompositionName(item);
+  }
+
 	render() {
-		const { compName, download, setCompositionName, setCompositionDownloads } = this.props;
+		const { compName, download, setCompositionName, setCompositionDownloads, setFilters } = this.props;
     let comps = [];
     this.state.comps.map((comp) => {
       comps.push(comp);
@@ -80,7 +105,7 @@ class CompositionSelector extends Component {
               }
               else {
                 return (
-                  <div key={index} className={styles.listItem} onClick={() => setCompositionName(item)}>
+                  <div key={index} className={styles.listItem} onClick={this.handleCompClick.bind(this, item)}>
                     {item}
                     <div className={styles.circleContainer}>
                       <input
@@ -109,10 +134,11 @@ class CompositionSelector extends Component {
 function mapStateToProps(state) {
 	return {
 		compState: state.compState,
-		selectedComp: state.compName,
+		compName: state.compName,
     compDownload: state.compDownload,
 		setCompositionName: state.compName,
     setCompositionDownloads: state.compDownload,
+    setAnimationState: state.previewState,
 		download: state.download,
     filter: state.filter,
     setFilters: state.filter
@@ -120,7 +146,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Object.assign({}, CompositionActions, FilterActions), dispatch);
+	return bindActionCreators(Object.assign({}, 
+    CompositionActions, 
+    FilterActions,
+    SelectStateActions
+  ), dispatch);
 }
 
 const CompositionSelectorContainer = connect(mapStateToProps, mapDispatchToProps)(CompositionSelector);

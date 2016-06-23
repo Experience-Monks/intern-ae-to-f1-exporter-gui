@@ -30,13 +30,16 @@ class ReactF1Preview extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.compName !== this.props.compName) {
-      this.setAEProps();
+      this.setAEProps(nextProps.compName);
     }
   }
 	
-  setAEProps() {
+  setAEProps(name) {
     let compName = '';
-    if(this.props.compState) compName = this.props.compName + '/';
+    if(this.props.compState) {
+      name = name || '';
+      compName = name.length > 0 ? name + '/' : this.props.compName + '/';
+    } 
 
     const dataAsset = JSON.parse(fs.readFileSync(__dirname + '/output-react/' + compName + 'targets.json', {encoding: 'utf-8'}));
     const dataAnimation = JSON.parse(fs.readFileSync(__dirname + '/output-react/' + compName + 'animation.json', {encoding: 'utf-8'}));

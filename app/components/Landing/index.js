@@ -74,6 +74,8 @@ class Landing extends Component {
             compState={this.props.compState}
             compDownload={this.props.compDownload}
             fiter={this.props.filter}
+            compState={this.props.filter}
+            previewState={this.props.previewState}
           />
           <div className={styles.controlWrapper}>
             <div className={styles.inlineWrapper}>

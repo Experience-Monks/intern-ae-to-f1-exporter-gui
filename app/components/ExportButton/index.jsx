@@ -15,6 +15,8 @@ import * as SelectStateActions from '../../actions/selectState';
 import * as MultiCompActions from '../../actions/multiComp';
 import * as CompNameActions from '../../actions/compositions';
 
+import arrNoDupe from '../../utils/arrNoDupe';
+
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
 import aeToReactF1 from 'exporters-react-f1';
@@ -118,7 +120,7 @@ class ExportButton extends React.Component {
               states.push(item.to);
           });
         }
-        states = this.arrNoDupe(states);
+        states = arrNoDupe(states);
         this.props.setAESync('Synchronized');
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
@@ -147,14 +149,6 @@ class ExportButton extends React.Component {
 
   componentWillLeave(cb) {
     this.animateOut().then(cb);
-  }
-
-  arrNoDupe = (a) => {
-    let temp = {};
-    for(let i = 0; i < a.length; i++) {
-        temp[a[i]] = true;
-    }
-    return Object.keys(temp);
   }
 
   render() {
