@@ -10,20 +10,39 @@ const fs = require('fs');
 
 class ReactF1Preview extends React.Component {
 	static propType = {
-        previewState: React.PropTypes.string,
-        displayError: React.PropTypes.func
+    previewState: React.PropTypes.string,
+    displayError: React.PropTypes.func,
+    compState: React.PropTypes.bool,
+    compName: React.PropTypes.string
   }
 
 	state = {
 		style: {},
 		aeOpts: {},
 		assetNames: '',
+    assetDir: '',
 		dimensions: {}
 	}
 
 	componentWillMount = () => {
-		const dataAsset = JSON.parse(fs.readFileSync(__dirname + '/output-react/targets.json', {encoding: 'utf-8'}));
-		const dataAnimation = JSON.parse(fs.readFileSync(__dirname + '/output-react/animation.json', {encoding: 'utf-8'}));
+    this.setAEProps();
+	}
+
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.compName !== this.props.compName) {
+      this.setAEProps(nextProps.compName);
+    }
+  }
+	
+  setAEProps(name) {
+    let compName = '';
+    if(this.props.compState) {
+      name = name || '';
+      compName = name.length > 0 ? name + '/' : this.props.compName + '/';
+    } 
+
+    const dataAsset = JSON.parse(fs.readFileSync(__dirname + '/output-react/' + compName + 'targets.json', {encoding: 'utf-8'}));
+    const dataAnimation = JSON.parse(fs.readFileSync(__dirname + '/output-react/' + compName + 'animation.json', {encoding: 'utf-8'}));
     const assetNames = [];
     if(Object.keys(dataAsset).length === 0 || Object.keys(dataAnimation).length === 0) {
       this.setState({ aeOpts: {} });
@@ -32,7 +51,7 @@ class ReactF1Preview extends React.Component {
         suggestion: 'Make sure your composition is compatible with the ae-to-f1 exporter.'
       });
     }
-		else {
+    else {
       Object.keys(dataAsset).forEach((key) => {
         assetNames.push({
           key,
@@ -48,11 +67,10 @@ class ReactF1Preview extends React.Component {
         assetNames
       });
     }
+  }
 
-	}
-	
 	render() {
-		const { previewState, displayError } = this.props;
+		const { previewState, displayError, compState, compName } = this.props;
     if(Object.keys(this.state.aeOpts).length === 0) return;
 
 		const props = {
@@ -74,6 +92,7 @@ class ReactF1Preview extends React.Component {
 			transformOrigin: '50% 50%'
 		};
 		const assetNames = this.state.assetNames;
+    const comp = compState ? compName : '';
 		try {
       return(
         <ReactF1 {...props} style={styleContainer}>
@@ -83,7 +102,7 @@ class ReactF1Preview extends React.Component {
                 <img 
                   data-f1={name.key} 
                   key={index}
-                  src={__dirname + '/output-react/assets/' + name.data.src} 
+                  src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
                   width={name.data.width || 500} 
                   height={name.data.height || 500} 
                   style={{position: 'absolute', left: 0, top: 0}} 
@@ -108,7 +127,9 @@ class ReactF1Preview extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        previewState: state.previewState,
+      previewState: state.previewState,
+      compState: state.compState,
+      compName: state.compName
     };
 }
 

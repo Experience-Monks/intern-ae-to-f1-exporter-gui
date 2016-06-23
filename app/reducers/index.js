@@ -7,6 +7,8 @@ import filter from './filter';
 import previewType from './toggle';
 import errors from './errors';
 import compState from './compState';
+import compName from './compName';
+import compDownload from './compDownload';
 
 const rootReducer = combineReducers({
 	status,
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
 	previewType,
 	errors,
 	compState,
+	compName,
+	compDownload,
 	routing
 });
 

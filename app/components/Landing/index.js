@@ -6,16 +6,16 @@ import ExportButton from '../ExportButton/index.jsx';
 import StateSelector from '../StateSelector/index.jsx';
 import Preview from '../Preview/index.jsx';
 import ErrorDisplay from '../ErrorDisplay/index.jsx';
+import CompositionSelector from '../CompositionSelector/index.jsx';
 import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
-//import EmailForm from '../EmailForm/index.jsx';
+// import EmailForm from '../EmailForm/index.jsx';
 
-//import nodeMailer from 'node-mailer';
-//import emailSettings from '../../utils/clinet_id.json';
-//const emailSettings = require('../../utils/clinet_id.json');
+// import nodeMailer from 'node-mailer';
+// import emailSettings from '../../utils/clinet_id.json';
+// const emailSettings = require('../../utils/clinet_id.json');
 
 class Landing extends Component {
-
   static propTypes = {
     previewState: React.PropTypes.string,
     setDownloadState: React.PropTypes.func,
@@ -24,7 +24,9 @@ class Landing extends Component {
     status: React.PropTypes.string,
     filter: React.PropTypes.array,
     emailTo: React.PropTypes.string,
-    compState: React.PropTypes.bool
+    compState: React.PropTypes.bool,
+    compName: React.PropTypes.string,
+    compDownload: React.PropTypes.array
   };
 
   static defaultProps = {
@@ -51,6 +53,7 @@ class Landing extends Component {
             download={this.props.download}
             filters={this.props.filter}
             compState={this.props.compState}
+            compName={this.props.compName}
           />
           <StateSelector
             className={styles.stateSelector}
@@ -64,17 +67,17 @@ class Landing extends Component {
             download={this.props.download}
             status={this.props.status}
             compState={this.props.compState}
+            compName={this.props.compName}
+            compDownload={this.props.compDownload}
           />
-          <div className={styles.compositionWrapper}>
-            <div className={styles.allComps}>All Comps&nbsp;&nbsp;<b>0</b></div>
-            {
-              Array.apply(null, {length: 6}).map(() => '—').map((item, i) => {
-                return (
-                  <div key={i} className={styles.listItem}>{item}</div>
-                );
-              })
-            }
-          </div>
+          <CompositionSelector 
+            compName={this.props.compName}
+            compState={this.props.compState}
+            compDownload={this.props.compDownload}
+            fiter={this.props.filter}
+            compState={this.props.filter}
+            previewState={this.props.previewState}
+          />
           <div className={styles.controlWrapper}>
             <div className={styles.inlineWrapper}>
               <label>Select F1 Flavour</label>
@@ -87,6 +90,8 @@ class Landing extends Component {
               <DownloadButton
                 download={this.props.download}
                 status={this.props.status}
+                compDownload={this.props.compDownload}
+                compState={this.props.compState}
               />
             </div>
             <textarea className={styles.fakeTextArea} ref="description" placeholder="Description" />

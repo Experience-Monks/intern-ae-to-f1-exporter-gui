@@ -12,7 +12,11 @@ import * as DownloadActions from '../../actions/download';
 import * as FilterActions from '../../actions/filter';
 import * as ErrorsAction from '../../actions/errors';
 import * as SelectStateActions from '../../actions/selectState';
-import * as CompActions from '../../actions/multiComp';
+import * as MultiCompActions from '../../actions/multiComp';
+import * as CompNameActions from '../../actions/compositions';
+import * as CompositionDownloadActions from '../../actions/compositionDownloads';
+
+import arrNoDupe from '../../utils/arrNoDupe';
 
 import aeToJSON from 'ae-to-json';
 import ae from 'after-effects';
@@ -37,6 +41,8 @@ class ExportButton extends React.Component {
     status: React.PropTypes.string,
     setFilters: React.PropTypes.func,
     setAnimationState: React.PropTypes.func,
+    setCompositionName: React.PropTypes.func,
+    compDownload: React.PropTypes.array,
     previewType: React.PropTypes.string
   };
 
@@ -100,16 +106,13 @@ class ExportButton extends React.Component {
           return fs.statSync(path.join(srcPath, file)).isDirectory();
         });
         let states = [];
-        let compPath = '';
-        if(subDirectories.length > 1 ) {
-          subDirectories.forEach((dir) => {
-            const data = fs.readFileSync(srcPath + dir + '/animation.json', 'utf-8');
-            let datas = JSON.parse(data);
-            datas.forEach((item) => {
-                states.push(item.from);
-                states.push(item.to);
-            });  
-          });
+        if(subDirectories.length > 1) {
+          const data = fs.readFileSync(srcPath + subDirectories[0] + '/animation.json', 'utf-8');
+          let datas = JSON.parse(data);
+          datas.forEach((item) => {
+              states.push(item.from);
+              states.push(item.to);
+          });  
         }
         else {
           const data = fs.readFileSync(srcPath + 'animation.json', 'utf-8');
@@ -119,12 +122,17 @@ class ExportButton extends React.Component {
               states.push(item.to);
           });
         }
-        states = this.arrNoDupe(states);
+        states = arrNoDupe(states);
         this.props.setAESync('Synchronized');
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
-        if(subDirectories.length > 1) this.props.setMultiCompState(true);
+        if(subDirectories.length > 1) {
+          this.props.setMultiCompState(true);
+          this.props.setCompositionName(subDirectories[0]);
+        }
+        else this.props.setMultiCompState(false);
         this.props.setDownloadState(true);
+        this.props.setCompositionDownloads([]);
       })
       .catch((e) => {
         this.props.displayError({
@@ -132,6 +140,7 @@ class ExportButton extends React.Component {
           suggestion: 'Make sure your after effects process is started.'
         });
         this.props.setAESync('Synchronized');
+        this.props.setCompositionDownloads([]);
       });
   };
 
@@ -145,14 +154,6 @@ class ExportButton extends React.Component {
 
   componentWillLeave(cb) {
     this.animateOut().then(cb);
-  }
-
-  arrNoDupe = (a) => {
-    let temp = {};
-    for(let i = 0; i < a.length; i++) {
-        temp[a[i]] = true;
-    }
-    return Object.keys(temp);
   }
 
   render() {
@@ -187,6 +188,9 @@ function mapStateToProps(state) {
         previewState: state.previewState,
         setAnimationState: state.previewState,
         compState: state.compState,
+        setCompositionName: state.compName,
+        compDownload: state.compDownload,
+        setCompositionDownloads: state.compDownload,
         setMultiCompState: state.compState
     };
 }
@@ -198,7 +202,9 @@ function mapDispatchToProps(dispatch) {
     FilterActions, 
     ErrorsAction, 
     SelectStateActions,
-    CompActions
+    MultiCompActions,
+    CompNameActions,
+    CompositionDownloadActions
     ), dispatch);
 }
 

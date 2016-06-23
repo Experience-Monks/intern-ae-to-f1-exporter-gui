@@ -1,0 +1,83 @@
+.compositionWrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 0.7;
+  overflow: scroll;
+  cursor: pointer;
+}
+
+.allComps, .listItem {
+  display: flex;
+  flex-basis: 40%;
+  align-items: center;
+  padding-left: 30px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  min-height: 60px;
+}
+
+.allComps {
+  border-bottom: 1px solid #E3E3E3;
+}
+
+.listItem {
+  font-size: 16px;
+  color: rgba(200,200,200,0.8);
+  background-color: #F9F9F9;
+  text-align: left;
+}
+
+.listItem:not(:last-child) {
+  border-bottom: 1px solid #E3E3E3;
+}
+
+.circleContainer {
+  cursor: pointer;
+  width: 40px;
+  color: #333;
+  justify-content: center;
+  align-items: right;
+  border-left: 1px solid #ECECEC;
+}
+
+ .checkbox, .radio {
+  opacity: 1;
+  height: 20px;
+  width: 20px;
+  position: relative;
+}
+
+.checkbox + .checkboxLabel  {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 5px;
+  content: '';
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  height: 20px;
+  padding: 2px;
+}
+
+.checkboxLabel {
+  position: relative;
+  width: 80%;
+}
+
+.checkbox + .checkboxLabel:before {
+  content: '';
+  background: #fff;
+  border: 2px solid #ddd;
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 20px;
+  padding: 2px;
+  margin-right: 10px;
+}
+
+.checkbox:checked + .checkboxLabel:before {
+  background: #222;
+  box-shadow: inset 0px 0px 0px 4px #fff;
+}

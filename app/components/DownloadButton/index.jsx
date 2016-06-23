@@ -11,7 +11,10 @@ shelljs.config.fatal = false;
 class DownloadButton extends Component {
   static propTypes = {
     download: React.PropTypes.bool,
-    previewType: React.PropTypes.string
+    previewType: React.PropTypes.string,
+    compExports: React.PropTypes.array,
+    compDownload: React.PropTypes.array,
+    compState: React.PropTypes.bool
   };
 
   constructor(props) {
@@ -25,13 +28,31 @@ class DownloadButton extends Component {
 
       if(!path) return;
       mkdirp(path);
-
-      if(this.props.previewType === 'react') {
-        shelljs.cp('-R', __dirname + '/output-react/*', path);
+      if(this.props.compState) {
+        if(this.props.previewType === 'react') {
+          this.props.compDownload.forEach((comp) => {
+            shelljs.cp('-R', __dirname + '/output-react/' + comp, path);  
+          });
+          
+        }
+        else {
+          this.props.compDownload.forEach((comp) => {
+            shelljs.cp('-R', __dirname + '/output-f1/' + comp, path);
+          });
+        }
+      }
+      else if(this.props.compDownload.length === 0) {
+        return;
       }
       else {
-        shelljs.cp('-R', __dirname + '/output-f1/*', path);
+        if(this.props.previewType === 'react') {
+          shelljs.cp('-R', __dirname + '/output-react/*', path);  
+        }
+        else {
+          shelljs.cp('-R', __dirname + '/output-react/*', path);  
+        }
       }
+      
     }
   }
 
@@ -51,7 +72,9 @@ function mapStateToProps(state) {
     return {
         download: state.download,
         status: state.status,
-        previewType: state.previewType
+        previewType: state.previewType,
+        compDownload: state.compDownload,
+        compState: state.compState
     };
 }
 

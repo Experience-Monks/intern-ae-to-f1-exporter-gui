@@ -15,11 +15,13 @@ class Preview extends Component {
     previewState: React.PropTypes.string,
     download: React.PropTypes.bool,
     displayError: React.PropTypes.func,
-    filter: React.PropTypes.array
+    filter: React.PropTypes.array,
+    compState: React.PropTypes.bool,
+    compName: React.PropTypes.string
   };
 
   render() {
-    const { previewState, download, displayError, filter } = this.props;
+    const { previewState, download, displayError, filter, compState, compName } = this.props;
     const className = classnames(styles.container, this.props.className);
     try {
       return (
@@ -28,7 +30,11 @@ class Preview extends Component {
             !download || filter.indexOf(previewState) === -1 
             ? <NoPreview />
             : <div className={styles.previewContainer} >
-                <ReactF1Preview previewState={previewState} />
+                <ReactF1Preview 
+                  previewState={previewState} 
+                  compState={compState} 
+                  compName={compName}
+                />
               </div>
           }
         </div>
@@ -59,7 +65,8 @@ function mapStateToProps(state) {
     setAnimationState: state.previewState,
     previewState: state.previewState,
     download: state.download,
-    filter: state.filter
+    filter: state.filter,
+    compState: state.compState
   };
 }
 
