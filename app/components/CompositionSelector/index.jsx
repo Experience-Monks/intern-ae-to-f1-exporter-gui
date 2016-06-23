@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import * as CompositionActions from '../../actions/compositions';
+import * as CompositionDownloadActions from '../../actions/compositionDownloads';
 import * as FilterActions from '../../actions/filter';
 import * as SelectStateActions from '../../actions/selectState';
 
@@ -41,8 +42,11 @@ class CompositionSelector extends Component {
         this.setState({comps: subDirectories});
       }	
       else {
-        const name = JSON.parse(fs.readFileSync(__dirname + '/output-react/targets.json'));
-        this.setState({comps: [name.src.split('.')[0]]});
+        let name = JSON.parse(fs.readFileSync(__dirname + '/output-react/targets.json'));
+        name = Object.keys(name).map((key) => {
+          return name[key].src;
+        });
+        this.setState({comps: [name[0].split('.')[0]]});
       }	
 		}
     if(nextProps.compName !== this.props.compName) {
@@ -62,12 +66,36 @@ class CompositionSelector extends Component {
 	}
 
   handleCompClick = (item) => {
+    if(!this.props.compState || this.props.compName === item) return;
     this.props.setFilters([]);
     this.props.setCompositionName(item);
   }
 
+  handleDownloadClick = (item) => {
+    let itemName = item[0];
+    if(this.props.compDownload.indexOf(itemName) === -1) {
+      if(this.props.compDownload.length > 0) {
+        this.props.compDownload.forEach((comp) => {
+          item.push(comp);
+        });
+      }
+      item = arrNoDupe(item);
+    }
+    else {
+      if(this.props.compDownload.length > 0) {
+        this.props.compDownload.forEach((comp) => {
+          item.push(comp);
+        });
+      }
+      item = arrNoDupe(item); 
+      item.splice(item.indexOf(itemName), 1);
+    }
+    
+    this.props.setCompositionDownloads(item);
+  }
+
 	render() {
-		const { compName, download, setCompositionName, setCompositionDownloads, setFilters } = this.props;
+		const { compName, download, compDownload, setCompositionName, setFilters } = this.props;
     let comps = [];
     this.state.comps.map((comp) => {
       comps.push(comp);
@@ -105,17 +133,20 @@ class CompositionSelector extends Component {
               }
               else {
                 return (
-                  <div key={index} className={styles.listItem} onClick={this.handleCompClick.bind(this, item)}>
-                    {item}
-                    <div className={styles.circleContainer}>
+                  <div key={index} className={styles.listItem} >
+                    <label 
+                      onClick={this.handleCompClick.bind(this, item)}
+                      className={styles.checkboxLabel} 
+                    >
+                        {'- ' + item}
+                    </label>
+                    <div onClick={this.handleDownloadClick.bind(this, [item])} className={styles.circleContainer}>
                       <input
                         id={item}
                         key={index}
                         className={styles.checkbox}
                         type="checkbox"
                         value={item}
-                        checked
-                        onChange={() => setCompositionDownloads(item)}
                       /> 
                     </div> 
                   </div>
@@ -148,6 +179,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return bindActionCreators(Object.assign({}, 
     CompositionActions, 
+    CompositionDownloadActions,
     FilterActions,
     SelectStateActions
   ), dispatch);

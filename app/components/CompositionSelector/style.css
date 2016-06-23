@@ -25,6 +25,7 @@
   font-size: 16px;
   color: rgba(200,200,200,0.8);
   background-color: #F9F9F9;
+  text-align: left;
 }
 
 .listItem:not(:last-child) {
@@ -33,22 +34,21 @@
 
 .circleContainer {
   cursor: pointer;
-  margin-left: 50%;
-  width: 20px;
+  width: 40px;
   color: #333;
   justify-content: center;
   align-items: right;
   border-left: 1px solid #ECECEC;
 }
 
- input, .radio {
-  opacity: 0;
-  height: 0%;
-  width: 0%;
+ .checkbox, .radio {
+  opacity: 1;
+  height: 20px;
+  width: 20px;
   position: relative;
 }
 
-.checkbox  {
+.checkbox + .checkboxLabel  {
   display: inline-block;
   vertical-align: middle;
   margin: 5px;
@@ -56,13 +56,28 @@
   background: #fff;
   border: 2px solid #ddd;
   border-radius: 50%;
+  height: 20px;
+  padding: 2px;
+}
+
+.checkboxLabel {
+  position: relative;
+  width: 80%;
+}
+
+.checkbox + .checkboxLabel:before {
+  content: '';
+  background: #fff;
+  border: 2px solid #ddd;
+  display: inline-block;
+  vertical-align: middle;
   width: 20px;
   height: 20px;
   padding: 2px;
-  text-align: center;
+  margin-right: 10px;
 }
 
-.checkbox:checked  {
+.checkbox:checked + .checkboxLabel:before {
   background: #222;
   box-shadow: inset 0px 0px 0px 4px #fff;
 }

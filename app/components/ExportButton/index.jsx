@@ -14,6 +14,7 @@ import * as ErrorsAction from '../../actions/errors';
 import * as SelectStateActions from '../../actions/selectState';
 import * as MultiCompActions from '../../actions/multiComp';
 import * as CompNameActions from '../../actions/compositions';
+import * as CompositionDownloadActions from '../../actions/compositionDownloads';
 
 import arrNoDupe from '../../utils/arrNoDupe';
 
@@ -41,6 +42,7 @@ class ExportButton extends React.Component {
     setFilters: React.PropTypes.func,
     setAnimationState: React.PropTypes.func,
     setCompositionName: React.PropTypes.func,
+    compDownload: React.PropTypes.array,
     previewType: React.PropTypes.string
   };
 
@@ -104,7 +106,7 @@ class ExportButton extends React.Component {
           return fs.statSync(path.join(srcPath, file)).isDirectory();
         });
         let states = [];
-        if(subDirectories.length > 1 ) {
+        if(subDirectories.length > 1) {
           const data = fs.readFileSync(srcPath + subDirectories[0] + '/animation.json', 'utf-8');
           let datas = JSON.parse(data);
           datas.forEach((item) => {
@@ -128,7 +130,9 @@ class ExportButton extends React.Component {
           this.props.setMultiCompState(true);
           this.props.setCompositionName(subDirectories[0]);
         }
+        else this.props.setMultiCompState(false);
         this.props.setDownloadState(true);
+        this.props.setCompositionDownloads([]);
       })
       .catch((e) => {
         this.props.displayError({
@@ -136,6 +140,7 @@ class ExportButton extends React.Component {
           suggestion: 'Make sure your after effects process is started.'
         });
         this.props.setAESync('Synchronized');
+        this.props.setCompositionDownloads([]);
       });
   };
 
@@ -184,6 +189,8 @@ function mapStateToProps(state) {
         setAnimationState: state.previewState,
         compState: state.compState,
         setCompositionName: state.compName,
+        compDownload: state.compDownload,
+        setCompositionDownloads: state.compDownload,
         setMultiCompState: state.compState
     };
 }
@@ -196,7 +203,8 @@ function mapDispatchToProps(dispatch) {
     ErrorsAction, 
     SelectStateActions,
     MultiCompActions,
-    CompNameActions
+    CompNameActions,
+    CompositionDownloadActions
     ), dispatch);
 }
 

@@ -92,6 +92,7 @@ class ReactF1Preview extends React.Component {
 			transformOrigin: '50% 50%'
 		};
 		const assetNames = this.state.assetNames;
+    const comp = compState ? compName : '';
 		try {
       return(
         <ReactF1 {...props} style={styleContainer}>
@@ -101,7 +102,7 @@ class ReactF1Preview extends React.Component {
                 <img 
                   data-f1={name.key} 
                   key={index}
-                  src={__dirname + '/output-react/' + compName + '/assets/' + name.data.src} 
+                  src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
                   width={name.data.width || 500} 
                   height={name.data.height || 500} 
                   style={{position: 'absolute', left: 0, top: 0}} 

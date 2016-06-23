@@ -68,6 +68,7 @@ class Landing extends Component {
             status={this.props.status}
             compState={this.props.compState}
             compName={this.props.compName}
+            compDownload={this.props.compDownload}
           />
           <CompositionSelector 
             compName={this.props.compName}
@@ -90,6 +91,7 @@ class Landing extends Component {
                 download={this.props.download}
                 status={this.props.status}
                 compDownload={this.props.compDownload}
+                compState={this.props.compState}
               />
             </div>
             <textarea className={styles.fakeTextArea} ref="description" placeholder="Description" />

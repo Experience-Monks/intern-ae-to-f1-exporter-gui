@@ -1,8 +1,8 @@
-import { SET_COMPOSITION_NAME } from '../actions/compositionDownloads';
+import { SET_COMPOSITION_DOWNLOAD } from '../actions/compositionDownloads';
 
 export default function compositionDownloads(state = [], action) {
 	switch(action.type) {
-		case SET_COMPOSITION_NAME: 
+		case SET_COMPOSITION_DOWNLOAD: 
 			state = action.state;
 			return state;
 		default:
