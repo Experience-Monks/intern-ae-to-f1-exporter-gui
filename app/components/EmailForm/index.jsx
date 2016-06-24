@@ -65,7 +65,7 @@ class EmailForm extends React.Component {
 
 	onEmailClick = (email) => {
 		let tempArr = [];
-		if(this.props.emailTo.findIndex(x => x.email === email.email) === -1) {
+		if(this.props.emailTo.findIndex(x => x.name === email.name) === -1) {
 			this.props.emailTo.forEach((item) => {
 				tempArr.push(item);
 			});
@@ -75,7 +75,7 @@ class EmailForm extends React.Component {
 			this.props.emailTo.forEach((item) => {
 				tempArr.push(item);
 			});
-			tempArr.splice(tempArr.findIndex(x => x.email === email.email), 1);
+			tempArr.splice(tempArr.findIndex(x => x.name === email.name), 1);
 			
 		}
 		this.props.setEmailTo(tempArr);
@@ -116,7 +116,7 @@ class EmailForm extends React.Component {
 				<div className={style.box} onClick={this.toggleEmail.bind(this)}>
 					<input 
 						className={style.emailEntry} 
-						placeholder="email"
+						placeholder="Enter email here"
 						onChange={this.updateEmail.bind(this)} 
 						type="text"
 						ref="emailEntry"
@@ -128,7 +128,7 @@ class EmailForm extends React.Component {
 					<div className={style.emailBox} ref="emailBox" >
 						{
 							emailContacts.map((item, index) => {
-								const selected = emailTo.findIndex(x => x.email === item.email) !== -1;
+								const selected = emailTo.findIndex(x => x.name === item.name) !== -1;
 								const listItemStyle = classnames(style.listItem, {
 									[style.listItemSelected]: selected
 								});
