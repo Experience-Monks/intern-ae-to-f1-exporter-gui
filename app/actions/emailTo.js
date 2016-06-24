@@ -1,6 +1,6 @@
 export const SET_EMAIL_TO = 'SET_EMAIL_TO';
 
-export function emailTo(state) {
+export function email(state) {
     return {
         type: SET_EMAIL_TO,
         state
@@ -9,6 +9,6 @@ export function emailTo(state) {
 
 export function setEmailTo(state) {
   return (dispatch) => {
-    dispatch(emailTo(state));
+    dispatch(email(state));
   };
 }

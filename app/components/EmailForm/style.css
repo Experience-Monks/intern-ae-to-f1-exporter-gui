@@ -8,7 +8,8 @@
 }
 
 .emailBox {
-	right: 55%;
+	right: 20vw;
+	bottom: 70vw;
 	overflow-y: scroll;
 	position: relative;
 	text-align: left;
@@ -19,25 +20,45 @@
 	min-width: 300px;
 }
 
+.emailEntry {
+	width: 100px;
+	margin-bottom: 0px;
+	margin-left: 5px;
+	float: left;
+	border: 0;
+	height: 5vh;
+	line-height: 20px;
+
+}
+
 .listItem {
 	text-transform: uppercase;
 	letter-spacing: 4px;
 	padding-left: 33px;
 	padding-top: 10px;
-	
 	padding-bottom: 10px;
 }
 
+.listItemSelected {
+	background-color: #eee;
+	color: #fff;
+}
+
 .label {
-	
+	width: 40px;
+	display: inline-block;
+}
+.labelContainer {
+	min-width: 20%;
+	display: inline;
 }
 
 .arrow {
     background-image: url('./arrow.png');
     background-size: cover;
     width: 20px;
-    margin-left: 45%;
     margin-top: 5px;
     min-width: 20px;
     height: 20px;
+    float: left;
 }

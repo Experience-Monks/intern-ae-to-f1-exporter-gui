@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import animate from 'gsap-promise';
 
 import * as ContactsActions from '../../actions/setContacts';
+import * as EmailActions from '../../actions/emailTo';
 
 import contactList from '../../utils/contactList';
 //AKIAJMGME3PSYMESR2KA
@@ -27,11 +28,13 @@ class EmailForm extends React.Component {
 	static propTypes = {
 		emailContacts: React.PropTypes.array,
 		emailTo: React.PropTypes.array,
-		setContacts: React.PropTypes.func,
+		setContacts: React.PropTypes.func, 
+		setEmailTo: React.PropTypes.func
 	}
 
 	state = {
-		emailToggle: false
+		emailToggle: false,
+		emailEntry: ''
 	}
 
 	componentWillMount() {
@@ -60,31 +63,81 @@ class EmailForm extends React.Component {
 		animate.to(this.refs.arrow, 0.5, {rotation: 0});
 	}
 
-	clickHandler = () => {
-		let _this = this;
-		console.log('todo AWS SES');
+	onEmailClick = (email) => {
+		let tempArr = [];
+		if(this.props.emailTo.findIndex(x => x.email === email.email) === -1) {
+			this.props.emailTo.forEach((item) => {
+				tempArr.push(item);
+			});
+			tempArr.push(email);
+		}
+		else {
+			this.props.emailTo.forEach((item) => {
+				tempArr.push(item);
+			});
+			tempArr.splice(tempArr.findIndex(x => x.email === email.email), 1);
+			
+		}
+		this.props.setEmailTo(tempArr);
 	}
 
 	toggleEmail = () => {
 		this.setState({emailToggle: !this.state.emailToggle});
 	}
 
-	render() {
-		const  { emailContacts } = this.props;
-		const emailBoxClass = classnames(style.emailBox, {
-			[style.emailBoxOpen]: this.state.emailToggle,
-			[style.emailBoxClosed]: !this.state.emailToggle
+	updateEmail = () => {
+		const emailTo = this.props.emailTo;
+		const entryVal = this.refs.emailEntry.value;
+		const manualEntry = {
+			name: 'manual',
+			email: entryVal,
+			manual: true
+		};
+		let tempArr = [];
+		emailTo.forEach((item) => {
+			tempArr.push(item);
 		});
+		let manualEmailIndex = tempArr.findIndex(x => x.manual === true);
+		if(manualEmailIndex !== -1) tempArr.splice(manualEmailIndex, 1, manualEntry);
+		else tempArr.push(manualEntry);
+		
+		this.props.setEmailTo(tempArr);
+	}
+
+	render() {
+		const { emailContacts, emailTo } = this.props;
+		const _this = this;
+		const onEmailClick = this.onEmailClick;
 		return (
-			<div className={style.email} onClick={this.toggleEmail.bind(this)}>
-				<label className={style.label} >{'SEND TO: '} </label> 
-				<div className={style.arrow} ref='arrow'></div>
+			<div className={style.email}>
+				<div className={style.labelContainer} onClick={this.toggleEmail.bind(this)}>
+					<label className={style.label} >{'SEND TO: '} </label> 
+				</div>
+				<div className={style.box} onClick={this.toggleEmail.bind(this)}>
+					<input 
+						className={style.emailEntry} 
+						placeholder="email"
+						onChange={this.updateEmail.bind(this)} 
+						type="text"
+						ref="emailEntry"
+					/>
+				</div>
+				<div className={style.arrow} onClick={this.toggleEmail.bind(this)} ref='arrow'></div>	
+				
 				<div className={style.box}>
-					<div className={emailBoxClass} ref="emailBox" >
+					<div className={style.emailBox} ref="emailBox" >
 						{
 							emailContacts.map((item, index) => {
+								const selected = emailTo.findIndex(x => x.email === item.email) !== -1;
+								const listItemStyle = classnames(style.listItem, {
+									[style.listItemSelected]: selected
+								});
 								return (
-									<div key={index} className={style.listItem}>
+									<div 
+										key={index} 
+										className={listItemStyle}
+										onClick={onEmailClick.bind(_this, item)}
+									>
 										{item.name}
 									</div>
 								);
@@ -92,6 +145,7 @@ class EmailForm extends React.Component {
 						}
 					</div>
 				</div>
+
 			</div>
 		);
 	}
@@ -100,12 +154,14 @@ class EmailForm extends React.Component {
 function mapStateToProps(state) {
     return {
         emailContacts: state.emailContacts,
-        setContacts: state.emailContacts
+        emailTo: state.emailTo,
+        setContacts: state.emailContacts,
+        setEmailTo: state.emailTo
     };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, ContactsActions), dispatch);
+  return bindActionCreators(Object.assign({}, ContactsActions, EmailActions), dispatch);
 }
 
 const EmailFormContainer = connect(mapStateToProps, mapDispatchToProps)(EmailForm);
