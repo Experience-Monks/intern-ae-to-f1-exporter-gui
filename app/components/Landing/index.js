@@ -9,7 +9,7 @@ import ErrorDisplay from '../ErrorDisplay/index.jsx';
 import CompositionSelector from '../CompositionSelector/index.jsx';
 import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
-// import EmailForm from '../EmailForm/index.jsx';
+import EmailForm from '../EmailForm/index.jsx';
 
 // import nodeMailer from 'node-mailer';
 // import emailSettings from '../../utils/clinet_id.json';
@@ -26,7 +26,8 @@ class Landing extends Component {
     emailTo: React.PropTypes.string,
     compState: React.PropTypes.bool,
     compName: React.PropTypes.string,
-    compDownload: React.PropTypes.array
+    compDownload: React.PropTypes.array,
+    emailContacts: React.PropTypes.array
   };
 
   static defaultProps = {
@@ -87,6 +88,10 @@ class Landing extends Component {
               />
             </div>
             <div className={styles.inlineWrapper}>
+              <EmailForm 
+                contactList={this.props.emailContacts}
+                emailTo={this.props.emailTo}
+              />
               <DownloadButton
                 download={this.props.download}
                 status={this.props.status}

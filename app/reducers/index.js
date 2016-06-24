@@ -9,6 +9,7 @@ import errors from './errors';
 import compState from './compState';
 import compName from './compName';
 import compDownload from './compDownload';
+import emailContacts from './emailContacts';
 
 const rootReducer = combineReducers({
 	status,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	compState,
 	compName,
 	compDownload,
+	emailContacts,
 	routing
 });
 

@@ -1,0 +1,43 @@
+.email {
+	cursor: pointer;
+	display: flex;
+	height: 5vh;
+	width: 60%;
+	margin-left: 5%;
+	margin-bottom: 25px;
+}
+
+.emailBox {
+	right: 55%;
+	overflow-y: scroll;
+	position: relative;
+	text-align: left;
+	background-color: #fff;
+	width: 24vw;
+	text-transform: uppercase;
+	height: 60vh;
+	min-width: 300px;
+}
+
+.listItem {
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	padding-left: 33px;
+	padding-top: 10px;
+	
+	padding-bottom: 10px;
+}
+
+.label {
+	
+}
+
+.arrow {
+    background-image: url('./arrow.png');
+    background-size: cover;
+    width: 20px;
+    margin-left: 45%;
+    margin-top: 5px;
+    min-width: 20px;
+    height: 20px;
+}
