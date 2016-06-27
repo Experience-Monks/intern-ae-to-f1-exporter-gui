@@ -34,7 +34,7 @@ export default {
   ],
   externals: {
     'after-effects': 'after-effects',
-    'ae-to-json': 'ae-to-json/after-effects',
+    'ae-to-json': 'ae-to-f1-json/after-effects',
     'ae-to-f1-dom': 'ae-to-f1/f1-dom',
     'ae-to-f1-exporter': 'ae-to-f1-exporter',
     'exporters-react-f1': 'ae-to-f1-exporter/exporters/react-f1',

@@ -106,7 +106,7 @@
   "dependencies": {
     "ae-to-f1": "git+ssh://github.com/jam3/ae-to-f1.git",
     "ae-to-f1-exporter": "git+ssh://github.com/jam3/ae-to-f1-exporter.git#exporter-gui-changes",
-    "ae-to-json": "^1.1.2",
+    "ae-to-f1-json": "git+https://github.com/Jam3/ae-to-f1-json.git#dist",
     "after-effects": "git+https://github.com/nascherman/after-effects.git#0.3.3",
     "archiver": "^1.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
