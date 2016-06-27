@@ -3,12 +3,13 @@
 	display: flex;
 	height: 5vh;
 	width: 60%;
-	margin-left: 5%;
+	margin-left: 10%;
+	margin-top: 5px;
 	margin-bottom: 25px;
 }
 
 .emailBox {
-	right: 20vw;
+	right: 25vw;
 	bottom: 70vw;
 	overflow-y: scroll;
 	position: relative;

@@ -3,6 +3,7 @@
 	width: 10%;
 	height: 50px;
 	display: flex;
+	margin-top: 15px;
 	cursor: pointer;
 	text-transform: uppercase;
 }

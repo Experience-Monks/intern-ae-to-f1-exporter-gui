@@ -10,18 +10,6 @@ import * as EmailActions from '../../actions/emailTo';
 
 import contactList from '../../utils/contactList';
 
-// AWSAccessKeyID: 'AKIAJ7JLOBQD3GNVZPSQ',
-// AWSSecretKey: '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',
-//const email = require('ses-email-sender')({
-//	AWSAccessKeyID: 'AKIAJ7JLOBQD3GNVZPSQ',
-//	AWSSecretKey: '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',
-//	ServiceUrl: 'https://email-smtp.us-east-1.amazonaws.com',
-//	port: '587'
-//});
-
-//const jwtClient = new google.auth.JWT(serviceKey.client_email, null, serviceKey.private_key, ['https://www.googleapis.com/auth/admin.directory.user.readonly', 'https://www.googleapis.com/auth/drive'], null);
-//const admin = google.admin({version: 'directory_v1', auth: jwtClient }); 
-
 class EmailForm extends React.Component {
 	static propTypes = {
 		emailContacts: React.PropTypes.array,
