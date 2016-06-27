@@ -34,12 +34,15 @@ export default {
   ],
   externals: {
     'after-effects': 'after-effects',
-    'node-zip': 'node-zip',
     'ae-to-json': 'ae-to-json/after-effects',
     'ae-to-f1-dom': 'ae-to-f1/f1-dom',
     'ae-to-f1-exporter': 'ae-to-f1-exporter',
     'exporters-react-f1': 'ae-to-f1-exporter/exporters/react-f1',
-    'exporters-f1-dom': 'ae-to-f1-exporter/exporters/f1-dom'
+    'exporters-f1-dom': 'ae-to-f1-exporter/exporters/f1-dom',
+    'nodemailer': 'nodemailer',
+    'nodemailer-sendgrid-transport': 'nodemailer-sendgrid-transport',
+    'archiver': 'archiver',
+    'easy-zip': 'easy-zip'
     // put your node 3rd party libraries which can't be built with webpack here
     // (mysql, mongodb, and so on..)
   }

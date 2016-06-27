@@ -13,8 +13,16 @@ import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
 import EmailForm from '../EmailForm/index.jsx';
 
+import * as ErrorsAction from '../../actions/errors';
+
+import { EasyZip } from 'easy-zip';
+import fs from 'fs';
+
+import api_data from '../../api/api_data.json';
 import nodemailer from 'nodemailer';
-import zip from 'zip-folder';
+import sgTransport from 'nodemailer-sendgrid-transport';
+
+const { BrowserWindow } = require('electron').remote;
 
 class Landing extends Component {
   static propTypes = {
@@ -28,7 +36,8 @@ class Landing extends Component {
     compState: React.PropTypes.bool,
     compName: React.PropTypes.string,
     compDownload: React.PropTypes.array,
-    emailContacts: React.PropTypes.array
+    emailContacts: React.PropTypes.array,
+    displayError: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -48,100 +57,118 @@ class Landing extends Component {
     if(!this.props.download) return;
     let _this = this;
     this.setState({submitText: 'Submitting'});
-    const transport = nodemailer.createTransport('direct');
-    let emailList = this.extractEmailFromProp(this.props.emailTo);
+    
     this.writeZip(() => {
-      let attachments = [];
-      _this.state.attachments.forEach((attachment) => {
-        let attachName = attachment.split('/');
-        attachName = attachName[attachName.length - 1];
-        attachments.push({
-          fileName: attachName,
-          filePath: attachment
-        });
-      });
-      transport.sendMail({
-          from: 'noreply@jam3.com',
-          to: emailList,
-          subject: 'After Effects to F1 Export',
-          text: _this.refs.description.value || 'AE to F1 Export',
-          attachments: attachments
-      }, (err) => {
-        if(err) console.warn(err);
-        else this.setState({submitText: 'Submitted'});
-      });
+      _this.sendMail();
     });
   };
 
-  extractEmailFromProp = (prop) => {
-    let emailList = [];
-    prop.forEach((item) => {
-      emailList.push(item.email);
+  sendMail = () => {
+    var opt = {
+      auth: {
+        api_key: api_data.key
+      }
+    };
+    const mailer = nodemailer.createTransport(sgTransport(opt));
+
+    let attachments = this.state.attachments.map((attachment) => {
+      return {
+        filename: attachment.split('/')[attachment.split('/').length - 1],
+        path: attachment
+      }
     });
-    return emailList;
+
+    const email = {
+      to: this.props.emailTo.map((e) => { return e.email }),
+      from: 'ae-to-f1@jam3.com',
+      subject: 'Ae to f1 export',
+      text: this.refs.description.value || 'Ae Export',
+      attachments
+    };
+
+    mailer.sendMail(email, (err, res) => {
+      if(err) console.log(err);
+      else {
+        console.log(res);
+      }
+    });
+  }
+
+  openWiki = (val) => {
+    const wikiWindow = new BrowserWindow({
+      show: false,
+      width: 1024,
+      height: 768
+    });
+    wikiWindow.loadURL(`file://${__dirname}/wiki/${val}.html`);
+    wikiWindow.show();
+  }
+
+  zipComp = (type, dir) => {
+    const zip = new EasyZip();
+    
+    if(type === 'react') {
+      const path = __dirname + '/output-react/' + (dir.length > 0 ? dir + '/' : '');
+      zip.file(path + 'index.js', fs.readFileSync(path + 'index.js', 'utf-8'));
+      zip.file(path + 'animation.json', fs.readFileSync(path + 'animation.json', 'utf-8'));
+      zip.file(path + 'targets.json', fs.readFileSync(path + 'targets.json', 'utf-8'));
+      let zipFolder = zip.folder(path + 'assets');
+      fs.readdirSync(path + 'assets/').forEach((asset) => {
+        zipFolder.file(path + 'assets/' + asset, fs.readFileSync(path + 'assets/' + asset));
+      });
+      // typo in module
+      zip.writeToFileSycn(path + (dir.length > 0 ? dir + '.zip' : 'AE-Export.zip'));
+    }
+    else {
+      const path = __dirname + '/output-f1/' + (dir.length > 0 ? dir + '/' : '');
+      zip.file(path + 'index.js', fs.readFileSync(path + 'index.js', 'utf-8'));
+      zip.file(path + 'animation.json', fs.readFileSync(path + 'animation.json', 'utf-8'));
+      zip.file(path + 'targets.json', fs.readFileSync(path + 'targets.json', 'utf-8'));
+      let zipFolder = zip.folder(path + 'assets');
+      fs.readdirSync(path + 'assets/').forEach((asset) => {
+        zipFolder.file(path + 'assets/' + asset, fs.readFileSync(path + 'assets/' + asset));
+      });
+      zip.writeToFileSycn(path + (dir.length > 0 ? dir + '.zip' : 'AE-Export.zip'));
+    }
   }
 
   writeZip = (callback) => {
-    let _this = this;
     let attachments = [];
     
     if(!this.props.compState) {
       if(this.props.previewType === 'react') {
-        this.props.compDownload.forEach((item) => {
-          let path = __dirname + '/output-react/' + item + '.zip';
-          attachments.push(path);
-          zip(__dirname + '/output-react', path, (err) => {
-            if(err) console.log(err);
-            else {
-              _this.setState({attachments});
-              callback();
-            }
-          });
-        });
+        let path = __dirname + '/output-react/AE-Export.zip';
+        attachments.push(path);
+        this.setState({attachments});
+        this.zipComp(this.props.previewType, '');
       }
       else {
-        this.props.compDownload.forEach((item) => {
-          let path = __dirname + '/output-f1/' + item + '.zip';
-          attachments.push(path);
-          zip(__dirname + '/output-f1', path, (err) => {
-            if(err) console.log(err);
-            else {
-              _this.setState({attachments});
-              callback();
-            }
-          });
-        });
+        let path = __dirname + '/output-f1/AE-Export.zip';
+        attachments.push(path);
+        this.setState({attachments});
+        this.zipComp(this.props.previewType, '');
       }  
     }
     else {
       if(this.props.previewType === 'react') {
         this.props.compDownload.forEach((item) => {
-          let path = __dirname + '/output-react/' + item + '.zip';
+          let path = __dirname + '/output-react/' + item + '/' + item + '.zip';
           attachments.push(path);
-          zip(__dirname + '/output-react/' + item, path, (err) => {
-            if(err) console.log(err);
-            else {
-              _this.setState({attachments});
-              callback();
-            }
-          });
+          this.setState({attachments});
+          this.zipComp(this.props.previewType, item);
         });
+        this.setState({attachments});
       }
       else {
         this.props.compDownload.forEach((item) => {
-          let path = __dirname + '/output-f1/' + item + '.zip';
+          let path = __dirname + '/output-f1/' + item + '/' + item + '.zip';
           attachments.push(path);
-          zip(__dirname + '/output-f1/' + item, path, (err) => {
-            if(err) console.log(err);
-            else {
-              _this.setState({attachments});
-              callback();
-            }
-          });
+          this.zipComp(this.props.previewType, item);
         });
+        this.setState({attachments});
       }  
     }
-    
+    if(callback) callback();
   }
 
   render() {
@@ -201,6 +228,10 @@ class Landing extends Component {
               />
             </div>
             <textarea className={styles.fakeTextArea} ref="description" placeholder="Description" />
+            <h3> Need instructions or help? Click to view <br />  
+              <p className={styles.wikiLink} onClick={this.openWiki.bind(this, 'Instructions')}>Instructions</p> Or
+              <p className={styles.wikiLink} onClick={this.openWiki.bind(this, 'Rules-and-limitations')}>Help</p>
+            </h3>
           </div>
           <button className={styles.fakeSubmitButton} onClick={this.handleSubmit.bind(this)}>{this.state.submitText}</button>
         </div>
@@ -214,9 +245,15 @@ function mapStateToProps(state) {
     download: state.download,
     compDownload: state.compDownload,
     previewType: state.previewType,
-    compState: state.compState
+    compState: state.compState,
+    compName: state.compName
   };
 }
-const LandingContainer = connect(mapStateToProps)(Landing);
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(ErrorsAction, dispatch);
+}
+
+const LandingContainer = connect(mapStateToProps, mapDispatchToProps)(Landing);
 
 export default LandingContainer;

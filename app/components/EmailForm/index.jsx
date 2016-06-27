@@ -9,8 +9,6 @@ import * as ContactsActions from '../../actions/setContacts';
 import * as EmailActions from '../../actions/emailTo';
 
 import contactList from '../../utils/contactList';
-//AKIAJMGME3PSYMESR2KA
-//AhOjHvoE8WkqSf+ViDwSb09lo2kAqRYx9dCfK0PUqWhZ
 
 // AWSAccessKeyID: 'AKIAJ7JLOBQD3GNVZPSQ',
 // AWSSecretKey: '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',
@@ -38,7 +36,7 @@ class EmailForm extends React.Component {
 	}
 
 	componentWillMount() {
-		//hardcoded contact list
+		// hardcoded contact list
 		this.props.setContacts(contactList);
 	}
 

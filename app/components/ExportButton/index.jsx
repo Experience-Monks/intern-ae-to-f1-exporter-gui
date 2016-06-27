@@ -84,7 +84,7 @@ class ExportButton extends React.Component {
 
   syncAfterEffects = () => {
     return ae.execute(aeToJSON)
-      .then((result) => {
+    .then((result) => {
         fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
         rimraf.sync(__dirname + '/output*');
         mkdirp.sync(__dirname + '/output-react');
@@ -131,8 +131,10 @@ class ExportButton extends React.Component {
           this.props.setCompositionName(subDirectories[0]);
         }
         else this.props.setMultiCompState(false);
+
         this.props.setDownloadState(true);
         this.props.setCompositionDownloads([]);
+        this.cleanAE();
       })
       .catch((e) => {
         this.props.displayError({
@@ -141,8 +143,15 @@ class ExportButton extends React.Component {
         });
         this.props.setAESync('Synchronized');
         this.props.setCompositionDownloads([]);
+        this.cleanAE();
       });
   };
+
+  cleanAE = () => {
+    ae.execute(() => {
+      app.purge(PurgeTarget.ALL_CACHES);
+    });
+  }
 
   componentWillAppear(cb) {
     this.animateIn().then(cb);

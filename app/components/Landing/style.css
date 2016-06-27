@@ -63,6 +63,18 @@
   min-height: 60px;
 }
 
+.wikiLink {
+  display: inline;
+  font-size: 12pt;
+  margin-right: 3px;
+  margin-left: 3px;
+  padding-top: 4px;
+}
+
+.wikiLink:hover {
+  color: #000;
+}
+
 .allComps {
   border-bottom: 1px solid #E3E3E3;
 }
