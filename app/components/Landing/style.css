@@ -103,6 +103,7 @@
   align-items: center;
   width: 100%;
   margin: 10px 0;
+  margin-left: 5%;
 }
 
 .inlineWrapper label {
@@ -110,7 +111,6 @@
   font-size: 10px;
   font-weight: bold;
   letter-spacing: 2px;
-  margin-left: 10%;
 }
 
 .inlineWrapper label, .toggleSwitch {

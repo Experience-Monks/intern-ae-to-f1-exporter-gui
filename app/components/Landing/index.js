@@ -50,8 +50,7 @@ class Landing extends Component {
   };
 
   state = {
-    submitText: 'SUBMIT',
-    attachments: []
+    submitText: 'SUBMIT'
   }
 
   handleSubmit = () => {
@@ -59,12 +58,12 @@ class Landing extends Component {
     let _this = this;
     this.setState({submitText: 'Submitting'});
     
-    this.writeZip(() => {
-      _this.sendMail();
+    this.writeZip((attachments) => {
+      _this.sendMail(attachments);
     });
   };
 
-  sendMail = () => {
+  sendMail = (attach) => {
     var opt = {
       auth: {
         api_key: api_data.key
@@ -72,7 +71,7 @@ class Landing extends Component {
     };
     const mailer = nodemailer.createTransport(sgTransport(opt));
 
-    let attachments = this.state.attachments.map((attachment) => {
+    let attachments = attach.map((attachment) => {
       return {
         filename: attachment.split('/')[attachment.split('/').length - 1],
         path: attachment
@@ -88,7 +87,6 @@ class Landing extends Component {
     };
 
     mailer.sendMail(email, (err, resp) => {
-      this.setState({attachments: []});
       if(err) {
         this.props.displayError({
           description: err.message,
@@ -147,13 +145,11 @@ class Landing extends Component {
       if(this.props.previewType === 'react') {
         let path = __dirname + '/output-react/AE-Export.zip';
         attachments.push(path);
-        this.setState({attachments});
         this.zipComp(this.props.previewType, '');
       }
       else {
         let path = __dirname + '/output-f1/AE-Export.zip';
         attachments.push(path);
-        this.setState({attachments});
         this.zipComp(this.props.previewType, '');
       }  
     }
@@ -162,10 +158,8 @@ class Landing extends Component {
         this.props.compDownload.forEach((item) => {
           let path = __dirname + '/output-react/' + item + '/' + item + '.zip';
           attachments.push(path);
-          this.setState({attachments});
           this.zipComp(this.props.previewType, item);
         });
-        this.setState({attachments});
       }
       else {
         this.props.compDownload.forEach((item) => {
@@ -173,10 +167,9 @@ class Landing extends Component {
           attachments.push(path);
           this.zipComp(this.props.previewType, item);
         });
-        this.setState({attachments});
       }  
     }
-    if(callback) callback();
+    if(callback) callback(attachments);
   }
 
   render() {
