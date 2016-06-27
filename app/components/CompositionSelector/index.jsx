@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import fs from 'fs';
 import path from 'path';
+import classnames from 'classnames';
 import styles from './style.css';
 
 import { bindActionCreators } from 'redux';
@@ -132,15 +133,20 @@ class CompositionSelector extends Component {
                 );
               }
               else {
+                const listItemClass = compName === item || compName.length === 0
+                  ? classnames(styles.listItem, styles.listItemSelected) : styles.listItem;
+
+                const checkClass = compDownload.indexOf(item) !== -1 
+                ? classnames(styles.circleContainer, styles.circleContainerChecked) : styles.circleContainer
                 return (
-                  <div key={index} className={styles.listItem} >
+                  <div key={index} className={listItemClass} >
                     <label 
                       onClick={this.handleCompClick.bind(this, item)}
                       className={styles.checkboxLabel} 
                     >
                         {'- ' + item}
                     </label>
-                    <div onClick={this.handleDownloadClick.bind(this, [item])} className={styles.circleContainer}>
+                    <div onClick={this.handleDownloadClick.bind(this, [item])} className={checkClass}>
                       <input
                         id={item}
                         key={index}

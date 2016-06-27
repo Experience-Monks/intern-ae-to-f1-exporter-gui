@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
+import classnames from 'classnames';
 import styles from './style.css';
 
 import ExportButton from '../ExportButton/index.jsx';
@@ -86,11 +87,18 @@ class Landing extends Component {
       attachments
     };
 
-    mailer.sendMail(email, (err, res) => {
-      if(err) console.log(err);
-      else {
-        console.log(res);
+    mailer.sendMail(email, (err, resp) => {
+      this.setState({attachments: []});
+      if(err) {
+        this.props.displayError({
+          description: err.message,
+          suggestion: 'Make sure your after effects process is started.'
+        });
       }
+      else {
+        this.setState({submitText: 'Submitted'});
+      }
+      
     });
   }
 
@@ -172,6 +180,8 @@ class Landing extends Component {
   }
 
   render() {
+    const submitClass = this.state.submitText === 'SUBMIT' 
+      ? classnames(styles.fakeSubmitButton, styles.submit) : styles.fakeSubmitButton;
     return (
       <div className={styles.container}>
         <div className={styles.left}>
@@ -233,7 +243,7 @@ class Landing extends Component {
               <p className={styles.wikiLink} onClick={this.openWiki.bind(this, 'Rules-and-limitations')}>Help</p>
             </h3>
           </div>
-          <button className={styles.fakeSubmitButton} onClick={this.handleSubmit.bind(this)}>{this.state.submitText}</button>
+          <button className={submitClass} onClick={this.handleSubmit.bind(this)}>{this.state.submitText}</button>
         </div>
       </div>
     );

@@ -9,7 +9,7 @@
 }
 
 .emailBox {
-	right: 25vw;
+	right: 24vw;
 	bottom: 70vw;
 	overflow-y: scroll;
 	position: relative;
@@ -26,6 +26,8 @@
 	margin-bottom: 0px;
 	margin-left: 5px;
 	float: left;
+	outline-color: #999;
+	outline-width: 1px;
 	border: 0;
 	height: 5vh;
 	line-height: 20px;
@@ -59,6 +61,7 @@
     background-size: cover;
     width: 20px;
     margin-top: 5px;
+    margin-left: 5px;
     min-width: 20px;
     height: 20px;
     float: left;

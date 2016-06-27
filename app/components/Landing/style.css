@@ -124,6 +124,8 @@
   width: 80%;
   height: 30%;
   margin-top: auto;
+  outline-color: #999;
+  outline-width: 1px;
   margin-bottom: 20px;
   border: 1px solid #DCDCDC;
   padding: 5px;
@@ -144,4 +146,8 @@
   font-size: 14px;
   position: relative;
   cursor: pointer;
+}
+
+.submit {
+  background: #302D2D;
 }
