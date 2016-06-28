@@ -13,8 +13,11 @@ import CompositionSelector from '../CompositionSelector/index.jsx';
 import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
 import EmailForm from '../EmailForm/index.jsx';
+import WikiFeatures from '../Wiki/wikiFeatures.jsx';
+import menuTemplate from '../../templates/menu/darwinMenuTemplate';
 
 import * as ErrorsAction from '../../actions/errors';
+import * as WikiActions from '../../actions/wiki';
 
 import { EasyZip } from 'easy-zip';
 import fs from 'fs';
@@ -23,7 +26,7 @@ import api_data from '../../api/api_data.json';
 import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
 
-const { BrowserWindow } = require('electron').remote;
+const { BrowserWindow, Menu, app } = require('electron').remote;
 
 class Landing extends Component {
   static propTypes = {
@@ -38,7 +41,9 @@ class Landing extends Component {
     compName: React.PropTypes.string,
     compDownload: React.PropTypes.array,
     emailContacts: React.PropTypes.array,
-    displayError: React.PropTypes.func
+    displayError: React.PropTypes.func,
+    wiki: React.PropTypes.string,
+    setWiki: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -51,6 +56,30 @@ class Landing extends Component {
 
   state = {
     submitText: 'SUBMIT'
+  };
+
+  componentWillMount() {
+    const params = { 
+      instructions: () => {
+        this.openWiki('instructions');
+      },
+      features: () => {
+        this.openWiki('features');
+      }
+    };
+    let menu = new Menu();
+    const template = menuTemplate(BrowserWindow.getFocusedWindow(), app, params);
+    menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu); 
+  }
+
+  openWiki = (page) => {
+    if(page === 'features') {
+      this.props.setWiki('features');
+    }
+    else if(page === 'instructions') {
+      this.props.setWiki('instructions');
+    }
   }
 
   handleSubmit = () => {
@@ -64,7 +93,7 @@ class Landing extends Component {
   };
 
   sendMail = (attach) => {
-    var opt = {
+    let opt = {
       auth: {
         api_key: api_data.key
       }
@@ -75,11 +104,11 @@ class Landing extends Component {
       return {
         filename: attachment.split('/')[attachment.split('/').length - 1],
         path: attachment
-      }
+      };
     });
 
     const email = {
-      to: this.props.emailTo.map((e) => { return e.email }),
+      to: this.props.emailTo.map((e) => { return e.email; }),
       from: 'ae-to-f1@jam3.com',
       subject: 'Ae to f1 export',
       text: this.refs.description.value || 'Ae Export',
@@ -98,16 +127,6 @@ class Landing extends Component {
       }
       
     });
-  }
-
-  openWiki = (val) => {
-    const wikiWindow = new BrowserWindow({
-      show: false,
-      width: 1024,
-      height: 768
-    });
-    wikiWindow.loadURL(`file://${__dirname}/wiki/${val}.html`);
-    wikiWindow.show();
   }
 
   zipComp = (type, dir) => {
@@ -231,14 +250,18 @@ class Landing extends Component {
               />
             </div>
             <textarea className={styles.fakeTextArea} ref="description" placeholder="Description" />
-            <h3> Need instructions or help? Click to view <br />  
-              <p className={styles.wikiLink} onClick={this.openWiki.bind(this, 'Instructions')}>Instructions</p> Or
-              <p className={styles.wikiLink} onClick={this.openWiki.bind(this, 'Rules-and-limitations')}>Help</p>
-            </h3>
           </div>
           <button className={submitClass} onClick={this.handleSubmit.bind(this)}>{this.state.submitText}</button>
         </div>
+        <div >
+          <WikiFeatures 
+            wiki={this.props.wiki}
+            className={styles.wiki} 
+            ref='wikiFeatures' 
+          />
+        </div>
       </div>
+      
     );
   }
 }
@@ -249,12 +272,14 @@ function mapStateToProps(state) {
     compDownload: state.compDownload,
     previewType: state.previewType,
     compState: state.compState,
-    compName: state.compName
+    compName: state.compName,
+    wiki: state.wiki,
+    setWiki: state.wiki
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(ErrorsAction, dispatch);
+  return bindActionCreators(Object.assign({}, ErrorsAction, WikiActions), dispatch);
 }
 
 const LandingContainer = connect(mapStateToProps, mapDispatchToProps)(Landing);

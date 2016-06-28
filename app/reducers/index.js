@@ -11,6 +11,7 @@ import compName from './compName';
 import compDownload from './compDownload';
 import emailContacts from './emailContacts';
 import emailTo from './emailTo';
+import wiki from './wiki';
 
 const rootReducer = combineReducers({
 	status,
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
 	compDownload,
 	emailContacts,
 	emailTo,
+	wiki,
 	routing
 });
 
