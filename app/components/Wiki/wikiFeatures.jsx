@@ -36,11 +36,9 @@ class WikiFeatures extends Component {
   render() {
     return (
       <div className={styles.container} ref='wiki'>
-        <h1 className={styles.h1} className={styles.goBack} onClick={this.handleClick}> Go back </h1>
+        <h1 className={styles.h1} className={styles.goBack} onClick={this.handleClick}> Close </h1>
            <div className={styles.markdownBody}><p className={styles.p}>The following a set of rules that should be followed when creating After Effects Projects that will be exported to F1 ui animations:</p>
-          <h1 className={styles.h1}>1</h1>
-          <p className={styles.p}>One piece of ui per After Effects project. You should not have for instance two buttons in one After Effects project.</p>
-          <h1 className={styles.h1}>2 </h1>
+          <h1 className={styles.h1}>1 </h1>
           <p className={styles.p}>Compositions should be named something like out_to_idle, out_to_over, etc. So basically two state names separated by <em>to</em>. The state names should not contain spaces or _ characters other than alphanumeric characters.</p>
           <p className={styles.p}>Bad composition names:</p>
           <p className={styles.p}><strong className={styles.strong}>start_state_to_end_state</strong></p>
@@ -55,7 +53,7 @@ class WikiFeatures extends Component {
           <p className={styles.p}>You you can of course define different animations for a roll over and roll out by having two compositions:</p>
           <p className={styles.p}><strong className={styles.strong}>idle_to_over</strong></p>
           <p className={styles.p}><strong className={styles.strong}>over_to_idle</strong></p>
-          <h1 className={styles.h1}>3</h1>
+          <h1 className={styles.h1}>2</h1>
           <p className={styles.p}>Features in After Effects that you can animate: <br />
           a. Position <br />
           b. Scale <br />
@@ -63,12 +61,12 @@ class WikiFeatures extends Component {
           d. Opacity <br />
           e. Anchor Points <br />
           (note you cannot currently add and animate masks)</p>
-          <h1 className={styles.h1}>4</h1>
+          <h1 className={styles.h1}>3</h1>
           <p className={styles.p}>Easing. There are two types of easing in After Effects. Temporal or time based easing (similar to ease equations) these are defined via the graph editor. Motion path easing or spatial easing these are defined via curves in the scene editor. Currently only temporal easing can be used (edited via graph/keyframe editor)</p>
-          <h1 className={styles.h1}>5</h1>
+          <h1 className={styles.h1}>4</h1>
           <p className={styles.p}>Layer types you can use currently:
           a. Image layers (no text layers, no solids, vector graphics, videos, etc.)</p>
-          <h1 className={styles.h1}>6</h1>
+          <h1 className={styles.h1}>5</h1>
           <p className={styles.p}>Layer order and naming should match between compositions. Lets say we had two compositions:</p>
           <p className={styles.p}><strong className={styles.strong}>idle_to_over</strong></p>
           <p className={styles.p}><strong className={styles.strong}>over_to_idle</strong></p>
@@ -84,7 +82,7 @@ class WikiFeatures extends Component {
           <p className={styles.p}><strong className={styles.strong}>foregroundImage</strong></p>
           <p className={styles.p}><strong className={styles.strong}>backgroundImage</strong></p>
           <p className={styles.p}><strong className={styles.strong}>backgroundBorder</strong></p>
-          <h1 className={styles.h1}>7.</h1>
+          <h1 className={styles.h1}>6</h1>
           <p className={styles.p}>Multiple Comps:
           You can export multiple compositions at once using a specific project structure. You must have a top level project folder and a series of folders beneath that level, each containing a separate composition to export. An example structure below.</p>
           <h1 className={styles.h1}>Project/</h1>

@@ -14,6 +14,7 @@ import DownloadButton from '../DownloadButton/index.jsx';
 import Toggle from '../Toggle/index.jsx';
 import EmailForm from '../EmailForm/index.jsx';
 import WikiFeatures from '../Wiki/wikiFeatures.jsx';
+import WikiInstructions from '../Wiki/wikiInstructions.jsx';
 import menuTemplate from '../../templates/menu/darwinMenuTemplate';
 
 import * as ErrorsAction from '../../actions/errors';
@@ -255,6 +256,11 @@ class Landing extends Component {
         </div>
         <div >
           <WikiFeatures 
+            wiki={this.props.wiki}
+            className={styles.wiki} 
+            ref='wikiFeatures' 
+          />
+          <WikiInstructions 
             wiki={this.props.wiki}
             className={styles.wiki} 
             ref='wikiFeatures' 
