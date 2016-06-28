@@ -12,10 +12,6 @@ class WikiFeatures extends Component {
     setWiki: React.PropTypes.func
   }
 
-  handleClick = () => {
-    this.props.setWiki('');
-  }
-
   componentWillReceiveProps(nextProps) {
     if(nextProps.wiki === 'features') {
       this.animateIn();
@@ -23,6 +19,10 @@ class WikiFeatures extends Component {
     else {
       this.animateOut();
     }
+  }
+
+  handleClick = () => {
+    this.props.setWiki('');
   }
 
   animateIn = () => {
