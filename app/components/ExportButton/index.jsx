@@ -50,6 +50,10 @@ class ExportButton extends React.Component {
     status: 'Synchronize'
   }
 
+  state = {
+    initialSync: false
+  }
+
   componentDidMount() {
     const frontSvg = this.refs.waveAnimFront.firstChild;
     const backSvg = this.refs.waveAnimBack.firstChild;
@@ -124,6 +128,7 @@ class ExportButton extends React.Component {
         }
         states = arrNoDupe(states);
         this.props.setAESync('Synchronized');
+        this.setState({initialSync: true});
         this.props.setAnimationState(states[0]);
         this.props.setFilters(states);
         if(subDirectories.length > 1) {
@@ -167,16 +172,18 @@ class ExportButton extends React.Component {
 
   render() {
     const { setAESync, status } = this.props;
+    const { initialSync } = this.state;
     const className = classnames(style.exporter, {
       [style.buttonSynchronizing]: status === 'Synching',
-      [style.buttonSynchronized]: status === 'Synchronized'
+      [style.buttonSynchronized]: status === initialSync
     });
+    const statusText = status === 'Synchronize' && !initialSync ? 'Synchronize' : status === 'Synching' ? 'Synching' : 'Synchronized'; 
 
     return (
       <div className={className}>
         <div className={style.column}>
         <button className={style.exportButton} ref="exporter" onClick={() => setAESync('Synchronize')}>
-          <div className={style.message}>{status}</div>
+          <div className={style.message}>{statusText}</div>
           <div ref="waveAnimBack" className={style.backWave} dangerouslySetInnerHTML={{ __html: backWaveSvg }}></div>
           <div ref="waveAnimFront" className={style.frontWave} dangerouslySetInnerHTML={{ __html: frontWaveSvg }}></div>
         </button>
