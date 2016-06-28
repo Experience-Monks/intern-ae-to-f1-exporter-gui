@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu, shell } from 'electron';
-import darwinTemplate from './app/templates/menu/darwinMenuTemplate';
 
 let menu;
 let template;

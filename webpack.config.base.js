@@ -29,7 +29,7 @@ export default {
   },
   plugins: [
      new webpack.DefinePlugin({
-       __dirname: '__dirname',
+       __dirname: '__dirname'
      }),
   ],
   externals: {
