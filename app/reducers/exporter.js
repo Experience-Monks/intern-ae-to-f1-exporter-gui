@@ -4,7 +4,7 @@ function status(state = 'Synchronize', action) {
 	switch (action.type) {
 		case EXPORT:
 			if(state === 'Synchronize') {
-				state = 'Synching';
+				state = 'Synchronizing';
 				return state;
 			}
 			else if(state !== 'Synched') {

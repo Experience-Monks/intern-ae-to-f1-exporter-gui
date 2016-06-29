@@ -74,14 +74,14 @@ class ExportButton extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.status === 'Synching') {
+    if(nextProps.status === 'Synchronizing') {
       let _this = this;
       this.props.setDownloadState(false);
-      
+
       // This timeout is used to ensure the loading animation is in place before
       // executing after effects which may stall application for a few seconds.
       setTimeout(() => {
-        _this.syncAfterEffects(); 
+        _this.syncAfterEffects();
       }, 1000);
     }
   }
@@ -116,7 +116,7 @@ class ExportButton extends React.Component {
           datas.forEach((item) => {
               states.push(item.from);
               states.push(item.to);
-          });  
+          });
         }
         else {
           const data = fs.readFileSync(srcPath + 'animation.json', 'utf-8');
@@ -174,10 +174,10 @@ class ExportButton extends React.Component {
     const { setAESync, status } = this.props;
     const { initialSync } = this.state;
     const className = classnames(style.exporter, {
-      [style.buttonSynchronizing]: status === 'Synching',
+      [style.buttonSynchronizing]: status === 'Synchronizing',
       [style.buttonSynchronized]: status === initialSync
     });
-    const statusText = status === 'Synchronize' && !initialSync ? 'Synchronize' : status === 'Synching' ? 'Synching' : 'Synchronized'; 
+    const statusText = status === 'Synchronize' && !initialSync ? 'Synchronize' : status === 'Synchronizing' ? 'Synchronizing' : 'Synchronized';
 
     return (
       <div className={className}>
@@ -212,11 +212,11 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, 
-    ExportActions, 
-    DownloadActions, 
-    FilterActions, 
-    ErrorsAction, 
+  return bindActionCreators(Object.assign({},
+    ExportActions,
+    DownloadActions,
+    FilterActions,
+    ErrorsAction,
     SelectStateActions,
     MultiCompActions,
     CompNameActions,

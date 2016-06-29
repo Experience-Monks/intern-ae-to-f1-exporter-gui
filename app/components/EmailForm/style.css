@@ -1,68 +1,86 @@
 .email {
-	cursor: pointer;
-	display: flex;
-	height: 5vh;
-	width: 60%;
-	margin-left: 10%;
-	margin-top: 5px;
-	margin-bottom: 25px;
+  cursor: pointer;
+  height: 30px;
+  width: 58%;
+  padding-left: 8px;
+  margin-top: 5px;
+  margin-bottom: 25px;
+}
+
+.emailBoxWrapper {
+  position: relative;
+  bottom: 70vw;
+  left: -18px;
+  width: 200%;
+  height: 60vh;
+  background-color: #fff;
+  padding: 15px 0;
+  box-shadow: 0px 0px 128px 13px rgba(50,50,50,0.2);
 }
 
 .emailBox {
-	right: 24vw;
-	bottom: 70vw;
-	overflow-y: scroll;
-	position: relative;
-	text-align: left;
-	background-color: #fff;
-	width: 24vw;
-	text-transform: uppercase;
-	height: 60vh;
-	min-width: 300px;
+  position: relative;
+  overflow-y: scroll;
+  text-align: left;
+  text-transform: uppercase;
+  height: 86%;
+}
+
+.inputContainer {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 .emailEntry {
-	width: 100px;
-	margin-bottom: 0px;
-	margin-left: 5px;
-	float: left;
-	outline-color: #999;
-	outline-width: 1px;
-	border: 0;
-	height: 5vh;
-	line-height: 20px;
-
+  width: 100%;
+  height: 100%;
+  margin-bottom: 0px;
+  margin-left: 5px;
+  outline: none;
+  border: 0;
+  line-height: 20px;
+  border-bottom: 1px solid #E6E6E6;
+  background-color: transparent;
+  padding-right: 18px;
+  letter-spacing: 1px;
 }
 
 .listItem {
-	text-transform: uppercase;
-	letter-spacing: 4px;
-	padding-left: 33px;
-	padding-top: 10px;
-	padding-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  padding-left: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .listItemSelected {
-	background-color: #eee;
-	color: #fff;
+  background-color: #eee;
+  color: #fff;
 }
 
 .label {
-	width: 40px;
-	display: inline-block;
+  width: 40px;
+  display: inline-block;
 }
 .labelContainer {
-	min-width: 20%;
-	display: inline;
+  min-width: 20%;
+  display: inline;
 }
 
 .arrow {
-    background-image: url('./arrow.png');
-    background-size: cover;
-    width: 20px;
-    margin-top: 5px;
-    margin-left: 5px;
-    min-width: 20px;
-    height: 20px;
-    float: left;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  background-image: url('./arrow.png');
+  background-size: cover;
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
 }
