@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import * as ToggleActions from '../../actions/toggle';
- 
+
 class Toggle extends React.Component {
   static propTypes = {
     previewType: React.PropTypes.string,
@@ -14,22 +14,22 @@ class Toggle extends React.Component {
   }
 
   handleClick = (previewType) => {
-    if(this.props.status === 'Synching') return;
+    if(this.props.status === 'Synchronizing') return;
     this.props.setType(previewType === 'f1Dom' ? 'react' : 'f1Dom');
   }
 
   render() {
     const { previewType } = this.props;
-    const toggleClass = previewType === 'react' ? 
+    const toggleClass = previewType === 'react' ?
       classNames(style.switchToggle) : classNames(style.switchToggle, style.switchOn);
 
     return (
         <div className={this.props.className}>
-          F1 REACT
+          <span style={{ color: previewType === 'react' ? '#2B2727' : '#959393' }}>f1 React</span>
           <div className={style.switch} onClick={() => this.handleClick(previewType)} >
             <div className={toggleClass} />
           </div>
-          F1 DOM
+          <span style={{ color: previewType !== 'react' ? '#2B2727' : '#959393' }}>f1 Dom</span>
         </div>
     );
   }

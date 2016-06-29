@@ -8,7 +8,7 @@ export function sync(state) {
 			return {
 				type: EXPORT
 			};
-		case 'Synching':
+		case 'Synchronizing':
 			return {
 				type: EXPORT
 			};

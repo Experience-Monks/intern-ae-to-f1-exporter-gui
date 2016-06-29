@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import style from './style.css';
 import classnames from 'classnames';
+import Checkbox from '../Checkbox';
 
 import * as SelectStateActions from '../../actions/selectState';
 
@@ -44,11 +45,10 @@ class StateSelector extends Component {
           filter.map((type, index) => {
             return (
               <div key={type} className={style.checkContainer} >
-                <input
+                <Checkbox
                   id={type}
                   key={index}
                   className={style.checkbox}
-                  type="checkbox" value={type}
                   checked={this.props.previewState === type}
                   onChange={() => setAnimationState(type)}
                 />

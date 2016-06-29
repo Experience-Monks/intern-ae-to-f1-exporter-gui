@@ -87,7 +87,7 @@ class Landing extends Component {
     if(!this.props.download) return;
     let _this = this;
     this.setState({submitText: 'Submitting'});
-    
+
     this.writeZip((attachments) => {
       _this.sendMail(attachments);
     });
@@ -126,13 +126,13 @@ class Landing extends Component {
       else {
         this.setState({submitText: 'Submitted'});
       }
-      
+
     });
   }
 
   zipComp = (type, dir) => {
     const zip = new EasyZip();
-    
+
     if(type === 'react') {
       const path = __dirname + '/output-react/' + (dir.length > 0 ? dir + '/' : '');
       zip.file(path + 'index.js', fs.readFileSync(path + 'index.js', 'utf-8'));
@@ -160,7 +160,7 @@ class Landing extends Component {
 
   writeZip = (callback) => {
     let attachments = [];
-    
+
     if(!this.props.compState) {
       if(this.props.previewType === 'react') {
         let path = __dirname + '/output-react/AE-Export.zip';
@@ -171,7 +171,7 @@ class Landing extends Component {
         let path = __dirname + '/output-f1/AE-Export.zip';
         attachments.push(path);
         this.zipComp(this.props.previewType, '');
-      }  
+      }
     }
     else {
       if(this.props.previewType === 'react') {
@@ -187,13 +187,13 @@ class Landing extends Component {
           attachments.push(path);
           this.zipComp(this.props.previewType, item);
         });
-      }  
+      }
     }
     if(callback) callback(attachments);
   }
 
   render() {
-    const submitClass = this.state.submitText === 'SUBMIT' 
+    const submitClass = this.state.submitText === 'SUBMIT'
       ? classnames(styles.fakeSubmitButton, styles.submit) : styles.fakeSubmitButton;
     return (
       <div className={styles.container}>
@@ -222,7 +222,7 @@ class Landing extends Component {
             compName={this.props.compName}
             compDownload={this.props.compDownload}
           />
-          <CompositionSelector 
+          <CompositionSelector
             compName={this.props.compName}
             compState={this.props.compState}
             compDownload={this.props.compDownload}
@@ -233,13 +233,13 @@ class Landing extends Component {
           <div className={styles.controlWrapper}>
             <div className={styles.inlineWrapper}>
               <label>Select F1 Flavour</label>
-              <Toggle 
+              <Toggle
                 className={styles.toggleSwitch}
                 type={this.props.previewType}
               />
             </div>
             <div className={styles.inlineWrapper}>
-              <EmailForm 
+              <EmailForm
                 contactList={this.props.emailContacts}
                 emailTo={this.props.emailTo}
               />

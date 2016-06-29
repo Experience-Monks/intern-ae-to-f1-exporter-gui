@@ -13,40 +13,7 @@
   border-left: 1px solid #ECECEC;
 }
 
-.checkbox, .radio {
-  opacity: 0;
-  height: 0%;
-  width: 0%;
-  position: relative;
-  text-transform: uppercase;
-}
-
-.checkbox, .checkboxLabel {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 5px;
+.checkContainer label {
   cursor: pointer;
-  text-transform: capitalize;
-}
-
-.checkboxLabel {
-  position: relative;
-}
-
-.checkbox + .checkboxLabel:before {
-  content: '';
-  background: #fff;
-  border: 2px solid #ddd;
-  display: inline-block;
-  vertical-align: middle;
-  width: 20px;
-  height: 20px;
-  padding: 2px;
-  margin-right: 10px;
-  text-align: center;
-}
-
-.checkbox:checked + .checkboxLabel:before {
-  background: #222;
-  box-shadow: inset 0px 0px 0px 4px #fff;
+  margin-left: 10px;
 }

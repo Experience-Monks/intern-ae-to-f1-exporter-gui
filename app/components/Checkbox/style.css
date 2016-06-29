@@ -1,0 +1,57 @@
+.checkbox {
+  box-sizing: border-box;
+  position: relative;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1px solid #D7D7D7;
+  background-color: white;
+  cursor: pointer;
+  transform: scaleX(1);
+  transition: all 0.3s ease-out;
+}
+
+.checkbox.checked {
+  position: relative;
+  transform: scaleX(-1);
+  border-radius: 100%;
+  background-color: #232020;
+  border: none;
+}
+
+.checkbox.checked.invertedColors {
+  position: relative;
+  background-color: #C0BFBF;
+}
+
+.checkbox.checked.invertedColors:before, .checkbox.checked.invertedColors:after {
+  background-color: #2B2727;
+}
+
+.checkbox.checked:before, .checkbox.checked:after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  background-color: white;
+}
+
+.checkbox.checked:before {
+  width: 4px;
+  left: 12px;
+  top: 10px;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.checkbox.checked:after {
+  content: '';
+  position: absolute;
+  width: 9px;
+  left: 8px;
+  top: 9px;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.checkbox input[type="checkbox"] {
+  position: absolute;
+  visibility: hidden;
+}

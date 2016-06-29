@@ -3,7 +3,6 @@
   flex-direction: column;
   flex: 0.7;
   overflow: scroll;
-  cursor: pointer;
 }
 
 .allComps, .listItem {
@@ -22,27 +21,27 @@
 }
 
 .listItem {
-  font-size: 16px;
+  font-size: 10px;
   color: rgba(200,200,200,0.8);
   background-color: #F9F9F9;
   text-align: left;
-}
-
-.listItemSelected {
-  background-color:#a9a9a9;
-  color: #fff;
+  font-style: italic;
+  cursor: pointer;
 }
 
 .listItem:not(:last-child) {
   border-bottom: 1px solid #E3E3E3;
 }
 
- input {
-  opacity: 0;
-  margin-left: 10px;
-  height: 20px;
-  width: 20px;
+.listItem.empty {
+  cursor: default;
 }
+
+.listItemSelected {
+  background-color:#2B2727;
+  color: #fff;
+}
+
 
 .circleContainer  {
   margin: 5px;
@@ -56,11 +55,7 @@
 }
 
 .checkboxLabel {
+  cursor: pointer;
   position: relative;
   width: 80%;
-}
-
-.circleContainerChecked {
-  background: #222;
-  box-shadow: inset 0px 0px 0px 4px #fff;
 }

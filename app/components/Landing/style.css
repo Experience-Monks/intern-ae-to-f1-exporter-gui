@@ -90,12 +90,14 @@
 }
 
 .controlWrapper {
+  box-sizing: border-box;
   flex: 0.3;
   min-height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
   border-top: 1px solid #E3E3E3;
+  padding: 20px 0;
 }
 
 .inlineWrapper {
@@ -103,14 +105,7 @@
   align-items: center;
   width: 100%;
   margin: 10px 0;
-  margin-left: 5%;
-}
-
-.inlineWrapper label {
-  text-transform: uppercase;
-  font-size: 10px;
-  font-weight: bold;
-  letter-spacing: 2px;
+  padding-left: 10px;
 }
 
 .inlineWrapper label, .toggleSwitch {
@@ -120,13 +115,24 @@
   flex: 0.5;
 }
 
+.inlineWrapper label {
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  display: block;
+  text-align: left;
+  flex: 0.45;
+  padding-left: 14px;
+  color: #2B2727;
+}
+
 .fakeTextArea {
   width: 80%;
   height: 30%;
   margin-top: auto;
   outline-color: #999;
   outline-width: 1px;
-  margin-bottom: 20px;
   border: 1px solid #DCDCDC;
   padding: 5px;
 }
