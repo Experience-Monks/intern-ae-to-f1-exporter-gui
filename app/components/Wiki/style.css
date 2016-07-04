@@ -54,7 +54,15 @@
   margin: 0.67em 0;
 }
 
+.a {
+  margin-left: 3px;
+  margin-right: 3px;
+  color: #888;
+}
 
+.a:hover {
+  color: #000;
+}
 .code,
 .pre {
   font-family: monospace, monospace;

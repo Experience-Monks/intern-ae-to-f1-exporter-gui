@@ -1,6 +1,6 @@
 {
   "name": "ae-to-f1-exporter-gui",
-  "productName": "ElectronReact",
+  "productName": "AeToF1Exporter",
   "version": "0.10.0",
   "description": "Electron application boilerplate based on React, React Router, Webpack, React Hot Loader for rapid application development",
   "main": "main.js",

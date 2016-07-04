@@ -1,18 +1,8 @@
 module.exports = function(mainWindow, app, params) {
 	return [{
-      label: 'Electron',
+      label: 'AE To F1 Exporter',
       submenu: [{
-        label: 'About ElectronReact',
-        selector: 'orderFrontStandardAboutPanel:'
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Services',
-        submenu: []
-      }, {
-        type: 'separator'
-      }, {
-        label: 'Hide ElectronReact',
+        label: 'Hide AE To F1 Exporter',
         accelerator: 'Command+H',
         selector: 'hide:'
       }, {
@@ -34,7 +24,12 @@ module.exports = function(mainWindow, app, params) {
     }, { 
       label: 'Need help?',
       accelerator: 'Command+H',
-      submenu: [{
+      submenu: [
+      {
+        label: 'Tutorial',
+        click: params.tutorial
+      },
+      {
         label: 'Instructions',
         click: params.instructions
       },

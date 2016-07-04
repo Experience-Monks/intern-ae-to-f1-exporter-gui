@@ -79,8 +79,8 @@ class ReactF1Preview extends React.Component {
 			go: previewState
 		};
 		const styleContainer = {
-			width: this.state.dimensions.width || 500,
-			height: this.state.dimensions.height || 500,
+			width: (this.state.dimensions.width || 500) + 'px',
+			height: (this.state.dimensions.height || 500) + 'px',
 			perspective: 555.5555555555555,
 			WebkitPerspective: 555.5555555555555,
 			MozPerspective: 555.5555555555555,
@@ -98,17 +98,39 @@ class ReactF1Preview extends React.Component {
         <ReactF1 {...props} style={styleContainer}>
           {
             assetNames.map((name, index) => {
-              return (
-                <img 
-                  data-f1={name.key} 
-                  key={index}
-                  src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
-                  width={name.data.width || 500} 
-                  height={name.data.height || 500} 
-                  style={{position: 'absolute', left: 0, top: 0}} 
-                  alt={'preview-react'}
-                />
-              );
+              switch(name.data.src.split('.')[1]) {
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                  return (
+                    <img 
+                      data-f1={name.key} 
+                      key={index}
+                      src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
+                      width={name.data.width || 1000} 
+                      height={name.data.height || 1000} 
+                      style={{position: 'absolute', left: 0, top: 0}} 
+                      alt={'preview-react'}
+                    />
+                  );
+                case 'mp4':
+                case 'ogg':
+                case 'webm':
+                  return (
+                    <video
+                      autoPlay
+                      loop
+                      data-f1={name.key} 
+                      key={index}
+                      src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
+                      width={name.data.width || 1000} 
+                      height={name.data.height || 1000} 
+                      style={{position: 'absolute', left: 0, top: 0}} 
+                    >
+                    </video>
+                  );
+              }
             })
           }
         </ReactF1>

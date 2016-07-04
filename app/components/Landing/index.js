@@ -15,6 +15,7 @@ import Toggle from '../Toggle/index.jsx';
 import EmailForm from '../EmailForm/index.jsx';
 import WikiFeatures from '../Wiki/wikiFeatures.jsx';
 import WikiInstructions from '../Wiki/wikiInstructions.jsx';
+import WikiTutorial from '../Wiki/wikiTutorial.jsx';
 import menuTemplate from '../../templates/menu/darwinMenuTemplate';
 
 import * as ErrorsAction from '../../actions/errors';
@@ -66,6 +67,9 @@ class Landing extends Component {
       },
       features: () => {
         this.openWiki('features');
+      },
+      tutorial: () => {
+        this.openWiki('tutorial');
       }
     };
     let menu = new Menu();
@@ -80,6 +84,9 @@ class Landing extends Component {
     }
     else if(page === 'instructions') {
       this.props.setWiki('instructions');
+    }
+    else if(page === 'tutorial') {
+      this.props.setWiki('tutorial'); 
     }
   }
 
@@ -263,7 +270,12 @@ class Landing extends Component {
           <WikiInstructions 
             wiki={this.props.wiki}
             className={styles.wiki} 
-            ref='wikiFeatures' 
+            ref='wikiInstructions' 
+          />
+          <WikiTutorial
+            wiki={this.props.wiki}
+            className={styles.wiki} 
+            ref='wikiTutorial' 
           />
         </div>
       </div>
