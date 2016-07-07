@@ -27,6 +27,7 @@ import classnames from 'classnames';
 import frontWaveSvg from './front-wave.svg';
 import backWaveSvg from './back-wave.svg';
 
+const { BrowserWindow } = require('electron').remote;
 
 ae.options.includes = [
     './node_modules/after-effects/lib/includes/console.js',
@@ -87,8 +88,10 @@ class ExportButton extends React.Component {
   }
 
   syncAfterEffects = () => {
+    const win = BrowserWindow.getFocusedWindow();
     return ae.execute(aeToJSON)
     .then((result) => {
+        win.focus();
         fs.writeFileSync(__dirname + '/ae-export.json', JSON.stringify(result));
         rimraf.sync(__dirname + '/output*');
         mkdirp.sync(__dirname + '/output-react');
