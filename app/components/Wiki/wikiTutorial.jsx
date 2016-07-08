@@ -1,3 +1,4 @@
+ 
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -7,36 +8,35 @@ import animate from 'gsap-promise';
 import * as WikiActions from '../../actions/wiki';
 
 class WikiTutorial extends Component {
-  static propTypes = {
-    currentWiki: React.PropTypes.string,
-    setWiki: React.PropTypes.func
-  }
+    static propTypes = {
+      currentWiki: React.PropTypes.string,
+      setWiki: React.PropTypes.func
+    }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.wiki === 'tutorial') {
-      this.animateIn();
+        this.animateIn();
+      }
+      else {
+        this.animateOut();
+      }
     }
-    else {
-      this.animateOut();
+
+    handleClick = () => {
+      this.props.setWiki('');
     }
-  }
 
-  handleClick = () => {
-    this.props.setWiki('');
-  }
+    animateIn = () => {
+      animate.to(this.refs.wiki, 0.5, { top: '0%'});
+    }
 
-  animateIn = () => {
-    animate.to(this.refs.wiki, 0.5, { top: '0%'});
-  }
-
-  animateOut = () => {
-    animate.to(this.refs.wiki, 0.5, { top: '100%'});
-  }
+    animateOut = () => {
+      animate.to(this.refs.wiki, 0.5, { top: '100%'});
+    }
 
     render() {
       return (
         <div className={styles.container} ref='wiki'>
-        <h1 className={styles.h1} className={styles.goBack} onClick={this.handleClick}> Close </h1>
           <h1 className={styles.h1}>AE Animation Creation Tutorial</h1>
             <p className={styles.p}>This tutorial will walk you through different kind of animations that are possible with the exporter. The project file is available for download <a href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/multi_export_test.zip?raw=true">Here</a></p>
             <h1 className={styles.h1}>1 - Creating a simple project</h1>
@@ -47,6 +47,9 @@ class WikiTutorial extends Component {
 a. Position b. Scale c. Rotation d. Opacity e. Anchor Points. Set up two keyframes at the start and end of the composition. Translate the position from offscreen at the start of the keyframe and onscreen at the end keyframe. Apply easy-ease with F9.</p>
             <h5 className={styles.h5}>More than two keyframes in a composition</h5>
             <p className={styles.p}>A composition can have multiple keyframes.  Make a new composition called idle_to_rotate. Add a sequence of keyframes, changing the rotation each time like so, applying ease to each transition. Note that it is best to ENABLE 3d transforms for the composition. In this case, rotation is expressed as z-rotation.</p>
+            <h5 className={styles.h5}>Tracking position on an irregular path</h5>
+            <p className={styles.p}>If you have more than 2 keyframes in a position transform, it will be translated into an expression. This is so that irregular position can be tracked like a spiral or curve.</p>
+            <p className={styles.p}><img src="https://raw.githubusercontent.com/nascherman/my-pics/master/ae-to-f1-exporter-gui/ae-to-f1-position.png" alt="1"/></p>
             <h5 className={styles.h5}>Wrapping up</h5>
             <p className={styles.p}>That&#x27;s it. It&#x27;s trivial to create new transitions with compositions. This tutorial project is included <a href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/tutorial.zip?raw=true">Here</a>
 for reference. The other examples below demonstrate different effects and conventions of the exporter.</p>
@@ -62,13 +65,17 @@ for reference. The other examples below demonstrate different effects and conven
             <p className={styles.p}>This radio button/toggle switch is an example of a ui element with many different states</p>
             <h5 className={styles.h5}>4 - slider</h5>
             <p className={styles.p}>This example features the use of video assets and a cycle of transitions. Notice that the transitions are numbered 0-3 and there is a transition from 0_to_1 as well as a transition from 3_to_0, so that states the transition between 3_to_0 paths correctly.</p>
+            <h5 className={styles.h5}>5 - spiral/curve</h5>
+            <p className={styles.p}>A basic example that demonstrates irregular position animation or tracking along a curve.</p>
+            <h5 className={styles.h5}>5 - space</h5>
+            <p className={styles.p}>Example that demonstrates specifying two different animations for transitioning back and forth between states.</p>
             <h1 className={styles.h1}>3 - Things to note</h1>
             <ul className={styles.ul}>
               <li className={styles.li}>Composition that start from another compositions, end point should have the same transform properties. Eg if out_to_idle ends at position (x: 100,y: 100), idle_to_over should start at position (x: 100,y: 100). The same applies to rotation, opacity etc.</li>
               <li className={styles.li}>Compositions should always be defined as &#x27;transition_to_transition&#x27; (eg over_to_idle). If you don&#x27;t follow naming convention, the composition and its transition won&#x27;t be exported</li>
-              <li className={styles.li}>Make sure that you collect all your files when sharing a project with another designer - <em>Dependencies -&gt; Collect Files</em></li>
+              <li className={styles.li}>Make sure that you collect all your files when sharing a project - <em>Dependencies -&gt; Collect Files</em></li>
               <li className={styles.li}>Test the pathing from different states to ensure it animates smoothly, you may need to add an extra composition to transition smoothly.</li>
-              <li className={styles.li}>Supported Transforms: a. Position b. Scale c. Rotation d. Opacity e. Anchor Points.</li>
+              <li className={styles.li}>Supported Transforms: a. Position b. Scale c. Rotation (X Rotation, Y Rotation, Z Rotation) d. Opacity e. Anchor Points.</li>
               <li className={styles.li}>Supported formats: Images(pngs,jpgs,gifs), Videos</li>
             </ul>
         </div>
