@@ -37,6 +37,7 @@ class WikiTutorial extends Component {
     render() {
       return (
         <div className={styles.container} ref='wiki'>
+          <h3 className={styles.goBack} onClick={this.handleClick}> Close </h3>
           <h1 className={styles.h1}>AE Animation Creation Tutorial</h1>
             <p className={styles.p}>This tutorial will walk you through different kind of animations that are possible with the exporter. The project file is available for download <a href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/multi_export_test.zip?raw=true">Here</a></p>
             <h1 className={styles.h1}>1 - Creating a simple project</h1>
