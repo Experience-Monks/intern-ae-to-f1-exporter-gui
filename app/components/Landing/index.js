@@ -29,6 +29,8 @@ import nodemailer from 'nodemailer';
 import sgTransport from 'nodemailer-sendgrid-transport';
 
 const { BrowserWindow, Menu, app } = require('electron').remote;
+const formatSuggestion = require('../../utils/formatErrors').suggestion;
+const formatError = require('../../utils/formatErrors').error;
 
 class Landing extends Component {
   static propTypes = {
@@ -126,8 +128,8 @@ class Landing extends Component {
     mailer.sendMail(email, (err, resp) => {
       if(err) {
         this.props.displayError({
-          description: err.message,
-          suggestion: 'Make sure your after effects process is started.'
+          description: formatError(err),
+          suggestion: 'Make sure you\'ve entered a correct email address.'
         });
       }
       else {

@@ -42,7 +42,7 @@ class Preview extends Component {
     }
     catch (e) {
       displayError({
-        description: 'Preview rendering error: ' + e.message,
+        description: 'Preview rendering error',
         suggestion: 'Make sure your project\'s composition is compatible with F1.',
         error: e.message
       });

@@ -28,6 +28,8 @@ import frontWaveSvg from './front-wave.svg';
 import backWaveSvg from './back-wave.svg';
 
 const { BrowserWindow } = require('electron').remote;
+const formatSuggestion = require('../../utils/formatErrors').suggestion;
+const formatError = require('../../utils/formatErrors').error;
 
 ae.options.includes = [
     './node_modules/after-effects/lib/includes/console.js',
@@ -146,8 +148,8 @@ class ExportButton extends React.Component {
       })
       .catch((e) => {
         this.props.displayError({
-          description: e.message,
-          suggestion: 'Make sure your after effects process is started.'
+          description: formatError(e),
+          suggestion: formatSuggestion(e)
         });
         this.props.setAESync('Synchronized');
         this.props.setCompositionDownloads([]);

@@ -1,0 +1,16 @@
+module.exports.suggestion = function(error) {
+  switch(error.message) {
+    case 'No Result from After Effects.':
+      return 'Please restart after effects';
+      break;
+    default:
+      return 'Unkown Error, please ask a dev for assistance or consult the documentation.'
+  }
+}
+
+module.exports.error = function(error) {
+  if(error.message.length > 100) {
+    return error.message.match(/(.{1,100})/g)[0];
+  }
+  else return error.message;
+}
