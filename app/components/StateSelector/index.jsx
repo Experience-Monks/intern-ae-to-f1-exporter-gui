@@ -11,7 +11,8 @@ class StateSelector extends Component {
   static propTypes = {
     setAnimationState: React.PropTypes.func,
     filter: React.PropTypes.array,
-    previewState: React.PropTypes.string
+    previewState: React.PropTypes.string,
+    emailFocus: React.PropTypes.bool
   };
 
   static defaultProps = {
@@ -27,7 +28,8 @@ class StateSelector extends Component {
   }
 
   handleKeyDown = (e) => {
-    const { filter } = this.props;
+    const { filter, emailFocus } = this.props;
+    if(emailFocus) return;
     const stateIndex = e.keyCode - 49;
 
     if(filter[stateIndex] && e.keyCode >= 49 && e.keyCode <= 57) {
@@ -66,7 +68,8 @@ function mapStateToProps(state) {
   return {
     setAnimationState: state.previewState,
     filter: state.filter,
-    previewState: state.previewState
+    previewState: state.previewState,
+    emailFocus: state.emailFocus
   };
 }
 

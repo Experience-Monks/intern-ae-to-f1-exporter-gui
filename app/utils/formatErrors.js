@@ -2,7 +2,8 @@ module.exports.suggestion = function(error) {
   switch(error.message) {
     case 'No Result from After Effects.':
       return 'Please restart after effects';
-      break;
+    case 'Cannot convert undefined or null to object':
+      return 'Make sure you have a project open.'
     default:
       return 'Unkown Error, please ask a dev for assistance or consult the documentation.'
   }

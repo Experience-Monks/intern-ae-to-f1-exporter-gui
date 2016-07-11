@@ -47,7 +47,9 @@ class Landing extends Component {
     emailContacts: React.PropTypes.array,
     displayError: React.PropTypes.func,
     wiki: React.PropTypes.string,
-    setWiki: React.PropTypes.func
+    setWiki: React.PropTypes.func,
+    emailFocus: React.PropTypes.bool,
+    setEmailFocus: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -55,7 +57,8 @@ class Landing extends Component {
     download: false,
     status: 'Unsync',
     filter: [],
-    compState: false
+    compState: false,
+    emailFocus: false
   };
 
   state = {
@@ -220,6 +223,7 @@ class Landing extends Component {
             className={styles.stateSelector}
             previewState={this.props.previewState}
             filters={this.props.filter}
+            emailFocus={this.props.emailFocus}
           />
         </div>
         <div className={styles.right}>
@@ -251,6 +255,7 @@ class Landing extends Component {
               <EmailForm
                 contactList={this.props.emailContacts}
                 emailTo={this.props.emailTo}
+                emailFocus={this.props.emailFocus}
               />
               <DownloadButton
                 download={this.props.download}

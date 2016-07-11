@@ -7,6 +7,7 @@ import animate from 'gsap-promise';
 
 import * as ContactsActions from '../../actions/setContacts';
 import * as EmailActions from '../../actions/emailTo';
+import * as EmailFocus from '../../actions/emailFocus';
 
 import contactList from '../../utils/contactList';
 
@@ -15,7 +16,9 @@ class EmailForm extends React.Component {
     emailContacts: React.PropTypes.array,
     emailTo: React.PropTypes.array,
     setContacts: React.PropTypes.func,
-    setEmailTo: React.PropTypes.func
+    setEmailTo: React.PropTypes.func,
+    emailFocus: React.PropTypes.bool,
+    setEmailFocus: React.PropTypes.func
   }
 
   state = {
@@ -71,6 +74,11 @@ class EmailForm extends React.Component {
     this.setState({emailToggle: !this.state.emailToggle});
   }
 
+  toggleFocus = () => {
+    this.props.setEmailFocus(!this.props.emailFocus);
+    this.updateEmail();
+  }
+
   updateEmail = () => {
     const emailTo = this.props.emailTo;
     const entryVal = this.refs.emailEntry.value;
@@ -100,7 +108,8 @@ class EmailForm extends React.Component {
           <input
             className={style.emailEntry}
             placeholder="SEND TO:"
-            onChange={this.updateEmail.bind(this)}
+            onFocus={this.toggleFocus.bind(this)}
+            onBlur={this.toggleFocus.bind(this)}
             type="text"
             ref="emailEntry"
           />
@@ -138,12 +147,14 @@ function mapStateToProps(state) {
         emailContacts: state.emailContacts,
         emailTo: state.emailTo,
         setContacts: state.emailContacts,
-        setEmailTo: state.emailTo
+        setEmailTo: state.emailTo,
+        setEmailFocus: state.emailFocus,
+        emailFocus: state.emailFocus
     };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, ContactsActions, EmailActions), dispatch);
+  return bindActionCreators(Object.assign({}, ContactsActions, EmailActions, EmailFocus), dispatch);
 }
 
 const EmailFormContainer = connect(mapStateToProps, mapDispatchToProps)(EmailForm);

@@ -11,6 +11,7 @@ import compName from './compName';
 import compDownload from './compDownload';
 import emailContacts from './emailContacts';
 import emailTo from './emailTo';
+import emailFocus from './emailFocus';
 import wiki from './wiki';
 
 const rootReducer = combineReducers({
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
 	emailContacts,
 	emailTo,
 	wiki,
+	emailFocus,
 	routing
 });
 
