@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import * as ErrorsAction from '../../actions/errors';
+import InlineSVG from 'svg-inline-react';
 
 const React = require('react');
 const ReactF1 = require('react-f1');
 const aeToF1Dom = require('ae-to-f1-dom');
 const fs = require('fs');
-
 class ReactF1Preview extends React.Component {
 	static propType = {
     previewState: React.PropTypes.string,
@@ -129,6 +129,23 @@ class ReactF1Preview extends React.Component {
                       style={{position: 'absolute', left: 0, top: 0}} 
                     >
                     </video>
+                  );
+                case 'svg': 
+                  return (
+                    <div
+                      data-f1={name.key} 
+                      key={index}
+                      style={{
+                        position: 'relative',
+                        top: 0,
+                        left: 0,
+                        overflow: 'visible'
+                      }}
+                    >
+                      <InlineSVG 
+                        src={fs.readFileSync(__dirname + '/output-react/' + comp + '/assets/' + name.data.src).toString()} 
+                      />
+                    </div>
                   );
               }
             })
