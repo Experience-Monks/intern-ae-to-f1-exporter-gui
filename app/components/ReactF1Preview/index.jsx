@@ -136,14 +136,18 @@ class ReactF1Preview extends React.Component {
                       data-f1={name.key} 
                       key={index}
                       style={{
-                        position: 'relative',
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
                         top: 0,
                         left: 0,
                         overflow: 'visible'
                       }}
                     >
                       <InlineSVG 
-                        src={fs.readFileSync(__dirname + '/output-react/' + comp + '/assets/' + name.data.src).toString()} 
+                        src={
+                          fs.readFileSync(__dirname + '/output-react/' + comp + '/assets/' + name.data.src).toString()
+                        } 
                       />
                     </div>
                   );

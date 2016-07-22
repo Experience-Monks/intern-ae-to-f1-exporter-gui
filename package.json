@@ -135,7 +135,6 @@
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
     "remote": "^0.2.6",
-    "remove-attributes": "^1.0.0",
     "rimraf": "^2.5.2",
     "shelljs": "^0.7.0",
     "source-map-support": "^0.4.0",
