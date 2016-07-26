@@ -24,18 +24,13 @@ import aeToReactF1 from 'exporters-react-f1';
 import aeToF1Dom from 'exporters-f1-dom';
 
 import classnames from 'classnames';
-import frontWaveSvg from './front-wave.svg';
-import backWaveSvg from './back-wave.svg';
 
 const { BrowserWindow } = require('electron').remote;
 const formatSuggestion = require('../../utils/formatErrors').suggestion;
 const formatError = require('../../utils/formatErrors').error;
 
-ae.options.includes = [
-    './node_modules/after-effects/lib/includes/console.js',
-    './node_modules/after-effects/lib/includes/es5-shim.js',
-    './node_modules/after-effects/lib/includes/get.js'
-];
+const frontWaveSvg = require('./front-wave.svg');
+const backWaveSvg = require('./back-wave.svg');
 
 class ExportButton extends React.Component {
   static propTypes = {

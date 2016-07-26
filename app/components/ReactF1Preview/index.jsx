@@ -79,8 +79,8 @@ class ReactF1Preview extends React.Component {
 			go: previewState
 		};
 		const styleContainer = {
-			width: (this.state.dimensions.width || 500) + 'px',
-			height: (this.state.dimensions.height || 500) + 'px',
+			width: '100%',
+			height: '100%',
 			perspective: 555.5555555555555,
 			WebkitPerspective: 555.5555555555555,
 			MozPerspective: 555.5555555555555,
@@ -137,8 +137,8 @@ class ReactF1Preview extends React.Component {
                       key={index}
                       style={{
                         position: 'absolute',
-                        width: '100%',
-                        height: '100%',
+                        width: name.data.width,
+                        height: name.data.height,
                         top: 0,
                         left: 0,
                         overflow: 'visible'
@@ -150,6 +150,27 @@ class ReactF1Preview extends React.Component {
                         } 
                       />
                     </div>
+                  );
+                case 'ttf':
+                case 'otf':
+                case 'ttc':
+                  return (
+                    <p 
+                      data-f1={name.key}
+                      key={index}
+                      style={{
+                        position: 'absolute',
+                        width: name.data.width,
+                        height: name.data.height,
+                        top: 0,
+                        left: 0,
+                        overflow: 'visible',
+                        fontFace: name.data.font.font,
+                        fontSize: name.data.font.fontSize
+                      }}
+                    >
+                      {name.data.font.text}
+                    </p>
                   );
               }
             })

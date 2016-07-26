@@ -135,9 +135,11 @@
     "redux": "^3.5.2",
     "redux-thunk": "^2.1.0",
     "remote": "^0.2.6",
+    "remove-attributes": "git+https://github.com/nascherman/removeAttributes.git",
     "rimraf": "^2.5.2",
     "shelljs": "^0.7.0",
     "source-map-support": "^0.4.0",
+    "svg-inline-loader": "^0.4.1",
     "svg-inline-react": "^1.0.2",
     "url-loader": "^0.5.7",
     "webpack-node-externals": "^1.2.0"
