@@ -78,7 +78,6 @@ class ReactF1Preview extends React.Component {
         fontFaces.push(merge(asset.data.font, {src: asset.data.src}));
       }
     });
-
     // document.head.removeChild(document.getElementById('fontDeclaration'));
     var style = document.createElement('style');
     fontFaces.forEach(function(face) {
@@ -132,9 +131,13 @@ class ReactF1Preview extends React.Component {
                       data-f1={name.key} 
                       key={index}
                       src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
-                      width={name.data.width || 1000} 
-                      height={name.data.height || 1000} 
-                      style={{position: 'absolute', left: 0, top: 0}} 
+                      width={name.data.width} 
+                      height={name.data.height} 
+                      style={{
+                        position: 'absolute', 
+                        top: 0,
+                        left: 0
+                      }} 
                       alt={'preview-react'}
                     />
                   );
@@ -148,9 +151,13 @@ class ReactF1Preview extends React.Component {
                       data-f1={name.key} 
                       key={index}
                       src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
-                      width={name.data.width || 1000} 
-                      height={name.data.height || 1000} 
-                      style={{position: 'absolute', left: 0, top: 0}} 
+                      width={name.data.width} 
+                      height={name.data.height} 
+                      style={{
+                        position: 'absolute', 
+                        top: 0,
+                        left: 0
+                      }} 
                     >
                     </video>
                   );
@@ -178,6 +185,7 @@ class ReactF1Preview extends React.Component {
                 case 'ttf':
                 case 'otf':
                 case 'ttc':
+                case 'dfont':
                   return (
                     <p 
                       data-f1={name.key}
@@ -189,8 +197,9 @@ class ReactF1Preview extends React.Component {
                         top: 0,
                         left: 0,
                         overflow: 'visible',
+                        color: 'rgb(' + parseInt(name.data.font.fillColor[0] * 256) + ',' + parseInt(name.data.font.fillColor[1] * 256) + ',' + parseInt(name.data.font.fillColor[2] * 256) +')',
                         fontFamily: name.data.font.font,
-                        fontSize: name.data.font.fontSize
+                        fontSize: name.data.font.fontSize + 'px'
                       }}
                     >
                       {name.data.font.text}
