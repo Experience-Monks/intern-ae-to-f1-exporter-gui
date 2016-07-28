@@ -8,6 +8,8 @@ const React = require('react');
 const ReactF1 = require('react-f1');
 const aeToF1Dom = require('ae-to-f1-dom');
 const fs = require('fs');
+const merge = require('merge');
+
 class ReactF1Preview extends React.Component {
 	static propType = {
     previewState: React.PropTypes.string,
@@ -69,10 +71,31 @@ class ReactF1Preview extends React.Component {
     }
   }
 
+  setFontFace(assetNames) {
+    let fontFaces = [];
+    assetNames.forEach(function(asset) {
+      if(asset.data.font) {
+        fontFaces.push(merge(asset.data.font, {src: asset.data.src}));
+      }
+    });
+
+    // document.head.removeChild(document.getElementById('fontDeclaration'));
+    var style = document.createElement('style');
+    fontFaces.forEach(function(face) {
+      var html = `
+        @fontFace {
+          font-family: ${face.font},
+          src: ${'../../output-react/assets/' + face.src}
+        }
+      `;
+      style.innerHTML += html;
+    });
+    document.head.appendChild(style);
+  }
+
 	render() {
 		const { previewState, displayError, compState, compName } = this.props;
     if(Object.keys(this.state.aeOpts).length === 0) return;
-
 		const props = {
 			states: aeToF1Dom.getStates(this.state.aeOpts),
 			transitions: aeToF1Dom.getTransitions(this.state.aeOpts),
@@ -92,6 +115,7 @@ class ReactF1Preview extends React.Component {
 			transformOrigin: '50% 50%'
 		};
 		const assetNames = this.state.assetNames;
+    this.setFontFace(assetNames); 
     const comp = compState ? compName : '';
 		try {
       return(
@@ -165,7 +189,7 @@ class ReactF1Preview extends React.Component {
                         top: 0,
                         left: 0,
                         overflow: 'visible',
-                        fontFace: name.data.font.font,
+                        fontFamily: name.data.font.font,
                         fontSize: name.data.font.fontSize
                       }}
                     >
