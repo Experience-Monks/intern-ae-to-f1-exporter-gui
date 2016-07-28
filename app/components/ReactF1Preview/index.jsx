@@ -78,7 +78,6 @@ class ReactF1Preview extends React.Component {
         fontFaces.push(merge(asset.data.font, {src: asset.data.src}));
       }
     });
-    // document.head.removeChild(document.getElementById('fontDeclaration'));
     var style = document.createElement('style');
     fontFaces.forEach(function(face) {
       var html = `
@@ -194,11 +193,12 @@ class ReactF1Preview extends React.Component {
                         position: 'absolute',
                         width: name.data.width,
                         height: name.data.height,
-                        top: 0,
+                        top: -name.data.font.fontSize + 'px',
                         left: 0,
                         overflow: 'visible',
                         color: 'rgb(' + parseInt(name.data.font.fillColor[0] * 256) + ',' + parseInt(name.data.font.fillColor[1] * 256) + ',' + parseInt(name.data.font.fillColor[2] * 256) +')',
                         fontFamily: name.data.font.font,
+                        textAlign: name.data.font.justification,
                         fontSize: name.data.font.fontSize + 'px'
                       }}
                     >
