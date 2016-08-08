@@ -39,7 +39,7 @@ class WikiTutorial extends Component {
         <div className={styles.container} ref='wiki'>
           <h3 className={styles.goBack} onClick={this.handleClick}> Close </h3>
           <h1 className={styles.h1}>AE Animation Creation Tutorial</h1>
-            <p className={styles.p}>This tutorial will walk you through different kind of animations that are possible with the exporter. The project file is available for download <a href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/multi_export_test.zip?raw=true">Here</a></p>
+            <p className={styles.p}>This tutorial will walk you through different kind of animations that are possible with the exporter. The project file is available for download <a className={styles.a} href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/multi_export_test.zip?raw=true">Here</a></p>
             <h1 className={styles.h1}>1 - Creating a simple project</h1>
             <h5 className={styles.h5}>Creating compositions and adding assets</h5>
             <p className={styles.p}>Your first project will only have 3 transition, out, idle and rotate. These states are expressed as a single composition. Create a composition in your new project and name it &#x27;out_to_idle.&#x27; Create an &#x27;images&#x27; folder and add import .png or .jpg file to the folder; add the image to the composition.</p>
@@ -52,7 +52,7 @@ a. Position b. Scale c. Rotation d. Opacity e. Anchor Points. Set up two keyfram
             <p className={styles.p}>If you have more than 2 keyframes in a position transform, it will be translated into an expression. This is so that irregular position can be tracked like a spiral or curve.</p>
             <p className={styles.p}><img src="https://raw.githubusercontent.com/nascherman/my-pics/master/ae-to-f1-exporter-gui/ae-to-f1-position.png" alt="1"/></p>
             <h5 className={styles.h5}>Wrapping up</h5>
-            <p className={styles.p}>That&#x27;s it. It&#x27;s trivial to create new transitions with compositions. This tutorial project is included <a href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/tutorial.zip?raw=true">Here</a>
+            <p className={styles.p}>That&#x27;s it. It&#x27;s trivial to create new transitions with compositions. This tutorial project is included <a className={styles.a}  href="https://github.com/nascherman/my-pics/blob/master/ae-to-f1-exporter-gui/projects/tutorial.zip?raw=true">Here</a>
 for reference. The other examples below demonstrate different effects and conventions of the exporter.</p>
             <h1 className={styles.h1}>2 - Examples</h1>
             <p className={styles.p}>Unzip the &#x27;multi_export_test&#x27; project folder and open the .aep file. There are four f1 components that will be exported as a result of this project. Opening the Ae-to-f1-exporter application and syncing the project will result in four projects showing up in the sidebar</p>
