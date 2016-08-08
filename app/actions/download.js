@@ -1,6 +1,5 @@
 export const DOWNLOAD = 'DOWNLOAD';
 
-
 export function download(downloadState) {
 	return {
 		type: DOWNLOAD,
