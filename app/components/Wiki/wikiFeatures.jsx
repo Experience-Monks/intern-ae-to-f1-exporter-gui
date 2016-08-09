@@ -110,7 +110,6 @@ class WikiFeatures extends Component {
 function mapStateToProps(state) {
   return {
     wiki: state.wiki,
-    setWiki: state.wiki
   };
 }
 

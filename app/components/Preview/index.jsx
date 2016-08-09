@@ -62,7 +62,6 @@ function NoPreview() {
 
 function mapStateToProps(state) {
   return {
-    setAnimationState: state.previewState,
     previewState: state.previewState,
     download: state.download,
     filter: state.filter,

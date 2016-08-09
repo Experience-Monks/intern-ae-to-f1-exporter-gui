@@ -298,8 +298,7 @@ function mapStateToProps(state) {
     previewType: state.previewType,
     compState: state.compState,
     compName: state.compName,
-    wiki: state.wiki,
-    setWiki: state.wiki
+    wiki: state.wiki
   };
 }
 

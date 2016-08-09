@@ -136,7 +136,6 @@ class ExportButton extends React.Component {
           this.props.setCompositionName(subDirectories[0]);
         }
         else this.props.setMultiCompState(false);
-
         this.props.setDownloadState(true);
         this.props.setCompositionDownloads([]);
         this.cleanAE();
@@ -196,18 +195,11 @@ class ExportButton extends React.Component {
 function mapStateToProps(state) {
     return {
         status: state.status,
-        setAESync: state.status,
-        setDownloadState: state.download,
         download: state.download,
         filter: state.filter,
-        setFilters: state.filter,
         previewState: state.previewState,
-        setAnimationState: state.previewState,
         compState: state.compState,
-        setCompositionName: state.compName,
         compDownload: state.compDownload,
-        setCompositionDownloads: state.compDownload,
-        setMultiCompState: state.compState
     };
 }
 
