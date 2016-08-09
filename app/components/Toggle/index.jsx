@@ -38,7 +38,6 @@ class Toggle extends React.Component {
 function mapStateToProps(state) {
   return {
     status: state.status,
-    setType: state.previewType,
     previewType: state.previewType
   };
 }

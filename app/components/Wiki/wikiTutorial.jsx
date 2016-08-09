@@ -86,8 +86,7 @@ for reference. The other examples below demonstrate different effects and conven
 
 function mapStateToProps(state) {
   return {
-    wiki: state.wiki,
-    setWiki: state.wiki
+    wiki: state.wiki
   };
 }
 

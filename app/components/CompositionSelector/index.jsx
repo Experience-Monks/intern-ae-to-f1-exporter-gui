@@ -170,12 +170,8 @@ function mapStateToProps(state) {
     compState: state.compState,
     compName: state.compName,
     compDownload: state.compDownload,
-    setCompositionName: state.compName,
-    setCompositionDownloads: state.compDownload,
-    setAnimationState: state.previewState,
     download: state.download,
-    filter: state.filter,
-    setFilters: state.filter
+    filter: state.filter
   };
 }
 

@@ -146,9 +146,6 @@ function mapStateToProps(state) {
     return {
         emailContacts: state.emailContacts,
         emailTo: state.emailTo,
-        setContacts: state.emailContacts,
-        setEmailTo: state.emailTo,
-        setEmailFocus: state.emailFocus,
         emailFocus: state.emailFocus
     };
 }

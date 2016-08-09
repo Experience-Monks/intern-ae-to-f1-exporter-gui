@@ -312,10 +312,7 @@ function mapStateToProps(state) {
     previewType: state.previewType,
     compState: state.compState,
     compName: state.compName,
-    wiki: state.wiki,
-    showTutorial: state.showTutorial,
-    setShowTutorial: state.setShowTutorial,
-    setWiki: state.wiki
+    wiki: state.wiki
   };
 }
 

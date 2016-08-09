@@ -66,7 +66,6 @@ class StateSelector extends Component {
 
 function mapStateToProps(state) {
   return {
-    setAnimationState: state.previewState,
     filter: state.filter,
     previewState: state.previewState,
     emailFocus: state.emailFocus
