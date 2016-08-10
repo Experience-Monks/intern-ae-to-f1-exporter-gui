@@ -10,8 +10,18 @@ module.exports.suggestion = function(error) {
 }
 
 module.exports.error = function(error) {
-  if(error.message.length > 100) {
-    return error.message.match(/(.{1,100})/g)[0];
+  if(error.message) {
+    if(error.message.length > 100) {
+      return error.message.match(/(.{1,100})/g)[0];
+    }
+    else return error.message;  
   }
-  else return error.message;
+  else if(typeof error === 'string') {
+    if(error.length > 100) {
+      return error.match(/(.{1,100})/g)[0];
+    }
+    else return error;   
+  }
+  else return 'Unkown error';
+  
 }
