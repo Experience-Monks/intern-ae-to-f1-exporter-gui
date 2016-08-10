@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
+import findDOMNode  from 'react-dom';
 import * as ErrorsAction from '../../actions/errors';
 import InlineSVG from 'svg-inline-react';
+import style from './style.css';
 
 const React = require('react');
 const ReactF1 = require('react-f1');
@@ -10,32 +11,57 @@ const aeToF1Dom = require('ae-to-f1-dom');
 const fs = require('fs');
 const merge = require('merge');
 
+// scoped var for event bindings
+let node;
+
 class ReactF1Preview extends React.Component {
-	static propType = {
+  static propType = {
     previewState: React.PropTypes.string,
     displayError: React.PropTypes.func,
     compState: React.PropTypes.bool,
     compName: React.PropTypes.string
   }
 
-	state = {
-		style: {},
-		aeOpts: {},
-		assetNames: '',
+  state = {
+    style: {},
+    aeOpts: {},
+    assetNames: '',
     assetDir: '',
-		dimensions: {}
-	}
+    dimensions: {}
+  }
 
-	componentWillMount = () => {
+  handleMouseDown = () => {
+    node = findDOMNode.findDOMNode(this.refs.react);
+    window.addEventListener('mousemove', this.handleDrag, true);
+  }
+
+  handleDrag = (e) => {
+    if(isNaN(parseInt(node.style.top)) || isNaN(parseInt(node.style.left))) {
+      node.style.top = e.movementY + 'px';
+      node.style.left = e.movementX + 'px';
+    }
+    else {
+      node.style.top = parseInt(node.style.top.split('px')[0]) + e.movementY + 'px';
+      node.style.left = parseInt(node.style.left.split('px')[0]) + e.movementX + 'px';
+      console.log(node.style.top);
+      console.log(node.style.left);
+    }  
+  }
+
+  handleMouseUp = () => {
+    window.removeEventListener('mousemove', this.handleDrag, true);
+  }
+
+  componentWillMount = () => {
     this.setAEProps();
-	}
+  }
 
   componentWillReceiveProps(nextProps) {
     if(nextProps.compName !== this.props.compName) {
       this.setAEProps(nextProps.compName);
     }
   }
-	
+  
   setAEProps(name) {
     let compName = '';
     if(this.props.compState) {
@@ -91,33 +117,43 @@ class ReactF1Preview extends React.Component {
     document.head.appendChild(style);
   }
 
-	render() {
-		const { previewState, displayError, compState, compName } = this.props;
+  render() {
+    const { previewState, displayError, compState, compName } = this.props;
+    const { handleMouseDown, handleMouseUp, handleDrag } = this;
     if(Object.keys(this.state.aeOpts).length === 0) return;
-		const props = {
-			states: aeToF1Dom.getStates(this.state.aeOpts),
-			transitions: aeToF1Dom.getTransitions(this.state.aeOpts),
-			go: previewState
-		};
-		const styleContainer = {
-			width: '100%',
-			height: '100%',
-			perspective: 555.5555555555555,
-			WebkitPerspective: 555.5555555555555,
-			MozPerspective: 555.5555555555555,
-			WebkitTransformStyle: 'preserve-3d',
-			MozTransformStyle: 'preserve-3d',
-			transformStyle: 'preserve-3d',
-			WebkitTransformOrigin: '50% 50%',
-			MozTransformOrigin: '50% 50%',
-			transformOrigin: '50% 50%'
-		};
-		const assetNames = this.state.assetNames;
+    const props = {
+      states: aeToF1Dom.getStates(this.state.aeOpts),
+      transitions: aeToF1Dom.getTransitions(this.state.aeOpts),
+      go: previewState
+    };
+
+    const assetNames = this.state.assetNames;
+    const styleContainer = {
+      width: '100%',
+      height: '100%',
+      position: 'absolute',
+      perspective: 555.5555555555555,
+      WebkitPerspective: 555.5555555555555,
+      MozPerspective: 555.5555555555555,
+      WebkitTransformStyle: 'preserve-3d',
+      MozTransformStyle: 'preserve-3d',
+      transformStyle: 'preserve-3d'
+    };
     this.setFontFace(assetNames); 
     const comp = compState ? compName : '';
-		try {
+    try {
       return(
-        <ReactF1 {...props} style={styleContainer}>
+        <ReactF1 
+          {...props} 
+          style={styleContainer}
+          ref='react'
+          className={style['react-container']}
+          onMouseDown={handleMouseDown.bind(this)}
+          onMouseUp={handleMouseUp.bind(this)}
+          onMouseLeave={handleMouseUp.bind(this)}
+          onTouchStart={handleMouseDown.bind(this)}
+          onTouchEnd={handleMouseUp.bind(this)}
+        >
           {
             assetNames.map((name, index) => {
               switch(name.data.src.split('.')[1]) {
@@ -128,6 +164,7 @@ class ReactF1Preview extends React.Component {
                   return (
                     <img 
                       data-f1={name.key} 
+                      className={style.react}
                       key={index}
                       src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
                       width={name.data.width} 
@@ -148,6 +185,7 @@ class ReactF1Preview extends React.Component {
                       autoPlay
                       loop
                       data-f1={name.key} 
+                      className={style.react}
                       key={index}
                       src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
                       width={name.data.width} 
@@ -165,6 +203,7 @@ class ReactF1Preview extends React.Component {
                     <div
                       data-f1={name.key} 
                       key={index}
+                      className={style.react}
                       style={{
                         position: 'absolute',
                         width: name.data.width,
@@ -188,6 +227,7 @@ class ReactF1Preview extends React.Component {
                   return (
                     <p 
                       data-f1={name.key}
+                      className={style.react}
                       key={index}
                       style={{
                         position: 'absolute',
@@ -209,8 +249,8 @@ class ReactF1Preview extends React.Component {
             })
           }
         </ReactF1>
-      );	
-		}
+      );  
+    }
     catch (e) {
        displayError({
         description: 'Preview rendering error: ' + e.message,
@@ -218,8 +258,8 @@ class ReactF1Preview extends React.Component {
         error: e.message
       });
     }
-		
-	}
+    
+  }
 }
 
 function mapStateToProps(state) {

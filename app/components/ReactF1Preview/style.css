@@ -1,0 +1,4 @@
+.react {
+  pointer-events: none;
+  -webkit-user-select: none;
+}

@@ -16,10 +16,12 @@ import EmailForm from '../EmailForm/index.jsx';
 import WikiFeatures from '../Wiki/wikiFeatures.jsx';
 import WikiInstructions from '../Wiki/wikiInstructions.jsx';
 import WikiTutorial from '../Wiki/wikiTutorial.jsx';
+import Tutorial from '../Tutorial/index.jsx';
 import menuTemplate from '../../templates/menu/darwinMenuTemplate';
 
 import * as ErrorsAction from '../../actions/errors';
 import * as WikiActions from '../../actions/wiki';
+import * as TutorialActions from '../../actions/tutorial';
 
 import { EasyZip } from 'easy-zip';
 import fs from 'fs';
@@ -49,7 +51,10 @@ class Landing extends Component {
     wiki: React.PropTypes.string,
     setWiki: React.PropTypes.func,
     emailFocus: React.PropTypes.bool,
-    setEmailFocus: React.PropTypes.func
+    setEmailFocus: React.PropTypes.func,
+    firstRun: React.PropTypes.bool,
+    showTutorial: React.PropTypes.bool,
+    setShowTutorial: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -66,6 +71,7 @@ class Landing extends Component {
   };
 
   componentWillMount() {
+    let tutorial = window.localStorage.getItem('tutorial');
     const params = { 
       instructions: () => {
         this.openWiki('instructions');
@@ -81,6 +87,10 @@ class Landing extends Component {
     const template = menuTemplate(BrowserWindow.getFocusedWindow(), app, params);
     menu = Menu.buildFromTemplate(template);
     Menu.setApplicationMenu(menu); 
+    if(tutorial === 'false') {
+      window.localStorage.setItem('tutorial', true);
+      this.props.setShowTutorial(true);
+    }
   }
 
   openWiki = (page) => {
@@ -269,6 +279,9 @@ class Landing extends Component {
           <button className={submitClass} onClick={this.handleSubmit.bind(this)}>{this.state.submitText}</button>
         </div>
         <div >
+          <Tutorial 
+            show={this.props.showTutorial}
+          />
           <WikiFeatures 
             wiki={this.props.wiki}
             className={styles.wiki} 
@@ -290,6 +303,7 @@ class Landing extends Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   return {
     emailTo: state.emailTo,
@@ -303,7 +317,12 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(Object.assign({}, ErrorsAction, WikiActions), dispatch);
+  return bindActionCreators(Object.assign(
+    {}, 
+    ErrorsAction, 
+    WikiActions,
+    TutorialActions
+  ), dispatch);
 }
 
 const LandingContainer = connect(mapStateToProps, mapDispatchToProps)(Landing);
