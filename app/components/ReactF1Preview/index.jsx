@@ -5,14 +5,17 @@ import * as ErrorsAction from '../../actions/errors';
 import InlineSVG from 'svg-inline-react';
 import style from './style.css';
 
+const SCALE_X_MULTIPLIER = 0.5;
+const SCALE_Y_MULTIPLIER = 0.01;
+
 const React = require('react');
 const ReactF1 = require('react-f1');
 const aeToF1Dom = require('ae-to-f1-dom');
 const fs = require('fs');
 const merge = require('merge');
-
+const mouseWheel = require('mouse-wheel');
 // scoped var for event bindings
-let node;
+let node, mouseWheelListener, scrollTotal;
 
 class ReactF1Preview extends React.Component {
   static propType = {
@@ -30,8 +33,41 @@ class ReactF1Preview extends React.Component {
     dimensions: {}
   }
 
-  handleMouseDown = () => {
+  componentDidMount = () => {
     node = findDOMNode.findDOMNode(this.refs.react);
+    node.style.top = '0px';
+    node.style.left = '0px';
+    let scale = 1;
+    mouseWheelListener = mouseWheel(node, (dX, dY) => {
+      if(dX !== undefined) {
+        let moveValue = (parseInt(node.style.left.split('px')[0]) + dX * SCALE_X_MULTIPLIER) + 'px';
+        moveValue = moveValue.split('px')[0];
+        if(moveValue > node.children[0].width - 100 || moveValue < -node.children[0].width - 100 ) {
+          return;
+        }
+        node.style.left = (parseInt(node.style.left.split('px')[0]) + dX * SCALE_X_MULTIPLIER) + 'px';
+      }
+      if(dY !== undefined) {
+        if(node.style.transform.length <= 0) {
+          node.style.transform = 'scale(' + scale + ','+ scale + ')';
+        } 
+        else {
+          let scaleTo = (dY * 0.001);
+          scale = scale + scaleTo;
+          if(scale > 4 || scale < 0.5) {
+            return; 
+          }
+          node.style.transform = 'scale(' + scale + ','+ scale + ')';
+          let newScale = parseScaleTransform(node.style.transform);
+          if(newScale[0] > 4 || newScale[1] > 4) {
+            node.style.transform = 'scale( 4, 4)';
+          }
+        }
+      }
+    }, true);  
+  }
+  
+  handleMouseDown = () => {
     window.addEventListener('mousemove', this.handleDrag, true);
   }
 
@@ -43,8 +79,6 @@ class ReactF1Preview extends React.Component {
     else {
       node.style.top = parseInt(node.style.top.split('px')[0]) + e.movementY + 'px';
       node.style.left = parseInt(node.style.left.split('px')[0]) + e.movementX + 'px';
-      console.log(node.style.top);
-      console.log(node.style.left);
     }  
   }
 
@@ -54,6 +88,11 @@ class ReactF1Preview extends React.Component {
 
   componentWillMount = () => {
     this.setAEProps();
+  }
+
+  componentWillUnmount = () => {
+    if(node === undefined) node = findDOMNode.findDOMNode(this.refs.react);
+    node.removeEventListener('wheel', mouseWheelListener);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -119,7 +158,7 @@ class ReactF1Preview extends React.Component {
 
   render() {
     const { previewState, displayError, compState, compName } = this.props;
-    const { handleMouseDown, handleMouseUp, handleDrag } = this;
+    const { handleMouseDown, handleMouseUp, handleDrag, handleScroll } = this;
     if(Object.keys(this.state.aeOpts).length === 0) return;
     const props = {
       states: aeToF1Dom.getStates(this.state.aeOpts),
@@ -143,112 +182,120 @@ class ReactF1Preview extends React.Component {
     const comp = compState ? compName : '';
     try {
       return(
-        <ReactF1 
-          {...props} 
-          style={styleContainer}
-          ref='react'
-          className={style['react-container']}
-          onMouseDown={handleMouseDown.bind(this)}
-          onMouseUp={handleMouseUp.bind(this)}
-          onMouseLeave={handleMouseUp.bind(this)}
-          onTouchStart={handleMouseDown.bind(this)}
-          onTouchEnd={handleMouseUp.bind(this)}
+        <div 
+          style={{
+            width: '100%',
+            height: '100%'
+          }}
+          className='react-container'
         >
-          {
-            assetNames.map((name, index) => {
-              switch(name.data.src.split('.')[1]) {
-                case 'jpg':
-                case 'jpeg':
-                case 'png':
-                case 'gif':
-                  return (
-                    <img 
-                      data-f1={name.key} 
-                      className={style.react}
-                      key={index}
-                      src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
-                      width={name.data.width} 
-                      height={name.data.height} 
-                      style={{
-                        position: 'absolute', 
-                        top: 0,
-                        left: 0
-                      }} 
-                      alt={'preview-react'}
-                    />
-                  );
-                case 'mp4':
-                case 'ogg':
-                case 'webm':
-                  return (
-                    <video
-                      autoPlay
-                      loop
-                      data-f1={name.key} 
-                      className={style.react}
-                      key={index}
-                      src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
-                      width={name.data.width} 
-                      height={name.data.height} 
-                      style={{
-                        position: 'absolute', 
-                        top: 0,
-                        left: 0
-                      }} 
-                    >
-                    </video>
-                  );
-                case 'svg': 
-                  return (
-                    <div
-                      data-f1={name.key} 
-                      key={index}
-                      className={style.react}
-                      style={{
-                        position: 'absolute',
-                        width: name.data.width,
-                        height: name.data.height,
-                        top: 0,
-                        left: 0,
-                        overflow: 'visible'
-                      }}
-                    >
-                      <InlineSVG 
-                        src={
-                          fs.readFileSync(__dirname + '/output-react/' + comp + '/assets/' + name.data.src).toString()
-                        } 
+          <ReactF1 
+            {...props} 
+            style={styleContainer}
+            ref='react'
+            className={style['react-container']}
+            onMouseDown={handleMouseDown.bind(this)}
+            onMouseUp={handleMouseUp.bind(this)}
+            onMouseLeave={handleMouseUp.bind(this)}
+            onTouchStart={handleMouseDown.bind(this)}
+            onTouchEnd={handleMouseUp.bind(this)}
+          >
+            {
+              assetNames.map((name, index) => {
+                switch(name.data.src.split('.')[1]) {
+                  case 'jpg':
+                  case 'jpeg':
+                  case 'png':
+                  case 'gif':
+                    return (
+                      <img 
+                        data-f1={name.key} 
+                        className={style.react}
+                        key={index}
+                        src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
+                        width={name.data.width} 
+                        height={name.data.height} 
+                        style={{
+                          position: 'absolute', 
+                          top: 0,
+                          left: 0
+                        }} 
+                        alt={'preview-react'}
                       />
-                    </div>
-                  );
-                case 'ttf':
-                case 'otf':
-                case 'ttc':
-                case 'dfont':
-                  return (
-                    <p 
-                      data-f1={name.key}
-                      className={style.react}
-                      key={index}
-                      style={{
-                        position: 'absolute',
-                        width: name.data.width,
-                        height: name.data.height,
-                        top: -name.data.font.fontSize + 'px',
-                        left: 0,
-                        overflow: 'visible',
-                        color: 'rgb(' + parseInt(name.data.font.fillColor[0] * 256) + ',' + parseInt(name.data.font.fillColor[1] * 256) + ',' + parseInt(name.data.font.fillColor[2] * 256) +')',
-                        fontFamily: name.data.font.font,
-                        textAlign: name.data.font.justification,
-                        fontSize: name.data.font.fontSize + 'px'
-                      }}
-                    >
-                      {name.data.font.text}
-                    </p>
-                  );
-              }
-            })
-          }
-        </ReactF1>
+                    );
+                  case 'mp4':
+                  case 'ogg':
+                  case 'webm':
+                    return (
+                      <video
+                        autoPlay
+                        loop
+                        data-f1={name.key} 
+                        className={style.react}
+                        key={index}
+                        src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
+                        width={name.data.width} 
+                        height={name.data.height} 
+                        style={{
+                          position: 'absolute', 
+                          top: 0,
+                          left: 0
+                        }} 
+                      >
+                      </video>
+                    );
+                  case 'svg': 
+                    return (
+                      <div
+                        data-f1={name.key} 
+                        key={index}
+                        className={style.react}
+                        style={{
+                          position: 'absolute',
+                          width: name.data.width,
+                          height: name.data.height,
+                          top: 0,
+                          left: 0,
+                          overflow: 'visible'
+                        }}
+                      >
+                        <InlineSVG 
+                          src={
+                            fs.readFileSync(__dirname + '/output-react/' + comp + '/assets/' + name.data.src).toString()
+                          } 
+                        />
+                      </div>
+                    );
+                  case 'ttf':
+                  case 'otf':
+                  case 'ttc':
+                  case 'dfont':
+                    return (
+                      <p 
+                        data-f1={name.key}
+                        className={style.react}
+                        key={index}
+                        style={{
+                          position: 'absolute',
+                          width: name.data.width,
+                          height: name.data.height,
+                          top: -name.data.font.fontSize + 'px',
+                          left: 0,
+                          overflow: 'visible',
+                          color: 'rgb(' + parseInt(name.data.font.fillColor[0] * 256) + ',' + parseInt(name.data.font.fillColor[1] * 256) + ',' + parseInt(name.data.font.fillColor[2] * 256) +')',
+                          fontFamily: name.data.font.font,
+                          textAlign: name.data.font.justification,
+                          fontSize: name.data.font.fontSize + 'px'
+                        }}
+                      >
+                        {name.data.font.text}
+                      </p>
+                    );
+                }
+              })
+            }
+          </ReactF1>
+        </div>
       );  
     }
     catch (e) {
@@ -272,6 +319,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(ErrorsAction, dispatch);
+}
+
+function parseScaleTransform(scale) {
+  return scale.split('scale(')[1].split(')')[0].split(',');
 }
 
 const ReactF1PreviewContainer = connect(mapStateToProps, mapDispatchToProps)(ReactF1Preview);

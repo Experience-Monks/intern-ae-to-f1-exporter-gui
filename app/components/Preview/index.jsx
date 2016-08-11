@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import findDOMNode  from 'react-dom';
 import ReactF1Preview from '../ReactF1Preview/index.jsx';
 
 import * as SelectStateActions from '../../actions/selectState';
 import * as ErrorsAction from '../../actions/errors';
+
 import styles from './style.css';
 import noPreviewSvg from './no-preview.svg';
 import classnames from 'classnames';
+
+const mouseWheel = require('mouse-wheel');
+let mouseWheelListener;
 
 class Preview extends Component {
   static propType = {
@@ -20,17 +25,33 @@ class Preview extends Component {
     compName: React.PropTypes.string
   };
 
+  componentDidMount = () => {
+    let _self = this;
+    let node = findDOMNode.findDOMNode(this.refs.preview);
+    mouseWheelListener = mouseWheel(node, (dX, dY) => {
+      _self.props.setZoom({x: dX, y: dY});
+    });
+  }
+
   render() {
-    const { previewState, download, displayError, filter, compState, compName } = this.props;
+    const { previewState, download, displayError, filter, compState, compName, zoom } = this.props;
     const className = classnames(styles.container, this.props.className);
+
     try {
       return (
-        <div className={className}>
+
+        <div 
+          className={className}
+          ref='preview'
+        >
           {
             !download || filter.indexOf(previewState) === -1 
             ? <NoPreview />
-            : <div className={styles.previewContainer} >
-                <ReactF1Preview 
+            : <div 
+                className={styles.previewContainer} 
+              >
+                <ReactF1Preview
+                  zoom={zoom}
                   previewState={previewState} 
                   compState={compState} 
                   compName={compName}
