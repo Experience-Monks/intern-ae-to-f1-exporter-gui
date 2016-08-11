@@ -55,7 +55,7 @@ class ReactF1Preview extends React.Component {
         else {
           let scaleTo = (dY * 0.001);
           scale = scale + scaleTo;
-          if(scale > 4 || scale < 0.5) {
+          if(scale > 4 || scale < 0.1) {
             return; 
           }
           node.style.transform = 'scale(' + scale + ','+ scale + ')';
@@ -172,13 +172,15 @@ class ReactF1Preview extends React.Component {
       width: '100%',
       height: '100%',
       position: 'absolute',
+    };
+    const stylePerspective = {
       perspective: 555.5555555555555,
       WebkitPerspective: 555.5555555555555,
       MozPerspective: 555.5555555555555,
       WebkitTransformStyle: 'preserve-3d',
       MozTransformStyle: 'preserve-3d',
       transformStyle: 'preserve-3d'
-    };
+    }
     this.setFontFace(assetNames); 
     const comp = compState ? compName : '';
     try {
@@ -217,11 +219,11 @@ class ReactF1Preview extends React.Component {
                         src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
                         width={name.data.width} 
                         height={name.data.height} 
-                        style={{
+                        style={ Object.assign({
                           position: 'absolute', 
                           top: 0,
                           left: 0
-                        }} 
+                        }, stylePerspective)} 
                         alt={'preview-react'}
                       />
                     );
@@ -238,11 +240,11 @@ class ReactF1Preview extends React.Component {
                         src={__dirname + '/output-react/' + comp + '/assets/' + name.data.src} 
                         width={name.data.width} 
                         height={name.data.height} 
-                        style={{
+                        style={ Object.assign({
                           position: 'absolute', 
                           top: 0,
                           left: 0
-                        }} 
+                        }, stylePerspective)}
                       >
                       </video>
                     );
@@ -252,14 +254,14 @@ class ReactF1Preview extends React.Component {
                         data-f1={name.key} 
                         key={index}
                         className={style.react}
-                        style={{
+                        style={Object.assign({
                           position: 'absolute',
                           width: name.data.width,
                           height: name.data.height,
                           top: 0,
                           left: 0,
                           overflow: 'visible'
-                        }}
+                        }, stylePerspective)}
                       >
                         <InlineSVG 
                           src={
@@ -277,7 +279,7 @@ class ReactF1Preview extends React.Component {
                         data-f1={name.key}
                         className={style.react}
                         key={index}
-                        style={{
+                        style={Object.assign({
                           position: 'absolute',
                           width: name.data.width,
                           height: name.data.height,
@@ -288,7 +290,7 @@ class ReactF1Preview extends React.Component {
                           fontFamily: name.data.font.font,
                           textAlign: name.data.font.justification,
                           fontSize: name.data.font.fontSize + 'px'
-                        }}
+                        }, stylePerspective)}
                       >
                         {name.data.font.text}
                       </p>
