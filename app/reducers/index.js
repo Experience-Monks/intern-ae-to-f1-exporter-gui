@@ -13,6 +13,8 @@ import emailContacts from './emailContacts';
 import emailTo from './emailTo';
 import emailFocus from './emailFocus';
 import wiki from './wiki';
+import scale from './scale';
+import offset from './offset';
 
 const rootReducer = combineReducers({
 	status,
@@ -28,6 +30,8 @@ const rootReducer = combineReducers({
 	emailTo,
 	wiki,
 	emailFocus,
+	offset,
+	scale,
 	routing
 });
 

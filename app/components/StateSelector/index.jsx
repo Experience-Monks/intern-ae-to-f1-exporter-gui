@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import style from './style.css';
 import classnames from 'classnames';
 import Checkbox from '../Checkbox';
+import PositionTracker from '../PositionTracker';
 
 import * as SelectStateActions from '../../actions/selectState';
 
@@ -12,7 +13,9 @@ class StateSelector extends Component {
     setAnimationState: React.PropTypes.func,
     filter: React.PropTypes.array,
     previewState: React.PropTypes.string,
-    emailFocus: React.PropTypes.bool
+    emailFocus: React.PropTypes.bool,
+    scale: React.PropTypes.string,
+    offset: React.PropTypes.object
   };
 
   static defaultProps = {
@@ -40,25 +43,34 @@ class StateSelector extends Component {
   render() {
     const { setAnimationState, filter } = this.props;
     const className = classnames(style.stateSelector, this.props.className);
-
     return (
-      <div className={className}>
+      <div className={this.props.className}>
         {
-          filter.map((type, index) => {
-            return (
-              <div key={type} className={style.checkContainer} >
-                <Checkbox
-                  id={type}
-                  key={index}
-                  className={style.checkbox}
-                  checked={this.props.previewState === type}
-                  onChange={() => setAnimationState(type)}
-                />
-                <label className={style.checkboxLabel} htmlFor={type}>{type}</label>
-              </div>
-            );
-          })
-        }
+          filter.length > 0 ? 
+          <PositionTracker 
+            scale={this.props.scale}
+            offset={this.props.offset}
+          />  
+          : <div></div>
+        } 
+        <div className={style.stateSelector}>
+          {
+            filter.map((type, index) => {
+              return (
+                <div key={type} className={style.checkContainer} >
+                  <Checkbox
+                    id={type}
+                    key={index}
+                    className={style.checkbox}
+                    checked={this.props.previewState === type}
+                    onChange={() => setAnimationState(type)}
+                  />
+                  <label className={style.checkboxLabel} htmlFor={type}>{type}</label>
+                </div>
+              );
+            })
+          }
+        </div>
       </div>
     );
   }
@@ -68,7 +80,9 @@ function mapStateToProps(state) {
   return {
     filter: state.filter,
     previewState: state.previewState,
-    emailFocus: state.emailFocus
+    emailFocus: state.emailFocus,
+    scale: state.scale,
+    offset: state.offset
   };
 }
 

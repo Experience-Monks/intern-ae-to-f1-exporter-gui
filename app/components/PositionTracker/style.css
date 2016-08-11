@@ -1,0 +1,11 @@
+.position-tracker {
+  width: 100%;
+  height: 0px;
+}
+
+.tracker {
+  font-size: 12pt;
+  display: inline-block;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}

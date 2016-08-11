@@ -22,6 +22,8 @@ import menuTemplate from '../../templates/menu/darwinMenuTemplate';
 import * as ErrorsAction from '../../actions/errors';
 import * as WikiActions from '../../actions/wiki';
 import * as TutorialActions from '../../actions/tutorial';
+import * as ScaleActions from '../../actions/scale';
+import * as OffsetActions from '../../actions/offset';
 
 import { EasyZip } from 'easy-zip';
 import fs from 'fs';
@@ -54,7 +56,11 @@ class Landing extends Component {
     setEmailFocus: React.PropTypes.func,
     firstRun: React.PropTypes.bool,
     showTutorial: React.PropTypes.bool,
-    setShowTutorial: React.PropTypes.func
+    setShowTutorial: React.PropTypes.func,
+    setScaleState: React.PropTypes.func,
+    setOffsetState: React.PropTypes.func,
+    scale: React.PropTypes.string,
+    offset: React.PropTypes.object
   };
 
   static defaultProps = {
@@ -228,8 +234,12 @@ class Landing extends Component {
             filters={this.props.filter}
             compState={this.props.compState}
             compName={this.props.compName}
+            setOffsetState={this.props.setOffsetState}
+            setScaleState={this.props.setScaleState}
           />
           <StateSelector
+            scale={this.props.scale}
+            offset={this.props.offset}
             className={styles.stateSelector}
             previewState={this.props.previewState}
             filters={this.props.filter}
@@ -312,7 +322,9 @@ function mapStateToProps(state) {
     previewType: state.previewType,
     compState: state.compState,
     compName: state.compName,
-    wiki: state.wiki
+    wiki: state.wiki,
+    scale: state.scale,
+    offset: state.offset
   };
 }
 
@@ -321,7 +333,9 @@ function mapDispatchToProps(dispatch) {
     {}, 
     ErrorsAction, 
     WikiActions,
-    TutorialActions
+    TutorialActions,
+    ScaleActions,
+    OffsetActions
   ), dispatch);
 }
 

@@ -22,24 +22,16 @@ class Preview extends Component {
     displayError: React.PropTypes.func,
     filter: React.PropTypes.array,
     compState: React.PropTypes.bool,
+    setScaleState: React.PropTypes.func,
+    setOffsetState: React.PropTypes.func,
     compName: React.PropTypes.string
   };
-
-  componentDidMount = () => {
-    let _self = this;
-    let node = findDOMNode.findDOMNode(this.refs.preview);
-    mouseWheelListener = mouseWheel(node, (dX, dY) => {
-      _self.props.setZoom({x: dX, y: dY});
-    });
-  }
 
   render() {
     const { previewState, download, displayError, filter, compState, compName, zoom } = this.props;
     const className = classnames(styles.container, this.props.className);
-
     try {
       return (
-
         <div 
           className={className}
           ref='preview'
@@ -51,6 +43,8 @@ class Preview extends Component {
                 className={styles.previewContainer} 
               >
                 <ReactF1Preview
+                  setOffsetState={this.props.setOffsetState}
+                  setScaleState={this.props.setScaleState}
                   zoom={zoom}
                   previewState={previewState} 
                   compState={compState} 

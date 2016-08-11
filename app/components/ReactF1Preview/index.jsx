@@ -7,6 +7,8 @@ import style from './style.css';
 
 const SCALE_X_MULTIPLIER = 0.5;
 const SCALE_Y_MULTIPLIER = 0.01;
+const ACTION_INTERVAL_SCROLL = 50;
+const ACTION_INTERVAL_DRAG = 5;
 
 const React = require('react');
 const ReactF1 = require('react-f1');
@@ -17,12 +19,20 @@ const mouseWheel = require('mouse-wheel');
 // scoped var for event bindings
 let node, mouseWheelListener, scrollTotal;
 
+// needed to prevent slowdown on action
+let actionInterval = {
+  scale: 0,
+  offset: 0
+};
+
 class ReactF1Preview extends React.Component {
   static propType = {
     previewState: React.PropTypes.string,
     displayError: React.PropTypes.func,
     compState: React.PropTypes.bool,
-    compName: React.PropTypes.string
+    compName: React.PropTypes.string,
+    setScaleState: React.PropTypes.func,
+    setOffsetState: React.PropTypes.func,
   }
 
   state = {
@@ -34,6 +44,7 @@ class ReactF1Preview extends React.Component {
   }
 
   componentDidMount = () => {
+    const { setScaleState, setOffsetState } = this.props;
     node = findDOMNode.findDOMNode(this.refs.react);
     node.style.top = '0px';
     node.style.left = '0px';
@@ -41,27 +52,50 @@ class ReactF1Preview extends React.Component {
     let previewContainer = node.parentElement.parentElement;
     mouseWheelListener = mouseWheel(node, (dX, dY) => {
       if(dX !== undefined) {
+        actionInterval.offset++;
         let moveValue = (parseInt(node.style.left.split('px')[0]) + dX * SCALE_X_MULTIPLIER) + 'px';
         moveValue = moveValue.split('px')[0];
         if(moveValue > previewContainer.clientWidth/2 || moveValue < -previewContainer.clientWidth/2 ) {
           return;
         }
         node.style.left = (parseInt(node.style.left.split('px')[0]) + dX * SCALE_X_MULTIPLIER) + 'px';
+        if(checkInterval(actionInterval.offset, ACTION_INTERVAL_SCROLL)) {
+          actionInterval.offset = 0;
+          setOffsetState({
+            x: node.style.left,
+            y: node.style.top
+          })
+        }
       }
       if(dY !== undefined) {
+        actionInterval.scale++;
         if(node.style.transform.length <= 0) {
-          node.style.transform = 'scale(' + scale + ','+ scale + ')';
+          let scaleStyle = 'scale(' + scale + ','+ scale + ')';
+          node.style.transform = scaleStyle;
+          if(checkInterval(actionInterval.scale, ACTION_INTERVAL_SCROLL)) {
+            actionInterval.scale = 0;
+            setScaleState(scaleStyle);
+          }
         } 
         else {
           let scaleTo = (dY * 0.001);
-          scale = scale + scaleTo;
+          scale = parseFloat((scale + scaleTo).toPrecision(3));
           if(scale > 4 || scale < 0.1) {
             return; 
           }
-          node.style.transform = 'scale(' + scale + ','+ scale + ')';
+          let scaleStyle = 'scale(' + scale + ','+ scale + ')';
+          node.style.transform = scaleStyle;
+          if(checkInterval(actionInterval.scale, ACTION_INTERVAL_SCROLL)) {
+            actionInterval.scale = 0;
+            setScaleState(scaleStyle);
+          }
           let newScale = parseScaleTransform(node.style.transform);
           if(newScale[0] > 4 || newScale[1] > 4) {
             node.style.transform = 'scale( 4, 4)';
+            if(checkInterval(actionInterval.scale, ACTION_INTERVAL_SCROLL)) {
+              actionInterval.scale = 0;
+              setScaleState('scale( 4, 4)');
+            }
           }
         }
       }
@@ -78,8 +112,16 @@ class ReactF1Preview extends React.Component {
       node.style.left = e.movementX + 'px';
     }
     else {
+      actionInterval.offset++;
       node.style.top = parseInt(node.style.top.split('px')[0]) + e.movementY + 'px';
       node.style.left = parseInt(node.style.left.split('px')[0]) + e.movementX + 'px';
+      if(checkInterval(actionInterval.offset, ACTION_INTERVAL_DRAG)) {
+          actionInterval.offset = 0;
+          this.props.setOffsetState({
+            x: node.style.left,
+            y: node.style.top
+          })
+      }
     }  
   }
 
@@ -327,6 +369,15 @@ function mapDispatchToProps(dispatch) {
 
 function parseScaleTransform(scale) {
   return scale.split('scale(')[1].split(')')[0].split(',');
+}
+
+function checkInterval(interval, action) {
+  if(interval > action) {
+    return true;
+  }
+  else {
+    return false;
+  }
 }
 
 const ReactF1PreviewContainer = connect(mapStateToProps, mapDispatchToProps)(ReactF1Preview);
