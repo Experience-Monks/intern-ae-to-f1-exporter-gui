@@ -38,11 +38,12 @@ class ReactF1Preview extends React.Component {
     node.style.top = '0px';
     node.style.left = '0px';
     let scale = 1;
+    let previewContainer = node.parentElement.parentElement;
     mouseWheelListener = mouseWheel(node, (dX, dY) => {
       if(dX !== undefined) {
         let moveValue = (parseInt(node.style.left.split('px')[0]) + dX * SCALE_X_MULTIPLIER) + 'px';
         moveValue = moveValue.split('px')[0];
-        if(moveValue > node.children[0].width - 100 || moveValue < -node.children[0].width - 100 ) {
+        if(moveValue > previewContainer.clientWidth/2 || moveValue < -previewContainer.clientWidth/2 ) {
           return;
         }
         node.style.left = (parseInt(node.style.left.split('px')[0]) + dX * SCALE_X_MULTIPLIER) + 'px';
@@ -183,6 +184,7 @@ class ReactF1Preview extends React.Component {
     try {
       return(
         <div 
+          ref='react-container'
           style={{
             width: '100%',
             height: '100%'
